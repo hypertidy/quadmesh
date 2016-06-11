@@ -1,0 +1,11 @@
+Package: quadmesh
+Type: Package
+Title: Quadrangle Mesh
+Version: 0.1.0
+Authors@R: person("Michael D.","Sumner", role = c("aut", "cre"), email = "mdsumner@gmail.com")
+Description: Gridded data need not be regular, quadmesh creates a mesh from rasters. Future versions may be more general.
+License: GPL-3
+LazyData: TRUE
+RoxygenNote: 5.0.1
+Imports: dplyr, raster
+Suggests: datasets

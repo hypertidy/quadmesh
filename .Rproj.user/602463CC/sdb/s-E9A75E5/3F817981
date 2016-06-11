@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "# quadmesh 0.1.0\n\n* basic quadrangle mesh support\n\n* Added a `NEWS.md` file to track changes to the package.\n\n\n\n",
+    "created" : 1465668131907.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "552163090",
+    "id" : "3F817981",
+    "lastKnownWriteTime" : 1465668169,
+    "last_content_update" : 1465668169168,
+    "path" : "D:/twotera/GIT/quadmesh/NEWS.md",
+    "project_path" : "NEWS.md",
+    "properties" : {
+    },
+    "relative_order" : 5,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "markdown"
+}
