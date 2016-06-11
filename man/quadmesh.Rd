@@ -19,4 +19,10 @@ mesh3d
 \description{
 Convert a \code{\link[raster]{raster}} to a \code{\link[rgl]{mesh3d}} quadrangle mesh.
 }
+\examples{
+library(raster)
+data(volcano)
+r <- setExtent(raster(volcano), extent(0, 100, 0, 200))
+qm <- quadmesh(r)
+}
 

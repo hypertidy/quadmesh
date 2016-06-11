@@ -39,10 +39,11 @@ p4 <- function(xp, nc) {
 #' @export
 #' @importFrom raster extract extent values
 #' @importFrom dplyr  bind_rows  distinct  group_by  inner_join  mutate row_number transmute
+#' @examples
 #' library(raster)
 #' data(volcano)
 #' r <- setExtent(raster(volcano), extent(0, 100, 0, 200))
-#' qm <- quadmesh(r)f
+#' qm <- quadmesh(r)
 quadmesh <- function(x, z = x, na.rm = FALSE) {
   x <- x[[1]]  ## just the oneth raster for now
   ##exy <- as.matrix(expand.grid(edges(x), edges(x, "y")))
