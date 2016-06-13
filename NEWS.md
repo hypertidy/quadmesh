@@ -1,3 +1,7 @@
+# quadmesh dev
+
+* added supporting information to package
+
 # quadmesh 0.1.0
 
 * basic quadrangle mesh support

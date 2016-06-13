@@ -1,0 +1,36 @@
+---
+title: "Vignette Title"
+author: "Vignette Author"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+# Topographic example
+
+When we plot global data sets in 3D it can be very weird, since the data is stored with longitude-latitude angular coordinates, but the data are in metres above mean sea level. To make this work we need an arbitrary scaling to reduce the distortion due to these different units. 
+
+```{r}
+library(quadmesh)
+library(rglwidget)
+library(rgl)
+scl <- function(x) (x - min(x))/diff(range(x))
+data(etopo)
+qmtopo <- quadmesh(etopo, etopo)
+open3d()
+shade3d(qmtopo, col = grey(scl(qmtopo$vb[3,qmtopo$ib])))
+aspect3d(1, 1, 0.0001)
+subid <- currentSubscene3d()
+rglwidget(elementId="quadmesh003")
+```
+
+It's much more natural to work in a map projection, or on the surface of the sphere, but legacy spatial tools make this more difficult than it should be. 
+
+We can do what ever we like with quadmesh coordinates. 
+
+``{r}
+library(proj4)
+proj4::pr
