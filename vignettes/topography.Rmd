@@ -14,23 +14,39 @@ vignette: >
 When we plot global data sets in 3D it can be very weird, since the data is stored with longitude-latitude angular coordinates, but the data are in metres above mean sea level. To make this work we need an arbitrary scaling to reduce the distortion due to these different units. 
 
 ```{r}
+decimate <- function(x, dec = 10) {
+  library(raster)
+  r0 <- raster(x)
+  res(r0) <- res(x) * dec
+  setValues(r0, extract(x, coordinates(r0), method = "bilinear"))
+}
 library(quadmesh)
 library(rglwidget)
 library(rgl)
 scl <- function(x) (x - min(x))/diff(range(x))
 data(etopo)
+etopo <- decimate(etopo, 5)
 qmtopo <- quadmesh(etopo, etopo)
 open3d()
 shade3d(qmtopo, col = grey(scl(qmtopo$vb[3,qmtopo$ib])))
-aspect3d(1, 1, 0.0001)
+aspect3d(1, 1, 0.1)
+
 subid <- currentSubscene3d()
 rglwidget(elementId="quadmesh003")
 ```
 
 It's much more natural to work in a map projection, or on the surface of the sphere, but legacy spatial tools make this more difficult than it should be. 
 
-We can do what ever we like with quadmesh coordinates. 
+We can do what ever we like with quadmesh coordinates, without breaking the topology of the mesh at all. 
 
-``{r}
+```{r}
 library(proj4)
-proj4::pr
+qmtopo$vb[1:2, ] <- t(proj4::project(t(qmtopo$vb[1:2, ]), "+proj=laea +ellps=WGS84 +lat_0=-90"))
+open3d()
+shade3d(qmtopo, col = grey(scl(qmtopo$vb[3,qmtopo$ib])), asp = "iso")
+aspect3d(1, 1, 1)
+
+subid <- currentSubscene3d()
+rglwidget(elementId="quadmesh004")
+
+```
