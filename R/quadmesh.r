@@ -46,25 +46,38 @@ p4 <- function(xp, nc) {
 #' qm <- quadmesh(r)
 quadmesh <- function(x, z = x, na.rm = FALSE) {
   x <- x[[1]]  ## just the oneth raster for now
-  ##exy <- as.matrix(expand.grid(edges(x), edges(x, "y")))
   exy <- edgesXY(x)
   ind <- apply(prs(seq(ncol(x) + 1)), 1, p4, nc = ncol(x) + 1)
-
-
   ## all face indexes
   ind0 <- as.vector(ind) +
     rep(seq(0, length = nrow(x), by = ncol(x) + 1), each = 4 * ncol(x))
-
-
-  ## need to consider normalizing vertices here
+  ind1 <- matrix(ind0, nrow = 4)
   if (na.rm) {
-    ind1 <- matrix(ind0, nrow = 4)
-    ind0 <- ind1[,!is.na(values(x))]
+    ind1 <- ind1[,!is.na(values(x))]
   }
   ob <- .mkq3d()
-
   if (!is.null(z)) z <- extract(z, exy, method = "bilinear") else z <- 0
   ob$vb <- t(cbind(exy, z, 1))
-  ob$ib <- matrix(ind0, nrow = 4)
+  ob$ib <- ind1
   ob
 }
+
+quad <- function(x, z = x, na.rm = FALSE) {
+  x <- x[[1]]  ## just the oneth raster for now
+  exy <- quadmesh:::edgesXY(x)
+  ind <- apply(quadmesh:::prs(seq(ncol(x) + 1)), 1, quadmesh:::p4, nc = ncol(x) + 1)
+  ## all face indexes
+  ind0 <- as.vector(ind) +
+    rep(seq(0, length = nrow(x), by = ncol(x) + 1), each = 4 * ncol(x))
+  ind1 <- matrix(ind0, nrow = 4)
+  ## need to consider normalizing vertices here
+  if (na.rm) {
+    ind1 <- ind1[,!is.na(values(x))]
+  }
+  if (!is.null(z)) z <- extract(z, exy, method = "bilinear") else z <- 0
+  v <- dplyr::data_frame(x_ = exy[,1], y_ = exy[,2], vertex_ = seq(nrow(exy)))
+  print(dim(ind1))
+  b <- dplyr::data_frame(vertex_ = as.vector(ind1), quad_ = rep(seq(ncol(ind1)), each = nrow(ind1)))
+  list(v = v, b = b)
+}
+
