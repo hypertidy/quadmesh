@@ -47,7 +47,11 @@ p4 <- function(xp, nc) {
 quadmesh <- function(x, z = x, na.rm = FALSE) {
   x <- x[[1]]  ## just the oneth raster for now
   exy <- edgesXY(x)
-  ind <- apply(prs(seq(ncol(x) + 1)), 1, p4, nc = ncol(x) + 1)
+ # ind <- apply(prs(seq(ncol(x) + 1)), 1, p4, nc = ncol(x) + 1)
+  nc1 <- ncol(x) + 1
+  aa <- t(prs(seq(ncol(x) + 1)))
+  ind <- matrix(c(rbind(aa, aa[2:1, ])) + c(0, 0, nc1, nc1), 4)
+#  ind <- matrix(unlist(purrr::map(split(aa, rep(seq(1, ncol(aa)), each = 2)), p4, nc = ncol(x) + 1)), 4)
   ## all face indexes
   ind0 <- as.vector(ind) +
     rep(seq(0, length = nrow(x), by = ncol(x) + 1), each = 4 * ncol(x))

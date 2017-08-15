@@ -14,3 +14,4 @@ Suggests: datasets,
 URL: https://github.com/mdsumner/quadmesh
 BugReports: https://github.com/mdsumner/quadmesh/issues
 VignetteBuilder: knitr
+ByteCompile: true
