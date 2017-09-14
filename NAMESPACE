@@ -2,6 +2,7 @@
 
 export(llh2xyz)
 export(quadmesh)
+export(triangulate_quads)
 importFrom(dplyr,bind_rows)
 importFrom(dplyr,distinct)
 importFrom(dplyr,group_by)

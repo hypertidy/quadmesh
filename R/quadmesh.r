@@ -13,10 +13,14 @@ edgesXY <- function(x) {
   #extract(r, expand.grid(c(xmin(r), xmax(r)), c(ymin(r), ymax(r))), method = "bilinear")
   #[1]   NA   NA 99.5   NA
   ## remove this eps fudge once bilinear works
-  eps <- sqrt(.Machine$double.eps)
-  as.matrix(expand.grid(seq(xmin(x), xmax(x) -eps, length = ncol(x) + 1),
-                        seq(ymax(x), ymin(x) + eps, length = nrow(x) + 1)
-  ))
+  eps <- rep(sqrt(.Machine$double.eps), 2L)
+  xx <- seq(xmin(x), xmax(x), length = ncol(x) + 1L)
+  yy <- seq(ymax(x), ymin(x), length = nrow(x) + 1L)
+  xx[c(1L, length(xx))] <- xx[c(1L, length(xx))] + c(+eps[2], -eps[2])
+  yy[c(1L, length(yy))] <- yy[c(1L, length(yy))] + c(-eps[1], +eps[1])
+  xy <- expand.grid(x = xx,
+                        y = yy)
+  xy
 }
 
 #' @importFrom utils head tail
@@ -60,7 +64,7 @@ quadmesh <- function(x, z = x, na.rm = FALSE) {
     ind1 <- ind1[,!is.na(values(x))]
   }
   ob <- .mkq3d()
-  if (!is.null(z)) z <- extract(z, exy, method = "bilinear") else z <- 0
+  if (!is.null(z)) z <- zapsmall(extract(z, exy, method = "bilinear")) else z <- 0
   ob$vb <- t(cbind(exy, z, 1))
   ob$ib <- ind1
   ob

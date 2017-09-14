@@ -19,4 +19,3 @@ matrix
 \description{
 Angular coordinates to X, Y, Z.
 }
-

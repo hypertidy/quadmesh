@@ -25,4 +25,3 @@ data(volcano)
 r <- setExtent(raster(volcano), extent(0, 100, 0, 200))
 qm <- quadmesh(r)
 }
-
