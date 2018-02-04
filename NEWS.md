@@ -1,5 +1,7 @@
 # quadmesh dev
 
+* made index array integer mode
+
 * added `triangulate_quads` function to convert quad index to pairs of triangle index
 
 * added supporting information to package

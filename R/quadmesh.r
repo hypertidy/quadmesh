@@ -57,9 +57,10 @@ quadmesh <- function(x, z = x, na.rm = FALSE) {
   ind <- matrix(c(rbind(aa, aa[2:1, ])) + c(0, 0, nc1, nc1), 4)
 #  ind <- matrix(unlist(purrr::map(split(aa, rep(seq(1, ncol(aa)), each = 2)), p4, nc = ncol(x) + 1)), 4)
   ## all face indexes
-  ind0 <- as.vector(ind) +
-    rep(seq(0, length = nrow(x), by = ncol(x) + 1), each = 4 * ncol(x))
+  ind0 <- as.integer(as.vector(ind) +
+    rep(seq(0, length = nrow(x), by = ncol(x) + 1), each = 4 * ncol(x)))
   ind1 <- matrix(ind0, nrow = 4)
+
   if (na.rm) {
     ind1 <- ind1[,!is.na(values(x))]
   }
