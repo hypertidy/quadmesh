@@ -1,20 +1,22 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
+[![Travis-CI Build Status](https://travis-ci.org/mdsumner/quadmesh.svg?branch=master)](https://travis-ci.org/mdsumner/quadmesh) [![CRAN status](https://www.r-pkg.org/badges/version/quadmesh)](https://cran.r-project.org/package=quadmesh)
+
 quadmesh
 ========
 
-Build a quadmesh in R.
+A "quadmesh" is a dense mesh describing a topologically continuous surface of 4-corner primitives. I.e. a grid, without the need to be "regular".
+
+You can install:
+
+-   the latest released version from CRAN with
 
 ``` r
-library(quadmesh)
-library(raster)
-data(volcano)
-r <- setExtent(raster(volcano), extent(0, 100, 0, 200))
+install.packages("quadmesh")
+```
 
+-   the latest development version from Github with
 
-qm <- quadmesh(r)
-
-library(rgl)
-scl <- function(x) (x - min(x))/diff(range(x))
-shade3d(qm, col = grey(scl(qm$vb[3,qm$ib])))
+``` r
+devtools::install_github("mdsumner/quadmesh")
 ```

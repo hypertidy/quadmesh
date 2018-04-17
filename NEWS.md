@@ -1,5 +1,8 @@
 # quadmesh dev
 
+* New function `mesh_plot` for basic vectorized raster plot with optional near near-lossless 
+ projection transformation. 
+ 
 * made index array integer mode
 
 * added `triangulate_quads` function to convert quad index to pairs of triangle index
