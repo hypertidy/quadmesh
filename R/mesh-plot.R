@@ -17,10 +17,10 @@ scl <- function(x) {
 #' @examples
 #' mesh_plot(worldll)
 #'
-#' mesh_plot(worldll, crs = "+proj=laea")
+#' mesh_plot(crop(worldll, extent(-179, 179, -89, 89)), crs = "+proj=laea")
 #' mesh_plot(worldll, crs = "+proj=moll")
 #' prj <- "+proj=lcc +datum=WGS84 +lon_0=147 +lat_0=-40 +lat_1=-55 +lat_2=-20"
-#' mesh_plot(etopo, crs = prj, add = TRUE, colfun = function(n = 20) grey(seq(0, 1, length = n)))
+#' mesh_plot(etopo, crs = prj, add = FALSE, colfun = function(n = 20) grey(seq(0, 1, length = n)))
 #' mesh_plot(worldll, crs = prj, add = TRUE)
 mesh_plot <- function(x, crs = NULL, colfun = NULL, add = FALSE, ...) {
   UseMethod("mesh_plot")
