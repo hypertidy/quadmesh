@@ -13,3 +13,12 @@ NULL
 #' @docType data
 #' @name etopo
 NULL
+
+#' World map
+#'
+#' A simple matrix of lon, lat, separated by NA.
+#'
+#' From the maps package, see 'data-raw/xymap.R'.
+#' @docType data
+#' @name xymap
+NULL

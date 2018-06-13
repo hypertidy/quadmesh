@@ -73,8 +73,8 @@ quadmesh <- function(x, z = x, na.rm = FALSE) {
 
 quad <- function(x, z = x, na.rm = FALSE) {
   x <- x[[1]]  ## just the oneth raster for now
-  exy <- quadmesh:::edgesXY(x)
-  ind <- apply(quadmesh:::prs(seq(ncol(x) + 1)), 1, quadmesh:::p4, nc = ncol(x) + 1)
+  exy <- edgesXY(x)
+  ind <- apply(prs(seq(ncol(x) + 1)), 1, p4, nc = ncol(x) + 1)
   ## all face indexes
   ind0 <- as.vector(ind) +
     rep(seq(0, length = nrow(x), by = ncol(x) + 1), each = 4 * ncol(x))

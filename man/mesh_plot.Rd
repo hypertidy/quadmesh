@@ -34,15 +34,11 @@ nothing
 Plot as a mesh
 }
 \examples{
-
-plot(wrld_simpl)
 mesh_plot(worldll)
 
 mesh_plot(worldll, crs = "+proj=laea")
 mesh_plot(worldll, crs = "+proj=moll")
 prj <- "+proj=lcc +datum=WGS84 +lon_0=147 +lat_0=-40 +lat_1=-55 +lat_2=-20"
-plot(spTransform(subset(wrld_simpl, NAME == "Australia"), prj))
-## this is near-lossless transformation, at native resolution
 mesh_plot(etopo, crs = prj, add = TRUE, colfun = function(n = 20) grey(seq(0, 1, length = n)))
 mesh_plot(worldll, crs = prj, add = TRUE)
 }

@@ -7,10 +7,18 @@ Description: Gridded data need not be regular, quadmesh creates a mesh from rast
 License: GPL-3
 LazyData: TRUE
 RoxygenNote: 6.0.1
-Imports: dplyr, raster
-Suggests: datasets,
+Imports: 
+    dplyr,
+    raster,
+    gridBase,
+    proj4,
+    viridis
+Suggests: 
+    datasets,
     knitr,
-    rmarkdown
+    rmarkdown,
+    palr,
+    rgl
 URL: https://github.com/mdsumner/quadmesh
 BugReports: https://github.com/mdsumner/quadmesh/issues
 VignetteBuilder: knitr
