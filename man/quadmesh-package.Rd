@@ -6,7 +6,8 @@
 \alias{quadmesh-package}
 \title{quadmesh: Quadrangle Mesh}
 \description{
-Gridded data need not be regular, quadmesh creates a mesh from rasters. Future versions may be more general.
+Create a standard quadrangle mesh from gridded data ('rasters') for flexible
+plotting and conversion to other mesh forms.
 }
 \seealso{
 Useful links:

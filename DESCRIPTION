@@ -3,12 +3,12 @@ Type: Package
 Title: Quadrangle Mesh
 Version: 0.1.0.9001
 Authors@R: person("Michael D.","Sumner", role = c("aut", "cre"), email = "mdsumner@gmail.com")
-Description: Gridded data need not be regular, quadmesh creates a mesh from rasters. Future versions may be more general.
+Description: Create a standard quadrangle mesh from gridded data ('rasters') for flexible
+ plotting and conversion to other mesh forms. 
 License: GPL-3
 LazyData: TRUE
 RoxygenNote: 6.0.1
-Imports: 
-    dplyr,
+Imports:
     raster,
     gridBase,
     proj4,
