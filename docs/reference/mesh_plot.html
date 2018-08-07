@@ -32,7 +32,7 @@
 
 <meta property="og:title" content="Plot as a mesh — mesh_plot" />
 
-<meta property="og:description" content="Plot as a mesh" />
+<meta property="og:description" content="Convert to a quadmesh and plot in efficient vectorized form using 'grid'." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -87,7 +87,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/topography.html">Vignette Title</a>
+      <a href="../articles/topography.html">Topography with quadmesh</a>
     </li>
   </ul>
 </li>
@@ -122,19 +122,19 @@
 
     <div class="ref-description">
     
-    <p>Plot as a mesh</p>
+    <p>Convert to a quadmesh and plot in efficient vectorized form using 'grid'.</p>
     
     </div>
 
     <pre class="usage"><span class='fu'>mesh_plot</span>(<span class='no'>x</span>, <span class='kw'>crs</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>colfun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for BasicRaster</span>
-<span class='fu'>mesh_plot</span>(<span class='no'>x</span>, <span class='kw'>crs</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>colfun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='no'>...</span>)
+<span class='fu'>mesh_plot</span>(<span class='no'>x</span>, <span class='kw'>crs</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>colfun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for RasterLayer</span>
-<span class='fu'>mesh_plot</span>(<span class='no'>x</span>, <span class='kw'>crs</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>colfun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='no'>...</span>)</pre>
+<span class='fu'>mesh_plot</span>(<span class='no'>x</span>, <span class='kw'>crs</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>colfun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -163,13 +163,21 @@
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>nothing</p>
+    <p>nothing, used for the side-effect of creating or adding to a plot</p>
+    
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>The mesh may be reprojected prior to plotting using the 'crs' argument to
+define the target map projection in 'PROJ string' format. (There is no
+"reproject" function for quadmesh, this is performed directly on the x-y
+coordinates of the 'quadmesh' output). The 'colfun' argument is used to
+generate colours which are mapped to the input object data as in 'image'.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>mesh_plot</span>(<span class='no'>worldll</span>)</div><div class='img'><img src='mesh_plot-1.png' alt='' width='700' height='433' /></div><div class='input'>
-<span class='fu'>mesh_plot</span>(<span class='kw pkg'>raster</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/raster/topics/crop'>crop</a></span>(<span class='no'>worldll</span>, <span class='fu'>extent</span>(-<span class='fl'>179</span>, <span class='fl'>179</span>, -<span class='fl'>89</span>, <span class='fl'>89</span>)), <span class='kw'>crs</span> <span class='kw'>=</span> <span class='st'>"+proj=laea"</span>)</div><div class='output co'>#&gt; <span class='error'>Error in .local(x, y, ...): Cannot get an Extent object from argument y</span></div><div class='input'><span class='fu'>mesh_plot</span>(<span class='no'>worldll</span>, <span class='kw'>crs</span> <span class='kw'>=</span> <span class='st'>"+proj=moll"</span>)</div><div class='img'><img src='mesh_plot-2.png' alt='' width='700' height='433' /></div><div class='input'><span class='no'>prj</span> <span class='kw'>&lt;-</span> <span class='st'>"+proj=lcc +datum=WGS84 +lon_0=147 +lat_0=-40 +lat_1=-55 +lat_2=-20"</span>
-<span class='fu'>mesh_plot</span>(<span class='no'>etopo</span>, <span class='kw'>crs</span> <span class='kw'>=</span> <span class='no'>prj</span>, <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>colfun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>n</span> <span class='kw'>=</span> <span class='fl'>20</span>) <span class='fu'>grey</span>(<span class='fu'>seq</span>(<span class='fl'>0</span>, <span class='fl'>1</span>, <span class='kw'>length</span> <span class='kw'>=</span> <span class='no'>n</span>)))</div><div class='input'><span class='fu'>mesh_plot</span>(<span class='no'>worldll</span>, <span class='kw'>crs</span> <span class='kw'>=</span> <span class='no'>prj</span>, <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='img'><img src='mesh_plot-3.png' alt='' width='700' height='433' /></div></pre>
+    <pre class="examples"><div class='input'><span class='fu'>mesh_plot</span>(<span class='no'>worldll</span>)</div><div class='img'><img src='mesh_plot-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'>## crop otherwise out of bounds from PROJ</span>
+<span class='fu'>mesh_plot</span>(<span class='kw pkg'>raster</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/raster/topics/crop'>crop</a></span>(<span class='no'>worldll</span>, <span class='kw pkg'>raster</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/raster/topics/extent'>extent</a></span>(-<span class='fl'>179</span>, <span class='fl'>179</span>, -<span class='fl'>89</span>, <span class='fl'>89</span>)), <span class='kw'>crs</span> <span class='kw'>=</span> <span class='st'>"+proj=laea"</span>)</div><div class='img'><img src='mesh_plot-2.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'>mesh_plot</span>(<span class='no'>worldll</span>, <span class='kw'>crs</span> <span class='kw'>=</span> <span class='st'>"+proj=moll"</span>)</div><div class='img'><img src='mesh_plot-3.png' alt='' width='700' height='433' /></div><div class='input'><span class='no'>prj</span> <span class='kw'>&lt;-</span> <span class='st'>"+proj=lcc +datum=WGS84 +lon_0=147 +lat_0=-40 +lat_1=-55 +lat_2=-20"</span>
+<span class='fu'>mesh_plot</span>(<span class='no'>etopo</span>, <span class='kw'>crs</span> <span class='kw'>=</span> <span class='no'>prj</span>, <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>colfun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>n</span> <span class='kw'>=</span> <span class='fl'>20</span>) <span class='fu'>grey</span>(<span class='fu'>seq</span>(<span class='fl'>0</span>, <span class='fl'>1</span>, <span class='kw'>length</span> <span class='kw'>=</span> <span class='no'>n</span>)))</div><div class='input'><span class='fu'>mesh_plot</span>(<span class='no'>worldll</span>, <span class='kw'>crs</span> <span class='kw'>=</span> <span class='no'>prj</span>, <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='img'><img src='mesh_plot-4.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -177,6 +185,8 @@
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
+
+      <li><a href="#details">Details</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>

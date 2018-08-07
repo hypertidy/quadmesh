@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Create a quad-type mesh for use in rgl — quadmesh • quadmesh</title>
+<title>Create a quad-type mesh for use in rgl. — quadmesh • quadmesh</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,9 +30,10 @@
 
 
 
-<meta property="og:title" content="Create a quad-type mesh for use in rgl — quadmesh" />
+<meta property="og:title" content="Create a quad-type mesh for use in rgl. — quadmesh" />
 
-<meta property="og:description" content="Convert a raster to a mesh3d quadrangle mesh." />
+<meta property="og:description" content="Convert an object to a mesh3d quadrangle mesh,
+currently the only available method is for raster." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -87,7 +88,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/topography.html">Vignette Title</a>
+      <a href="../articles/topography.html">Topography with quadmesh</a>
     </li>
   </ul>
 </li>
@@ -115,14 +116,15 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Create a quad-type mesh for use in rgl</h1>
-    <small class="dont-index">Source: <a href='https://github.com/mdsumner/quadmesh/blob/master/R/quadmesh.r'><code>R/quadmesh.r</code></a></small>
+    <h1>Create a quad-type mesh for use in rgl.</h1>
+    <small class="dont-index">Source: <a href='https://github.com/mdsumner/quadmesh/blob/master/R/quadmesh.R'><code>R/quadmesh.R</code></a></small>
     <div class="hidden name"><code>quadmesh.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Convert a <code><a href='http://www.rdocumentation.org/packages/raster/topics/raster'>raster</a></code> to a <code><a href='http://www.rdocumentation.org/packages/rgl/topics/mesh3d'>mesh3d</a></code> quadrangle mesh.</p>
+    <p>Convert an object to a <code><a href='http://www.rdocumentation.org/packages/rgl/topics/mesh3d'>mesh3d</a></code> quadrangle mesh,
+currently the only available method is for <code><a href='http://www.rdocumentation.org/packages/raster/topics/raster'>raster</a></code>.</p>
     
     </div>
 
@@ -149,6 +151,12 @@
 
     <p>mesh3d</p>
     
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>The output is described as a mesh because it is a dense representation
+of a continuous shape, in this case plane-filling quadrilaterals defined
+by index of four of the available vertices.</p>
+    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'>library</span>(<span class='no'>raster</span>)</div><div class='output co'>#&gt; <span class='message'>Loading required package: sp</span></div><div class='input'><span class='fu'>data</span>(<span class='no'>volcano</span>)
@@ -161,6 +169,8 @@
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
+
+      <li><a href="#details">Details</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>
