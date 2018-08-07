@@ -49,4 +49,96 @@ shade3d(qm, col = grey(scl(qm$vb[3,qm$ib])))
 rglwidget()
 ```
 
+# Why quadmesh? 
+
+Why meshes at all? 
+
+The simplest kind of mesh is a basic raster. Consider a matrix of 12 values. 
+
+```{r}
+(m <- matrix(1:12, nrow = 3))
+```
+
+On its own this matrix has absolutely nothing to do with spatial data, it is literally a collection of 12 numeric values in a given order, and by the magic of programming we've nominated a shape of 3x4. We can't help but think about this shape spatially however, but there's a problem. Does each element occupy space or should we consider them to be infinitesimal locations? 
+
+R provides either interpretation (to simplify this story we nominate locations for the rows and columns explicitly).  
+
+When considered as an image, each matrix element occupies a certain space in width and height,  but when considered as a point set the numbers simply float at the given locations. Which is correct? (Spoiler: Both are correct, it simply depends what we are doing.) 
+
+```{r}
+x <- seq(1, nrow(m)) - 0.5
+y <- seq(1, ncol(m)) - 0.5
+image(x, y, m)
+
+text(expand.grid(x, y), lab = m[])
+
+```
+
+The raster package defaults to the image interpretation and helpfully assumes the values are nominally at the centre points as shown above. We have to nominate the extent or we end up in 0,1 range, we also have to invert the order of the values because raster counts from the top of the page and R's matrix uses [column-major order](https://cran.r-project.org/web/packages/reticulate/vignettes/arrays.html).
+
+```{r}
+library(raster)
+(r <- raster(t(m[, ncol(m):1]), xmn = 0, xmx =ncol(m), ymn = 0, ymx = nrow(m)))
+```
+
+
+R's image and rasters in general are so efficient because they only store this minimal amount of information: the actual data values, and the extent and dimensions of the space they occur in. If we had to store the centre coordinate of every cell, or worse the corner coordinates then the data storage goes up dramatically. Every software that deals well with these kinds of data has to treat these coordinates as implicit.  We can easily expand the centre coordinates. 
+
+
+```{r}
+xyz <- as.data.frame(r, xy = TRUE)
+head(xyz)
+tail(xyz)
+```
+
+but to expand the corners we have to jump through some hoops and even then we get *every instance* of the corners, not only for each cell but to explicitly close the cell as a polygon. 
+
+```{r}
+as(as(raster::rasterToPolygons(r), "SpatialLinesDataFrame"), 
+   "SpatialPointsDataFrame")
+
+```
+
+There are only 20 unique coordinates at the corners, which is where quadmesh comes in. 
+
+```{r}
+library(quadmesh)
+qm <- quadmesh(r)
+str(qm)
+```
+
+
+This is a mysterious seeming data structure, it is the mesh3d type of the 'rgl' package, rarely seen in the wild. 
+
+The structure is `vb`, the coordinates of the mesh - these are the
+actual corner coordinates from the input raster.  
+
+```{r}
+image(r)
+op <- par(xpd = NA)
+text(t(qm$vb), lab = 1:20)
+par(op)
+```
+
+
+Notice how these are unique coordinates, there's no simple relationship between the cell and its value and its four corners. This is because they are shared between neighbouring cells. The relationship is stored in the `ib` array, this has four rows one for each corner of each cell. There are 12 cells and each has four coordinates from the shared vertex pool. The cells are defined in the order they occur in raster. 
+
+```{r}
+qm$ib
+```
+
+It works directly with rgl functions. 
+
+
+```{r}
+library(rgl)
+shade3d(qm)
+rglwidget()
+```
+
+
+The primary means to create this format from a raster is for 3D plotting, but because we have access to the coordinate directly it provides other uses. We can transform the coordinates (i.e. a map projection) or manipulate them and augment the Z value (for example) in flexible ways. 
+
+(The usual way of driving rgl grid surfaces is `rgl.surface` but this is limited to the x, y, z list interface just as image() is. )
+
 
