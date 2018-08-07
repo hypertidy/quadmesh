@@ -7,7 +7,7 @@
 triangulate_quads(quad_index)
 }
 \arguments{
-\item{quad_index}{}
+\item{quad_index}{the 'ib' index of quads from 'quadmesh'}
 }
 \value{
 matrix of triangle indices
@@ -18,4 +18,13 @@ Convert quad index to triangles.
 \details{
 Triangle pairs from each quad are interleaved in the result, so that neighbour
 triangles from a single quad are together.
+}
+\examples{
+triangulate_quads(cbind(c(1, 2, 4, 3), c(3, 4, 6, 5)))
+
+qm <- quadmesh(raster::crop(worldll, raster::extent(140, 160, -50, -30)))
+tri <- triangulate_quads(qm$ib)
+plot(t(qm$vb))
+## tri is qm$ib converted to triangles for the same vertex set
+polygon(t(qm$vb)[rbind(tri, NA), ])
 }
