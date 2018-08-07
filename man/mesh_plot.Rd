@@ -26,10 +26,17 @@ mesh_plot(x, crs = NULL, colfun = NULL, add = FALSE, ...)
 \item{...}{ignored}
 }
 \value{
-nothing
+nothing, used for the side-effect of creating or adding to a plot
 }
 \description{
-Plot as a mesh
+Convert to a quadmesh and plot in efficient vectorized form using 'grid'.
+}
+\details{
+The mesh may be reprojected prior to plotting using the 'crs' argument to
+define the target map projection in 'PROJ string' format. (There is no
+"reproject" function for quadmesh, this is performed directly on the x-y
+coordinates of the 'quadmesh' output). The 'colfun' argument is used to
+generate colours which are mapped to the input object data as in 'image'.
 }
 \examples{
 mesh_plot(worldll)

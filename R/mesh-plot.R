@@ -5,13 +5,20 @@ scl <- function(x) {
 
 #' Plot as a mesh
 #'
+#' Convert to a quadmesh and plot in efficient vectorized form using 'grid'.
+#'
+#' The mesh may be reprojected prior to plotting using the 'crs' argument to
+#' define the target map projection in 'PROJ string' format. (There is no
+#' "reproject" function for quadmesh, this is performed directly on the x-y
+#' coordinates of the 'quadmesh' output). The 'colfun' argument is used to
+#' generate colours which are mapped to the input object data as in 'image'.
 #' @param x object to convert to mesh and plot
 #' @param crs target map projection
 #' @param colfun colour function to use, `viridis` is the default
 #' @param add add to existing plot or start a new one
 #' @param ... ignored
 #'
-#' @return nothing
+#' @return nothing, used for the side-effect of creating or adding to a plot
 #' @export
 #'
 #' @examples

@@ -5,5 +5,7 @@
 \alias{etopo}
 \title{World topography map}
 \description{
-A simplified version of 'Etopo2'.
+A simplified version of 'Etopo2'. The Etopo2 data set was
+reduced 20X to create this raster layer of global relief. See code
+in 'data-raw/topo.R'.
 }

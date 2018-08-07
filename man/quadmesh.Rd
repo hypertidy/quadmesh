@@ -2,7 +2,7 @@
 % Please edit documentation in R/quadmesh.R
 \name{quadmesh}
 \alias{quadmesh}
-\title{Create a quad-type mesh for use in rgl}
+\title{Create a quad-type mesh for use in rgl.}
 \usage{
 quadmesh(x, z = x, na.rm = FALSE)
 }
@@ -17,7 +17,13 @@ quadmesh(x, z = x, na.rm = FALSE)
 mesh3d
 }
 \description{
-Convert a \code{\link[raster]{raster}} to a \code{\link[rgl]{mesh3d}} quadrangle mesh.
+Convert an object to a \code{\link[rgl]{mesh3d}} quadrangle mesh,
+currently the only available method is for \code{\link[raster]{raster}}.
+}
+\details{
+The output is described as a mesh because it is a dense representation
+of a continuous shape, in this case plane-filling quadrilaterals defined
+by index of four of the available vertices.
 }
 \examples{
 library(raster)

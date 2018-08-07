@@ -5,5 +5,8 @@
 \alias{worldll}
 \title{World raster map}
 \description{
-A rasterized version of `wrld_simpl`.
+A rasterized version of `wrld_simpl`, created by burning the country
+polygon ID number into a one-degree world raster. (This is a very
+out of date polygon data set used for example only).See code in
+'data-raw/worldll.R'.
 }

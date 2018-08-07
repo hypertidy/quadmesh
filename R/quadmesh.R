@@ -33,9 +33,14 @@ p4 <- function(xp, nc) {
 }
 
 
-#' Create a quad-type mesh for use in rgl
+#' Create a quad-type mesh for use in rgl.
 #'
-#' Convert a \code{\link[raster]{raster}} to a \code{\link[rgl]{mesh3d}} quadrangle mesh.
+#' Convert an object to a \code{\link[rgl]{mesh3d}} quadrangle mesh,
+#' currently the only available method is for \code{\link[raster]{raster}}.
+#'
+#' The output is described as a mesh because it is a dense representation
+#' of a continuous shape, in this case plane-filling quadrilaterals defined
+#' by index of four of the available vertices.
 #' @param x raster object for mesh structure
 #' @param z raster object for height values
 #' @param na.rm remove quads where missing values?

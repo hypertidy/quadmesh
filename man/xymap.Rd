@@ -5,7 +5,7 @@
 \alias{xymap}
 \title{World map}
 \description{
-A simple matrix of lon, lat, separated by NA.
+The world coastline coordinates. A simple matrix of lon, lat, separated by NA.
 }
 \details{
 From the maps package, see 'data-raw/xymap.R'.
