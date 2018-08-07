@@ -7,7 +7,7 @@ Description: Create a standard quadrangle mesh from gridded data ('rasters') for
  plotting and conversion to other mesh forms. 
 License: GPL-3
 LazyData: TRUE
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.0
 Imports:
     raster,
     gridBase,
@@ -18,7 +18,8 @@ Suggests:
     knitr,
     rmarkdown,
     palr,
-    rgl
+    rgl,
+    testthat
 URL: https://github.com/mdsumner/quadmesh
 BugReports: https://github.com/mdsumner/quadmesh/issues
 VignetteBuilder: knitr

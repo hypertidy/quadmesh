@@ -7,7 +7,7 @@
 \title{quadmesh: Quadrangle Mesh}
 \description{
 Create a standard quadrangle mesh from gridded data ('rasters') for flexible
-plotting and conversion to other mesh forms.
+ plotting and conversion to other mesh forms.
 }
 \seealso{
 Useful links:

@@ -2,19 +2,17 @@
 % Please edit documentation in R/mesh-plot.R
 \name{mesh_plot}
 \alias{mesh_plot}
-\alias{mesh_plot}
 \alias{mesh_plot.BasicRaster}
-\alias{mesh_plot}
 \alias{mesh_plot.RasterLayer}
 \title{Plot as a mesh}
 \usage{
 mesh_plot(x, crs = NULL, colfun = NULL, add = FALSE, ...)
 
-\method{mesh_plot}{BasicRaster}(x, crs = NULL, colfun = NULL, add = FALSE,
-  ...)
+\method{mesh_plot}{BasicRaster}(x, crs = NULL, colfun = NULL,
+  add = FALSE, ...)
 
-\method{mesh_plot}{RasterLayer}(x, crs = NULL, colfun = NULL, add = FALSE,
-  ...)
+\method{mesh_plot}{RasterLayer}(x, crs = NULL, colfun = NULL,
+  add = FALSE, ...)
 }
 \arguments{
 \item{x}{object to convert to mesh and plot}
@@ -35,8 +33,8 @@ Plot as a mesh
 }
 \examples{
 mesh_plot(worldll)
-
-mesh_plot(raster::crop(worldll, extent(-179, 179, -89, 89)), crs = "+proj=laea")
+## crop otherwise out of bounds from PROJ
+mesh_plot(raster::crop(worldll, raster::extent(-179, 179, -89, 89)), crs = "+proj=laea")
 mesh_plot(worldll, crs = "+proj=moll")
 prj <- "+proj=lcc +datum=WGS84 +lon_0=147 +lat_0=-40 +lat_1=-55 +lat_2=-20"
 mesh_plot(etopo, crs = prj, add = FALSE, colfun = function(n = 20) grey(seq(0, 1, length = n)))
