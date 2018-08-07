@@ -2,8 +2,8 @@
 % Please edit documentation in R/quadmesh-package.R
 \docType{package}
 \name{quadmesh-package}
-\alias{quadmesh}
 \alias{quadmesh-package}
+\alias{_PACKAGE}
 \title{quadmesh: Quadrangle Mesh}
 \description{
 Create a standard quadrangle mesh from gridded data ('rasters') for flexible

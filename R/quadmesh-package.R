@@ -1,4 +1,5 @@
 #' @keywords internal
+#' @aliases quadmesh-package
 "_PACKAGE"
 
 #' World raster map
