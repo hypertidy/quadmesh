@@ -139,6 +139,24 @@ rglwidget()
 
 The primary means to create this format from a raster is for 3D plotting, but because we have access to the coordinate directly it provides other uses. We can transform the coordinates (i.e. a map projection) or manipulate them and augment the Z value (for example) in flexible ways. 
 
-(The usual way of driving rgl grid surfaces is `rgl.surface` but this is limited to the x, y, z list interface just as image() is. )
+(The usual way of driving rgl grid surfaces is `rgl.surface` but this is limited to the centre-point interpretation only - more than the x, y, z list interface as image() is, i.e. it can take an individual x,y pair for every cell, but it cannot properly represent the cell-as-area as image can. For this we need to use `shade3d`, and actual `meshd3d` types in `rgl`). 
+
+
+# Quadmesh is a special case
+
+All quad meshes may be specified trivially as a triangular mesh, there's a straightforward re-indexing from quads to triangles by splitting each set of four into two sets of three. If the quad mesh is regular there's a literal ambiguity about the best choice (diagonal up, or down?) which leads us to the real value of a triangulated mesh. The triangle mesh may be denser or coarser depending on need, something that a regular grid cannot do. Mesh creation is a dark and difficult science, but has been formalized with a strong math basis in recent years. It's still hard to do constrained polygon triangulation, and this lack probably drove the transition of topology GIS to modern SF GIS more than any other issue. 
+
+But, modern meshing is now very well established, but its use in open and free contexts is still relatively rare. (We can see this changing in Javascript and D3 in particular.)
+
+Physical modellers, engineering construction, fluid hydrodynamics use these techniques in detail, but finite-element level model is rarely applied in GIS contexts. 
+
+# Topology and geometry are completely separable
+
+Consider two kinds of meshes, a simple triangulation and a short piecewise line composed of segments. The triangles and segments both *fill space* in a particular way, they inhabit 2D and 1D topology in a way that is independent of the actual geometric space in use. We can flatten the triangles into a plane or lay the line segments each at right angles to each other without changing this topological relation, as a mesh the triangles will still have the same neighbours and and the line will still have the same segments in the same order. The geometry is specified by the vertices between these topological elements, and we may define these in x,y, in x,y,z or x,y,z,time - or in any *geometric* space we choose. The topology itself may need to be defined in a partiular origin geometry, and for example the Delaunay triangulation for connecting planar x,y points gives a particular mesh - but once this is defined we can transform the original geometry (say it was UTM, zone 55 south) into a global Lambert Azimuthal Equal Area, or onto a geocentric shell with radius 637187m - the relationship between the primitives (triangles, edges) does not change. Not all geometries make sense for a given mesh, but with a mesh we are quite free to choose amongst many sensible alternatives, the primitives provide a straightforward interpolative space along with other physical properties might be assumed to vary. This is the basis of barycentric interpolation and simplistic linear interpolation with depth over time, for example. 
+
+
+# Geometry is purely a table of attributes
+
+It's the mesh indexing of how the primitives relate to a given geometry that matters, not the original (or particular) geometry in play. 
 
 
