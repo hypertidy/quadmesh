@@ -152,11 +152,32 @@ Physical modellers, engineering construction, fluid hydrodynamics use these tech
 
 # Topology and geometry are completely separable
 
-Consider two kinds of meshes, a simple triangulation and a short piecewise line composed of segments. The triangles and segments both *fill space* in a particular way, they inhabit 2D and 1D topology in a way that is independent of the actual geometric space in use. We can flatten the triangles into a plane or lay the line segments each at right angles to each other without changing this topological relation, as a mesh the triangles will still have the same neighbours and and the line will still have the same segments in the same order. The geometry is specified by the vertices between these topological elements, and we may define these in x,y, in x,y,z or x,y,z,time - or in any *geometric* space we choose. The topology itself may need to be defined in a partiular origin geometry, and for example the Delaunay triangulation for connecting planar x,y points gives a particular mesh - but once this is defined we can transform the original geometry (say it was UTM, zone 55 south) into a global Lambert Azimuthal Equal Area, or onto a geocentric shell with radius 637187m - the relationship between the primitives (triangles, edges) does not change. Not all geometries make sense for a given mesh, but with a mesh we are quite free to choose amongst many sensible alternatives, the primitives provide a straightforward interpolative space along with other physical properties might be assumed to vary. This is the basis of barycentric interpolation and simplistic linear interpolation with depth over time, for example. 
+Consider two kinds of meshes, a simple triangulation and a short piecewise line composed of segments. The triangles and segments both *fill space* in a particular way, they inhabit 2D and 1D topology in a way that is independent of the actual geometric space in use. We can flatten the triangles into a plane or lay the line segments each at right angles to each other without changing this topological relation, as a mesh the triangles will still have the same neighbours and and the line will still have the same segments in the same order. The geometry is specified by the vertices between these topological elements, and we may define these in x,y, in x,y,z or x,y,z,time - or in any *geometric* space we choose. 
+
+*planar and rgl plots of meshes*
+
+The topology itself may need to be defined in a partiular origin geometry, and for example the Delaunay triangulation for connecting planar x,y points gives a particular mesh - but once this is defined we can transform the original geometry (say it was UTM, zone 55 south) into a global Lambert Azimuthal Equal Area, or onto a geocentric shell with radius 637187m - the relationship between the primitives (triangles, edges) does not change. Not all geometries make sense for a given mesh, but with a mesh we are quite free to choose amongst many sensible alternatives, the primitives provide a straightforward interpolative space along with other physical properties might be assumed to vary. This is the basis of barycentric interpolation and simplistic linear interpolation with depth over time, for example. 
 
 
 # Geometry is purely a table of attributes
 
-It's the mesh indexing of how the primitives relate to a given geometry that matters, not the original (or particular) geometry in play. 
+It's the mesh indexing of how the primitives relate to a given geometry that matters, not the original (or particular) geometry in play. This means that if we triangulate in the local coordinate system but then map the mesh in a different one it will no longer "be Delaunay". 
+
+This also opens up the idea that we can store multiple coordinate system choices in one data set. 
+
+There are efficiences for different kinds of mesh, for raster we need only store the cell values and the offset and scale to position the grid. It's completely parameterized, and if we need the centre or corner coordinates they are implicit, no need to generate them. If we store a connected triangular mesh, it becomes wasteful to store every path around each triangle as coordinates, and it's actually error-prone because we need to update all instances of coordinates at any shared boundary. A better approach is to keep the index of each triangle, against a set of shared vertices. We can augment the vertices, transform them and so on and because they are uniquly defined the mesh is automatically correctly updated with no gaps. 
 
 
+
+# Point clouds are pure geometry
+
+Point clouds provide a range of implicit shapes from set of raw geometry. There's the "ground", and some challenging algorithms exist to identify which points best represent this particular surface in a set of points. We can define this set of ground points *implicitly*, by storing a reference to the relevant vertices from the entire set. If we use this to actually *connect the points* together then we still store those indexes in triplets, the triangulation of those points in the X-Y plane. Notice how the points are connnected together in a nominated X-Y space, it doesn't matter where the Z value/s are, they only contributed to the choice of ground points. There's a chain of implicit, indexed structures that we can construct from these samples of raw geometry. Other algorithms might include the spectral properties or other measurements for the particular definition of the target surface. 
+
+# Polygons and lines in GIS are piecewise graphs
+
+From the mesh perspective SF types are *explicitly described piecewise shapes. Every coordinate is stored explicitly as it occurs, but we can flip this view and rather store the entities involved (and *name them*) together. There are vertices and edges, and these are grouped into higher entities such as *paths*, and paths are grouped together as *lines or polygons*, and these are further grouped into features. By storing each element in its own set we have opportunity for explicit topology (shared vertices, shared edges). 
+
+We *lose* the ability to arbitrarily transmit atomic features around, but this can easily be achieved for a given set of features anyway. 
+
+
+# 
