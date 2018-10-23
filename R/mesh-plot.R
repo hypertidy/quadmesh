@@ -94,4 +94,92 @@ mesh_plot.RasterLayer <- function(x, crs = NULL, colfun = NULL, add = FALSE, ...
   invisible(NULL)
 }
 
+#' @name mesh_plot
+#' @export
+#' @examples
+#' # f = normalizePath("~/Git/weird.nc/extdata/get1index_64/test.nc")
+#' # library(stars)
+#' # x <- read_stars(f, curvilinear = c("lon", "lat"))
+#' # mesh_plot(x, qtile = 56)
+#' # mesh_plot(x, colfun = palr::sstPal, qtile = 67)
+#' # mesh_plot(x, colfun = palr::sstPal, qtile = 67, crs = "+proj=laea +lat_0=-30")
+mesh_plot.stars <- function(x, crs = NULL, colfun = NULL, add = FALSE, ..., qtile = FALSE) {
+  if (is.null(colfun)) colfun <- function(n) grey(seq(0, 1, length.out = n))
+  ## whoa, we might not be curvilinear
+  if (is.null(st_dimensions(x)$x$values) || is.null(st_dimensions(x)$x$values)) {
+    stop("not a curvilinear stars object")
+  }
+  if (is.null(dim(st_dimensions(x)$x$values)) || is.null(dim(st_dimensions(x)$x$values))) {
+    ## looks rectilinear
+    coords <- as.matrix(expand.grid(st_dimensions(x)$x$values, st_dimensions(x)$y$values))
+  } else {
+    ## looks curvilinear
+    coords <- cbind(as.vector(st_dimensions(x)$x$values),
+                    as.vector(st_dimensions(x)$y$values))
+  } # else
+  ## fail, we need helpers for affine grids to values ...
 
+  if (!is.null(crs)) {
+    coords <- rgdal::project(coords, crs)  ## assume forwards
+  }
+
+  tri <- RTriangle::triangulate(RTriangle::pslg(P = cbind(rep(seq_len(nrow(x)), ncol(x)),
+                                                          rep(seq_len(ncol(x)), each = nrow(x)))))
+
+
+  XY <- coords[t(tri$T), ]
+  ID <- rep(1:nrow(tri$T), each = 3)
+  one_slice <- function(x) {
+    xx <- x[[1]]
+    ## might need de-uniting here
+    dm <- dim(xx)
+    if (length(dm) > 2) xx <- xx[,,1, drop = TRUE]
+    xx
+  }
+  ## watch out here, we need a triangle vertex to get the colours in the right order
+  vals <- as.vector(one_slice(x))
+  if (qtile > 0) {
+    if (isTRUE(qtile)) qtile <- 12
+    vals <- findInterval(vals, quantile(vals, prob = seq(0, 1, length = qtile)))
+  }
+  COL <- colfun(27)[scales::rescale(vals[tri$T[,1]], c(1, 12))]
+  isLL <- !is.null(crs) ## assume it is
+  if (!add ) {
+    plot(cbind(range(coords[,1]), range(coords[,2])), type = "n", asp = if (isLL) 1/cos(mean(coords[,2]) * pi/180) else 1,
+         xlab = "", ylab = "")
+  }
+  vps <- gridBase::baseViewports()
+  grid::pushViewport(vps$inner, vps$figure, vps$plot)
+  grid::grid.polygon(XY[,1], XY[,2], ID,  gp = grid::gpar(col = NA, fill = COL),
+                     default.units = "native")
+  grid::popViewport(3)
+  mm <- rnaturalearth::ne_countries(scale = "medium", returnclass="sp")
+  if (!is.null(crs)) mm <- sp::spTransform(mm, crs)
+  sp::plot(mm, add = TRUE, border = 'firebrick')
+
+}
+
+
+coord_plot <- function(x, coords) {
+  ## triangulate the index (rather than quadmesh)
+
+  tri <- RTriangle::triangulate(RTriangle::pslg(P = cbind(raster::colFromCell(x, seq_len(raster::ncell(x))),
+                                                          raster::rowFromCell(x, seq_len(raster::ncell(x))))))
+
+
+  o <- structure(list(vb = t(cbind(coords, raster::values(x), 1)),
+            it = t(tri$T),
+            primitivetype = "triangle",
+            material = list(),
+            normals = NULL,
+            texcoords = NULL), class = c("mesh3d", "shape3d"))
+
+  rgl::open3d()
+cols <- viridis::viridis(56)[scales::rescale(o$vb[3,o$it], c(1, 56))]
+
+#print(str(cols))
+  rgl::shade3d(o, col = cols)
+  rgl::aspect3d(1, 1, .0001)
+
+  invisible(o)
+}

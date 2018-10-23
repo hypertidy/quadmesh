@@ -4,6 +4,7 @@
 \alias{mesh_plot}
 \alias{mesh_plot.BasicRaster}
 \alias{mesh_plot.RasterLayer}
+\alias{mesh_plot.stars}
 \title{Plot as a mesh}
 \usage{
 mesh_plot(x, crs = NULL, colfun = NULL, add = FALSE, ...)
@@ -13,6 +14,9 @@ mesh_plot(x, crs = NULL, colfun = NULL, add = FALSE, ...)
 
 \method{mesh_plot}{RasterLayer}(x, crs = NULL, colfun = NULL,
   add = FALSE, ...)
+
+\method{mesh_plot}{stars}(x, crs = NULL, colfun = NULL, add = FALSE,
+  ..., qtile = FALSE)
 }
 \arguments{
 \item{x}{object to convert to mesh and plot}
@@ -46,4 +50,10 @@ mesh_plot(worldll, crs = "+proj=moll")
 prj <- "+proj=lcc +datum=WGS84 +lon_0=147 +lat_0=-40 +lat_1=-55 +lat_2=-20"
 mesh_plot(etopo, crs = prj, add = FALSE, colfun = function(n = 20) grey(seq(0, 1, length = n)))
 mesh_plot(worldll, crs = prj, add = TRUE)
+# f = normalizePath("~/Git/weird.nc/extdata/get1index_64/test.nc")
+# library(stars)
+# x <- read_stars(f, curvilinear = c("lon", "lat"))
+# mesh_plot(x, qtile = 56)
+# mesh_plot(x, colfun = palr::sstPal, qtile = 67)
+# mesh_plot(x, colfun = palr::sstPal, qtile = 67, crs = "+proj=laea +lat_0=-30")
 }
