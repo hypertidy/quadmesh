@@ -53,6 +53,8 @@ p4 <- function(xp, nc) {
 #' @param x raster object for mesh structure
 #' @param z raster object for height values
 #' @param na.rm remove quads where missing values?
+#' @param ... ignored
+#' @param texture optional input RGB raster, 3-layers
 #' @return mesh3d
 #' @export
 #' @importFrom raster extract extent values

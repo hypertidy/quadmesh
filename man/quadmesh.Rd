@@ -12,6 +12,10 @@ quadmesh(x, z = x, na.rm = FALSE, ..., texture = NULL)
 \item{z}{raster object for height values}
 
 \item{na.rm}{remove quads where missing values?}
+
+\item{...}{ignored}
+
+\item{texture}{optional input RGB raster, 3-layers}
 }
 \value{
 mesh3d
