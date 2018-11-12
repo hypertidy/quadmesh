@@ -13,7 +13,8 @@ Imports:
     raster,
     gridBase,
     proj4,
-    viridis
+    viridis,
+    png
 Suggests: 
     datasets,
     knitr,

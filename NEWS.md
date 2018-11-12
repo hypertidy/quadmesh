@@ -1,5 +1,8 @@
 # quadmesh dev
 
+* The `quadmesh` functions gains a `texture` argument, to map on a 
+ 3-layer RGB raster (in 0-255) via a temporary PNG file. 
+ 
 * New function `mesh_plot` for basic vectorized raster plot with optional near near-lossless 
  projection transformation. 
  

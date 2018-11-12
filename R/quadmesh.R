@@ -41,12 +41,22 @@ p4 <- function(xp, nc) {
 #' The output is described as a mesh because it is a dense representation
 #' of a continuous shape, in this case plane-filling quadrilaterals defined
 #' by index of four of the available vertices.
+#'
+#' Any raster RGB object (3-layers, ranging in 0-255) may be used as
+#' a _texture_ on the resulting mesh3d object. There is however a bug
+#' in rgl 0.99.16 that prevents 'rgl::shade3d' from presenting this correctly.
+#' So for a 'mesh3d' object created with \code{x <- quadmesh(raster, texture = RGBraster)}
+#' A workaround is
+#' \code{shade3d(x, texcoords = t(x$texcoords)[x$ib, ], texture = x$texture)}
+#'
+#' It is not possible to provide rgl with an object of data, it must be a PNG file.
 #' @param x raster object for mesh structure
 #' @param z raster object for height values
 #' @param na.rm remove quads where missing values?
 #' @return mesh3d
 #' @export
 #' @importFrom raster extract extent values
+#' @importFrom png writePNG
 #' @examples
 #' library(raster)
 #' data(volcano)
@@ -74,22 +84,12 @@ quadmesh <- function(x, z = x, na.rm = FALSE, ..., texture = NULL) {
   ob$ib <- ind1
 
   if (!is.null(texture)) {
-    #vertices <- exy
-    ## check projection, need to handle missing ones, and assume they the same
-    #eitherNA <- is.na(projection(texture)) || is.na(projection(texture))
-
-    # if (!eitherNA || !projection(texture) == projection(x)) {
-    #   if (raster::isLonLat(x)) {
-    #     vertices <- vertices * pi/180
-    #   }
-    #   #browser()
-    #     vertices <- proj4::ptransform(vertices, src.proj = projection(x), dst.proj = projection(texture))
-    #     vertices <- cbind(vertices$x, vertices$y)
-    #    if (raster::isLonLat(texture)) {
-    #      vertices <- vertices * 180/pi
-    #    }
-    # }
-    #browser()
+    if (!inherits(texture, "BasicRaster")) {
+      stop("texture must be a 3-layer raster with RGB values (in 0-255)")
+    }
+    if (!raster::nlayers(texture) == 3L) {
+      stop("texture must be a 3-layer raster with RGB values (in 0-255)")
+    }
 
     exy <- target_coordinates(exy, src.proj = raster::projection(x),
                               target = texture)
