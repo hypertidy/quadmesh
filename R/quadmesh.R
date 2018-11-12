@@ -74,26 +74,34 @@ quadmesh <- function(x, z = x, na.rm = FALSE, ..., texture = NULL) {
   ob$ib <- ind1
 
   if (!is.null(texture)) {
-    vertices <- exy
+    #vertices <- exy
     ## check projection, need to handle missing ones, and assume they the same
-    eitherNA <- is.na(projection(texture)) || is.na(projection(texture))
+    #eitherNA <- is.na(projection(texture)) || is.na(projection(texture))
 
-    if (!eitherNA || !projection(texture) == projection(x)) {
-      if (raster::isLonLat(x)) {
-        vertices <- vertices * pi/180
-      }
-      #browser()
-        vertices <- proj4::ptransform(vertices, src.proj = projection(x), dst.proj = projection(texture))
-        vertices <- cbind(vertices$x, vertices$y)
-       if (raster::isLonLat(texture)) {
-         vertices <- vertices * 180/pi
-       }
-    }
+    # if (!eitherNA || !projection(texture) == projection(x)) {
+    #   if (raster::isLonLat(x)) {
+    #     vertices <- vertices * pi/180
+    #   }
+    #   #browser()
+    #     vertices <- proj4::ptransform(vertices, src.proj = projection(x), dst.proj = projection(texture))
+    #     vertices <- cbind(vertices$x, vertices$y)
+    #    if (raster::isLonLat(texture)) {
+    #      vertices <- vertices * 180/pi
+    #    }
+    # }
     #browser()
-   ob$texcoords <- t(texture_coordinates(texture, vertices))
+
+    exy <- target_coordinates(exy, src.proj = raster::projection(x),
+                              target = texture)
+
+
+
+  texcoords <- texture_coordinates(texture, vertices = exy)
+
+   ob$texcoords <- t(texcoords[qm$ib, ])
    pngfilename <- tempfile(fileext = ".png")
    message(sprintf("writing texture image to %s", pngfilename))
-   rgdal::writeGDAL(as(texture, "SpatialGridDataFrame"), pngfilename, driver = "PNG")
+   png::writePNG(raster::as.array(texture) / 255, pngfilename)
    ob$texture <- pngfilename
   }
   ob
@@ -101,12 +109,7 @@ quadmesh <- function(x, z = x, na.rm = FALSE, ..., texture = NULL) {
 
 
 
-texture_coordinates <- function(texture_image,vertices) {
-  #browser()
-  raster::xyFromCell(raster::setExtent(texture_image, raster::extent(0, 1, 0, 1)),
-                     raster::cellFromXY(texture_image, vertices))
 
-}
 # quad <- function(x, z = x, na.rm = FALSE) {
 #   x <- x[[1]]  ## just the oneth raster for now
 #   exy <- edgesXY(x)

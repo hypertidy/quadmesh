@@ -15,3 +15,10 @@ target_coordinates <- function(xy, src.proj = NA_character_, target) {
 }
 
 
+
+texture_coordinates <- function(texture_image,vertices) {
+  #browser()
+  raster::xyFromCell(raster::setExtent(texture_image, raster::extent(0, 1, 0, 1)),
+                     raster::cellFromXY(texture_image, vertices))
+
+}
