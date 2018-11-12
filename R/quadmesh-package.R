@@ -29,3 +29,13 @@ NULL
 #' @docType data
 #' @name xymap
 NULL
+
+
+#' Mapbox satellite image.
+#'
+#' Satellite image of southern Australia.
+#'
+#'
+#' @docType data
+#' @name mapbox_sat
+NULL

@@ -4,7 +4,7 @@
 \alias{quadmesh}
 \title{Create a quad-type mesh for use in rgl.}
 \usage{
-quadmesh(x, z = x, na.rm = FALSE)
+quadmesh(x, z = x, na.rm = FALSE, ..., texture = NULL)
 }
 \arguments{
 \item{x}{raster object for mesh structure}

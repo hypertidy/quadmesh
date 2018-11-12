@@ -7,7 +7,7 @@ Description: Create a standard quadrangle mesh from gridded data ('rasters') for
  plotting and conversion to other mesh forms. 
 License: GPL-3
 LazyData: TRUE
-RoxygenNote: 6.1.0
+RoxygenNote: 6.1.1
 Depends: R (>= 2.10)
 Imports:
     raster,

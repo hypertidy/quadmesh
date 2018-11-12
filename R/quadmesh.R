@@ -52,7 +52,7 @@ p4 <- function(xp, nc) {
 #' data(volcano)
 #' r <- setExtent(raster(volcano), extent(0, 100, 0, 200))
 #' qm <- quadmesh(r)
-quadmesh <- function(x, z = x, na.rm = FALSE) {
+quadmesh <- function(x, z = x, na.rm = FALSE, ..., texture = NULL) {
   x <- x[[1]]  ## just the oneth raster for now
   exy <- edgesXY(x)
  # ind <- apply(prs(seq(ncol(x) + 1)), 1, p4, nc = ncol(x) + 1)
@@ -72,9 +72,41 @@ quadmesh <- function(x, z = x, na.rm = FALSE) {
   if (!is.null(z)) z <- zapsmall(extract(z, exy, method = "bilinear")) else z <- 0
   ob$vb <- t(cbind(exy, z, 1))
   ob$ib <- ind1
+
+  if (!is.null(texture)) {
+    vertices <- exy
+    ## check projection, need to handle missing ones, and assume they the same
+    eitherNA <- is.na(projection(texture)) || is.na(projection(texture))
+
+    if (!eitherNA || !projection(texture) == projection(x)) {
+      if (raster::isLonLat(x)) {
+        vertices <- vertices * pi/180
+      }
+      #browser()
+        vertices <- proj4::ptransform(vertices, src.proj = projection(x), dst.proj = projection(texture))
+        vertices <- cbind(vertices$x, vertices$y)
+       if (raster::isLonLat(texture)) {
+         vertices <- vertices * 180/pi
+       }
+    }
+    #browser()
+   ob$texcoords <- t(texture_coordinates(texture, vertices))
+   pngfilename <- tempfile(fileext = ".png")
+   message(sprintf("writing texture image to %s", pngfilename))
+   rgdal::writeGDAL(as(texture, "SpatialGridDataFrame"), pngfilename, driver = "PNG")
+   ob$texture <- pngfilename
+  }
   ob
 }
 
+
+
+texture_coordinates <- function(texture_image,vertices) {
+  #browser()
+  raster::xyFromCell(raster::setExtent(texture_image, raster::extent(0, 1, 0, 1)),
+                     raster::cellFromXY(texture_image, vertices))
+
+}
 # quad <- function(x, z = x, na.rm = FALSE) {
 #   x <- x[[1]]  ## just the oneth raster for now
 #   exy <- edgesXY(x)
