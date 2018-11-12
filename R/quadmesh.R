@@ -98,7 +98,7 @@ quadmesh <- function(x, z = x, na.rm = FALSE, ..., texture = NULL) {
 
   texcoords <- texture_coordinates(texture, vertices = exy)
 
-   ob$texcoords <- t(texcoords[qm$ib, ])
+   ob$texcoords <- t(texcoords)
    pngfilename <- tempfile(fileext = ".png")
    message(sprintf("writing texture image to %s", pngfilename))
    png::writePNG(raster::as.array(texture) / 255, pngfilename)
