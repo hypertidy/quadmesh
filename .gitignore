@@ -5,3 +5,5 @@
 inst/doc
 .Rproj.user
 data/mapbox_sat.rda
+vignettes/*.html
+vignettes/*.R

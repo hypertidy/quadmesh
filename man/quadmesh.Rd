@@ -30,13 +30,8 @@ of a continuous shape, in this case plane-filling quadrilaterals defined
 by index of four of the available vertices.
 
 Any raster RGB object (3-layers, ranging in 0-255) may be used as
-a _texture_ on the resulting mesh3d object. There is however a bug
-in rgl 0.99.16 that prevents 'rgl::shade3d' from presenting this correctly.
-So for a 'mesh3d' object created with \code{x <- quadmesh(raster, texture = RGBraster)}
-A workaround is
-\code{shade3d(x, texcoords = t(x$texcoords)[x$ib, ], texture = x$texture)}
-
-It is not possible to provide rgl with an object of data, it must be a PNG file.
+a _texture_ on the resulting mesh3d object.
+It is not possible to provide rgl with an object of data for texture, it must be a PNG file.
 }
 \examples{
 library(raster)

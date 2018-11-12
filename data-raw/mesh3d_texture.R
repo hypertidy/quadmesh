@@ -6,10 +6,10 @@ etopo_aus[etopo_aus < -1000] <- -1000
 
 qm <- quadmesh(etopo_aus, texture = mapbox_sat)
 library(rgl)
-white <- "#FFFFFF"
-qm$material$col <- rep(white, length(qm$ib) * 4)
+# white <- "#FFFFFF"
+# qm$material$col <- rep(white, length(qm$ib) * 4)
 ## code is absolutely correct, the problem is a bug in rgl reported 2018-11-12
-rgl.clear(); shade3d(qm, col = "white"); aspect3d(1, 1, 0.1) ; rglwidget()
+rgl.clear(); shade3d(qm); aspect3d(1, 1, 0.1) ; rglwidget()
 rgl.clear(); shade3d(qm, texcoords = t(qm$texcoords)[qm$ib, ], texture = qm$texture); aspect3d(1, 1, 0.1) ; rglwidget()
 
 

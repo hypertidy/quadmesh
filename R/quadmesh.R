@@ -43,13 +43,8 @@ p4 <- function(xp, nc) {
 #' by index of four of the available vertices.
 #'
 #' Any raster RGB object (3-layers, ranging in 0-255) may be used as
-#' a _texture_ on the resulting mesh3d object. There is however a bug
-#' in rgl 0.99.16 that prevents 'rgl::shade3d' from presenting this correctly.
-#' So for a 'mesh3d' object created with \code{x <- quadmesh(raster, texture = RGBraster)}
-#' A workaround is
-#' \code{shade3d(x, texcoords = t(x$texcoords)[x$ib, ], texture = x$texture)}
-#'
-#' It is not possible to provide rgl with an object of data, it must be a PNG file.
+#' a _texture_ on the resulting mesh3d object.
+#' It is not possible to provide rgl with an object of data for texture, it must be a PNG file.
 #' @param x raster object for mesh structure
 #' @param z raster object for height values
 #' @param na.rm remove quads where missing values?
@@ -104,7 +99,8 @@ quadmesh <- function(x, z = x, na.rm = FALSE, ..., texture = NULL) {
    pngfilename <- tempfile(fileext = ".png")
    message(sprintf("writing texture image to %s", pngfilename))
    png::writePNG(raster::as.array(texture) / 255, pngfilename)
-   ob$texture <- pngfilename
+   ob$material$texture <- pngfilename
+   ob$material$col <- "grey"
   }
   ob
 }
