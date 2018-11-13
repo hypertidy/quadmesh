@@ -29,3 +29,4 @@ NULL
 #' @docType data
 #' @name xymap
 NULL
+

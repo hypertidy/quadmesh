@@ -41,18 +41,25 @@ p4 <- function(xp, nc) {
 #' The output is described as a mesh because it is a dense representation
 #' of a continuous shape, in this case plane-filling quadrilaterals defined
 #' by index of four of the available vertices.
+#'
+#' Any raster RGB object (3-layers, ranging in 0-255) may be used as
+#' a _texture_ on the resulting mesh3d object.
+#' It is not possible to provide rgl with an object of data for texture, it must be a PNG file.
 #' @param x raster object for mesh structure
 #' @param z raster object for height values
 #' @param na.rm remove quads where missing values?
+#' @param ... ignored
+#' @param texture optional input RGB raster, 3-layers
 #' @return mesh3d
 #' @export
 #' @importFrom raster extract extent values
+#' @importFrom png writePNG
 #' @examples
 #' library(raster)
 #' data(volcano)
 #' r <- setExtent(raster(volcano), extent(0, 100, 0, 200))
 #' qm <- quadmesh(r)
-quadmesh <- function(x, z = x, na.rm = FALSE) {
+quadmesh <- function(x, z = x, na.rm = FALSE, ..., texture = NULL) {
   x <- x[[1]]  ## just the oneth raster for now
   exy <- edgesXY(x)
  # ind <- apply(prs(seq(ncol(x) + 1)), 1, p4, nc = ncol(x) + 1)
@@ -72,8 +79,34 @@ quadmesh <- function(x, z = x, na.rm = FALSE) {
   if (!is.null(z)) z <- zapsmall(extract(z, exy, method = "bilinear")) else z <- 0
   ob$vb <- t(cbind(exy, z, 1))
   ob$ib <- ind1
+
+  if (!is.null(texture)) {
+    if (!inherits(texture, "BasicRaster")) {
+      stop("texture must be a 3-layer raster with RGB values (in 0-255)")
+    }
+    if (!raster::nlayers(texture) == 3L) {
+      stop("texture must be a 3-layer raster with RGB values (in 0-255)")
+    }
+
+    exy <- target_coordinates(exy, src.proj = raster::projection(x),
+                              target = texture)
+
+
+
+  texcoords <- texture_coordinates(texture, vertices = exy)
+
+   ob$texcoords <- t(texcoords)
+   pngfilename <- tempfile(fileext = ".png")
+   message(sprintf("writing texture image to %s", pngfilename))
+   png::writePNG(raster::as.array(texture) / 255, pngfilename)
+   ob$material$texture <- pngfilename
+   ob$material$col <- "grey"
+  }
   ob
 }
+
+
+
 
 # quad <- function(x, z = x, na.rm = FALSE) {
 #   x <- x[[1]]  ## just the oneth raster for now

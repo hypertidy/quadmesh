@@ -4,7 +4,7 @@
 \alias{quadmesh}
 \title{Create a quad-type mesh for use in rgl.}
 \usage{
-quadmesh(x, z = x, na.rm = FALSE)
+quadmesh(x, z = x, na.rm = FALSE, ..., texture = NULL)
 }
 \arguments{
 \item{x}{raster object for mesh structure}
@@ -12,6 +12,10 @@ quadmesh(x, z = x, na.rm = FALSE)
 \item{z}{raster object for height values}
 
 \item{na.rm}{remove quads where missing values?}
+
+\item{...}{ignored}
+
+\item{texture}{optional input RGB raster, 3-layers}
 }
 \value{
 mesh3d
@@ -24,6 +28,10 @@ currently the only available method is for \code{\link[raster]{raster}}.
 The output is described as a mesh because it is a dense representation
 of a continuous shape, in this case plane-filling quadrilaterals defined
 by index of four of the available vertices.
+
+Any raster RGB object (3-layers, ranging in 0-255) may be used as
+a _texture_ on the resulting mesh3d object.
+It is not possible to provide rgl with an object of data for texture, it must be a PNG file.
 }
 \examples{
 library(raster)
