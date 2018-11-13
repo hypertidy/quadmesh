@@ -12,9 +12,9 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-# quadmesh
+# quadmesh 
 
-Build a "quadmesh"" in R. 
+Build a "quadmesh" in R. 
 
 ```{r}
 library(quadmesh)

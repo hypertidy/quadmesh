@@ -1,6 +1,8 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
+# quadmesh <img src="man/figures/logo.png" align="right" />
+
 [![Travis-CI Build
 Status](https://travis-ci.org/hypertidy/quadmesh.svg?branch=master)](https://travis-ci.org/hypertidy/quadmesh)
 [![AppVeyor build
@@ -9,8 +11,6 @@ status](https://ci.appveyor.com/api/projects/status/github/hypertidy/quadmesh?br
 status](https://codecov.io/gh/hypertidy/quadmesh/branch/master/graph/badge.svg)](https://codecov.io/github/hypertidy/quadmesh?branch=master)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/quadmesh)](https://cran.r-project.org/package=quadmesh)[![CRAN\_Download\_Badge](http://cranlogs.r-pkg.org/badges/quadmesh)](https://cran.r-project.org/package=quadmesh)
-
-# quadmesh
 
 A *quadmesh* is a dense mesh describing a topologically continuous
 surface of 4-corner primitives. This is also known as a *cell-based
