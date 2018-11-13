@@ -12,6 +12,9 @@ addons:
 
     packages:
       - libproj-dev
+      - libudunits2-dev
+      - libnetcdf-dev
+      - netcdf-bin
 
 
  after_success:
