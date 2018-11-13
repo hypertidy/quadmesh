@@ -2,10 +2,10 @@
 ^\.Rproj\.user$
 ^README\.Rmd$
 ^README-.*\.png$
+^examples$
 ^\.travis\.yml$
 ^data-raw$
 ^cran-comments\.md$
 ^CODE_OF_CONDUCT\.md$
 ^docs$
 ^data/mapbox_sat.rda$
-^inst/examples$

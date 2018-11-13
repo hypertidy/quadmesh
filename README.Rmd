@@ -23,10 +23,10 @@ A *quadmesh* is a dense mesh describing a topologically continuous surface of 4-
 
 This package provides helpers for working with this mesh interpretation of gridded data to enable
 
-* arbitrary reprojection of raster cells without information loss.
-* easy plotting of grids in 3D visualization tools (like `rgl`).
-* the corner-based interpretation of a grid.
-* fast polygonization of individual cells. 
+* arbitrary reprojection of raster cells without information loss (`mesh_plot)`.
+* the corner-based interpretation of a grid (`quadmesh()`).
+* easy plotting of grids in 3D visualization tools (`quad primitives` in `rgl mesh3d`).
+* fast polygonization of individual cells, in [https://CRAN.R-project.org/package=spex](spex::polygonize). 
 
 You can install:
 

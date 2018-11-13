@@ -3,6 +3,7 @@ library(quadmesh)
 library(raster)
 
 data(volcano)
+volcano <- volcano[seq(1, nrow(volcano), by = 2), seq(1, ncol(volcano), by = 2)]
 r <- setExtent(raster(volcano), extent(0, 100, 0, 200))
 
 
@@ -15,11 +16,11 @@ shade3d(qm, col = grey(scl(qm$vb[3,qm$ib])))
 rglwidget()
 
 ## ------------------------------------------------------------------------
-qm <- quadmesh(r)
+qm1 <- quadmesh(r)
 
-qm$vb[1,] <- qm$vb[1,] * qm$vb[2,]/54
+qm1$vb[1,] <- qm$vb[1,] * qm$vb[2,]/54
 open3d()
-shade3d(qm, col = grey(scl(qm$vb[3,qm$ib])))
+shade3d(qm1, col = grey(scl(qm1$vb[3,qm1$ib])))
 
 rglwidget()
 
@@ -63,7 +64,13 @@ par(op)
 qm$ib
 
 ## ------------------------------------------------------------------------
+rgl.clear()
 library(rgl)
 shade3d(qm)
 rglwidget()
+
+rgl.clear()
+quads3d(t(qm$vb)[qm$ib,])
+rglwidget()
+
 
