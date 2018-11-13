@@ -3,7 +3,7 @@ library(quadmesh)
 library(raster)
 
 data(volcano)
-volcano <- volcano[seq(1, nrow(volcano), by = 2), seq(1, ncol(volcano), by = 2)]
+volcano <- volcano[seq(1, nrow(volcano), by = 3), seq(1, ncol(volcano), by = 3)]
 r <- setExtent(raster(volcano), extent(0, 100, 0, 200))
 
 
