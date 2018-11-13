@@ -12,3 +12,7 @@ addons:
 
     packages:
       - libproj-dev
+
+
+ after_success:
+    - Rscript -e 'covr::codecov()'

@@ -29,14 +29,14 @@ lltopo$vb[1:3, ] <- t(llh2xyz(t(lltopo$vb[1:3, ]), exag = 50))
 shade3d(lltopo, col = grey(scl(qmtopo$vb[3,lltopo$ib])))
 
 
-## ------------------------------------------------------------------------
-data(etopo)
-lt <- raster::crop(etopo, raster::extent(100, 168, -58, -40))
-ltt <- ltt0 <- quadmesh(lt, lt)
-ltt$vb[1:3, ] <- t(llh2xyz(t(ltt$vb[1:3, ])))
-open3d()
-shade3d(ltt, col = grey(scl(ltt0$vb[3,ltt$ib])))
-rglwidget()
+## ----eval=FALSE, include=TRUE--------------------------------------------
+#  data(etopo)
+#  lt <- raster::crop(etopo, raster::extent(100, 168, -58, -40))
+#  ltt <- ltt0 <- quadmesh(lt, lt)
+#  ltt$vb[1:3, ] <- t(llh2xyz(t(ltt$vb[1:3, ])))
+#  open3d()
+#  shade3d(ltt, col = grey(scl(ltt0$vb[3,ltt$ib])))
+#  rglwidget()
 
 ## ------------------------------------------------------------------------
 library(raster)

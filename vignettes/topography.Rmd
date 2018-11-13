@@ -53,9 +53,9 @@ shade3d(lltopo, col = grey(scl(qmtopo$vb[3,lltopo$ib])))
 ```
 
 
-Try a local area. 
+Try a local area, this is not rendered in order to keep the vignette size down. 
 
-```{r}
+```{r eval=FALSE, include=TRUE}
 data(etopo)
 lt <- raster::crop(etopo, raster::extent(100, 168, -58, -40))
 ltt <- ltt0 <- quadmesh(lt, lt)
@@ -65,7 +65,7 @@ shade3d(ltt, col = grey(scl(ltt0$vb[3,ltt$ib])))
 rglwidget()
 ```
 
-The `quadmesh` package also includes a `mesh_plot()` function for straightforward plotting of a raster to an arbitrary map projection. 
+The package also includes a `mesh_plot()` function for straightforward plotting of a raster to an arbitrary map projection. 
 
 ```{r}
 library(raster)

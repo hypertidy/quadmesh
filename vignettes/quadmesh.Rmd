@@ -4,8 +4,8 @@ author: "Michael D. Sumner"
 date: "`r Sys.Date()`"
 output:
   rmarkdown::html_vignette:
-    fig_width: 7
-    fig_height: 7
+    fig_width: 6
+    fig_height: 6
 vignette: >
   %\VignetteIndexEntry{quadmesh}
   %\VignetteEngine{knitr::rmarkdown}
@@ -21,7 +21,7 @@ library(quadmesh)
 library(raster)
 
 data(volcano)
-volcano <- volcano[seq(1, nrow(volcano), by = 2), seq(1, ncol(volcano), by = 2)]
+volcano <- volcano[seq(1, nrow(volcano), by = 3), seq(1, ncol(volcano), by = 3)]
 r <- setExtent(raster(volcano), extent(0, 100, 0, 200))
 
 
@@ -75,7 +75,7 @@ text(expand.grid(x, y), lab = m[])
 
 ```
 
-The raster package defaults to the image interpretation and helpfully assumes the values are nominally at the centre points as shown above. We have to nominate the extent or we end up in 0,1 range, we also have to invert the order of the values because raster counts from the top of the page and R's matrix uses [column-major order](https://cran.r-project.org/web/packages/reticulate/vignettes/arrays.html).
+The raster package defaults to the image interpretation and helpfully assumes the values are nominally at the centre points as shown above. We have to nominate the extent or we end up in 0,1 range, we also have to invert the order of the values because raster counts from the top of the page and R's matrix uses [column-major order](https://CRAN.R-project.org/package=reticulate/vignettes/arrays.html).
 
 ```{r}
 library(raster)

@@ -12,8 +12,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-[![Travis-CI Build Status](https://travis-ci.org/hypertidy/quadmesh.svg?branch=master)](https://travis-ci.org/hypertidy/quadmesh)
-[![CRAN status](https://www.r-pkg.org/badges/version/quadmesh)](https://cran.r-project.org/package=quadmesh)
+[![Travis-CI Build Status](https://travis-ci.org/hypertidy/quadmesh.svg?branch=master)](https://travis-ci.org/hypertidy/quadmesh) [![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/hypertidy/quadmesh?branch=master&svg=true)](https://ci.appveyor.com/project/hypertidy/quadmesh)  [![Coverage status](https://codecov.io/gh/hypertidy/quadmesh/branch/master/graph/badge.svg)](https://codecov.io/github/hypertidy/quadmesh?branch=master) [![CRAN status](https://www.r-pkg.org/badges/version/quadmesh)](https://cran.r-project.org/package=quadmesh)[![CRAN\_Download\_Badge](http://cranlogs.r-pkg.org/badges/quadmesh)](https://cran.r-project.org/package=quadmesh)
 
 
 # quadmesh
@@ -26,7 +25,7 @@ This package provides helpers for working with this mesh interpretation of gridd
 * arbitrary reprojection of raster cells without information loss (`mesh_plot)`.
 * the corner-based interpretation of a grid (`quadmesh()`).
 * easy plotting of grids in 3D visualization tools (`quad primitives` in `rgl mesh3d`).
-* fast polygonization of individual cells, in [https://CRAN.R-project.org/package=spex](spex::polygonize). 
+* fast polygonization of individual cells, in [spex::polygonize](https://CRAN.R-project.org/package=spex). 
 
 You can install:
 
