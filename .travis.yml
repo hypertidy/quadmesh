@@ -4,18 +4,15 @@ language: R
 sudo: enabled
 cache: packages
 
-
 addons:
-  apt:
-    sources:
-      - sourceline: 'ppa:ubuntugis/ubuntugis-unstable'
+ apt:
+  sources:
+   - sourceline: 'ppa:ubuntugis/ubuntugis-unstable'
+  packages:
+   - libproj-dev
+   - libudunits2-dev
+   - libnetcdf-dev
+   - netcdf-bin
 
-    packages:
-      - libproj-dev
-      - libudunits2-dev
-      - libnetcdf-dev
-      - netcdf-bin
-
-
- after_success:
+after_success:
     - Rscript -e 'covr::codecov()'
