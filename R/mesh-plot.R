@@ -94,16 +94,17 @@ mesh_plot.RasterLayer <- function(x, crs = NULL, colfun = NULL, add = FALSE, ...
   invisible(NULL)
 }
 
-# @name mesh_plot
-# @export
-# @importFrom grDevices grey
-# @examples
-# # f = normalizePath("~/Git/weird.nc/extdata/get1index_64/test.nc")
+## still not working right, triangulating the centres works but triangulating the quads makes a mush
+# # @name mesh_plot
+# # @export
+# # @importFrom grDevices grey
+# # @examples
+# # f = normalizePath("~/Git/rasterwise/extdata/get1index_64/test.nc")
 # # library(stars)
 # # x <- read_stars(f, curvilinear = c("lon", "lat"))
 # # mesh_plot(x, qtile = 56)
-# # mesh_plot(x, colfun = palr::sstPal, qtile = 67)
-# # mesh_plot(x, colfun = palr::sstPal, qtile = 67, crs = "+proj=laea +lat_0=-30")
+# # # mesh_plot(x, colfun = palr::sstPal, qtile = 67)
+# # # mesh_plot(x, colfun = palr::sstPal, qtile = 67, crs = "+proj=laea +lat_0=-30")
 # mesh_plot.stars <- function(x, crs = NULL, colfun = NULL, add = FALSE, ..., qtile = FALSE) {
 #   if (is.null(colfun)) colfun <- function(n) grDevices::grey(seq(0, 1, length.out = n))
 #   ## whoa, we might not be curvilinear
@@ -124,11 +125,13 @@ mesh_plot.RasterLayer <- function(x, crs = NULL, colfun = NULL, add = FALSE, ...
 #     coords <- rgdal::project(coords, crs)  ## assume forwards
 #   }
 #
-#   tri <- RTriangle::triangulate(RTriangle::pslg(P = cbind(rep(seq_len(nrow(x)), ncol(x)),
-#                                                           rep(seq_len(ncol(x)), each = nrow(x)))))
+#  # tri1 <- RTriangle::triangulate(RTriangle::pslg(P = cbind(rep(seq_len(nrow(x)), ncol(x)),
+# #                                                          rep(seq_len(ncol(x)), each = nrow(x)))))
 #
-#
+#   tri <- list(T = t(triangulate_quads(quadmesh(raster::raster(extent(0, ncol(x) - 1, 0, nrow(x)-1), nrows = nrow(x)-1,
+#                                                    ncols = ncol(x)-1))$ib)))
 #   XY <- coords[t(tri$T), ]
+#   #XY <- coords[t(tri), ]
 #   ID <- rep(1:nrow(tri$T), each = 3)
 #   one_slice <- function(x) {
 #     xx <- x[[1]]
@@ -154,9 +157,9 @@ mesh_plot.RasterLayer <- function(x, crs = NULL, colfun = NULL, add = FALSE, ...
 #   grid::grid.polygon(XY[,1], XY[,2], ID,  gp = grid::gpar(col = NA, fill = COL),
 #                      default.units = "native")
 #   grid::popViewport(3)
-#   mm <- rnaturalearth::ne_countries(scale = "medium", returnclass="sp")
-#   if (!is.null(crs)) mm <- sp::spTransform(mm, crs)
-#   sp::plot(mm, add = TRUE, border = 'firebrick')
+#   #mm <- rnaturalearth::ne_countries(scale = "medium", returnclass="sp")
+#   #if (!is.null(crs)) mm <- sp::spTransform(mm, crs)
+#   #sp::plot(mm, add = TRUE, border = 'firebrick')
 #
 # }
 
