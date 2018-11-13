@@ -6,14 +6,16 @@
 \alias{_PACKAGE}
 \title{quadmesh: Quadrangle Mesh}
 \description{
-Create a standard quadrangle mesh from gridded data ('rasters') for flexible
- plotting and conversion to other mesh forms.
+Create a standard quadrangle mesh from gridded data (i.e. 'rasters') for flexible
+ plotting and conversion to other mesh forms. The standard output 'quadmesh' is an 'mesh3d' object
+ used by the 'rgl' package. This is used for plotting raster data in 3D with or without textures, and
+ allows lossless data reprojection.
 }
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://github.com/mdsumner/quadmesh}
-  \item Report bugs at \url{https://github.com/mdsumner/quadmesh/issues}
+  \item \url{https://github.com/hypertidy/quadmesh}
+  \item Report bugs at \url{https://github.com/hypertidy/quadmesh/issues}
 }
 
 }

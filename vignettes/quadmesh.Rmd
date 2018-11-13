@@ -21,6 +21,7 @@ library(quadmesh)
 library(raster)
 
 data(volcano)
+volcano <- volcano[seq(1, nrow(volcano), by = 2), seq(1, ncol(volcano), by = 2)]
 r <- setExtent(raster(volcano), extent(0, 100, 0, 200))
 
 
@@ -40,11 +41,11 @@ We are not limited to a regular grid, trivially let's distort the mesh by a weir
 The topology of the grid is still sound, but we are no longer bound to the regular constraint. 
 
 ```{r}
-qm <- quadmesh(r)
+qm1 <- quadmesh(r)
 
-qm$vb[1,] <- qm$vb[1,] * qm$vb[2,]/54
+qm1$vb[1,] <- qm$vb[1,] * qm$vb[2,]/54
 open3d()
-shade3d(qm, col = grey(scl(qm$vb[3,qm$ib])))
+shade3d(qm1, col = grey(scl(qm1$vb[3,qm1$ib])))
 
 rglwidget()
 ```
@@ -127,13 +128,19 @@ Notice how these are unique coordinates, there's no simple relationship between 
 qm$ib
 ```
 
-It works directly with rgl functions. 
+It works directly with rgl function, and can be used in more raw form. 
 
 
 ```{r}
+rgl.clear()
 library(rgl)
 shade3d(qm)
 rglwidget()
+
+rgl.clear()
+quads3d(t(qm$vb)[qm$ib,])
+rglwidget()
+
 ```
 
 
@@ -180,4 +187,4 @@ From the mesh perspective SF types are *explicitly described piecewise shapes. E
 We *lose* the ability to arbitrarily transmit atomic features around, but this can easily be achieved for a given set of features anyway. 
 
 
-# 
+
