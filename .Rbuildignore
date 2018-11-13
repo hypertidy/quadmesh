@@ -1,3 +1,4 @@
+^CRAN-RELEASE$
 ^revdep$
 ^codecov\.yml$
 ^appveyor\.yml$
