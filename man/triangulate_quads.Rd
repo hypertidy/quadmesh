@@ -4,10 +4,15 @@
 \alias{triangulate_quads}
 \title{Triangles from quads}
 \usage{
-triangulate_quads(quad_index)
+triangulate_quads(quad_index, clockwise = FALSE)
 }
 \arguments{
 \item{quad_index}{the 'ib' index of quads from 'quadmesh'}
+
+\item{clockwise}{if true triangles are wound clockwise, if false
+anticlockwise. This affects which faces rendering engines consider to be
+the 'front' and 'back' of the triangle. If your mesh appears 'inside out',
+try the alternative setting.}
 }
 \value{
 matrix of triangle indices
