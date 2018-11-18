@@ -6,6 +6,10 @@
 #' Triangle pairs from each quad are interleaved in the result, so that neighbour
 #' triangles from a single quad are together.
 #' @param quad_index the 'ib' index of quads from 'quadmesh'
+#' @param clockwise if true triangles are wound clockwise, if false
+#'   anticlockwise. This affects which faces rendering engines consider to be
+#'   the 'front' and 'back' of the triangle. If your mesh appears 'inside out',
+#'   try the alternative setting.
 #' @return matrix of triangle indices
 #' @export
 #' @examples
@@ -20,8 +24,13 @@
 #' ## tri is qm$ib converted to triangles for the same vertex set
 #' polygon(t(qm$vb)[rbind(tri, NA), ])
 #' polygon(t(qm$vb)[rbind(tri, NA), ], col = tri_col)
-triangulate_quads <- function(quad_index) {
-  matrix(rbind(quad_index[c(1L, 2L, 4L), ], quad_index[c(2L, 3L, 4L), ]), 3L)
+triangulate_quads <- function(quad_index, clockwise = FALSE) {
+
+  if (clockwise){
+    matrix(rbind(quad_index[c(1L, 2L, 4L), ], quad_index[c(2L, 3L, 4L), ]), 3L)
+  } else {
+    matrix(rbind(quad_index[c(1L, 4L, 2L), ], quad_index[c(4L, 3L, 2L), ]), 3L)
+  }
 }
 
 
