@@ -1,3 +1,7 @@
+# dev
+
+* The `quadmesh` function gains a new argument 'texture_filename' to control the output PNG file. 
+
 # quadmesh 0.2.0
 
 * The `quadmesh` functions gains a `texture` argument, to map on a 

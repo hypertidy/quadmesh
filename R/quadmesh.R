@@ -50,6 +50,7 @@ p4 <- function(xp, nc) {
 #' @param na.rm remove quads where missing values?
 #' @param ... ignored
 #' @param texture optional input RGB raster, 3-layers
+#' @param texture_filename optional input file path for PNG texture
 #' @return mesh3d
 #' @export
 #' @importFrom raster extract extent values
@@ -59,7 +60,7 @@ p4 <- function(xp, nc) {
 #' data(volcano)
 #' r <- setExtent(raster(volcano), extent(0, 100, 0, 200))
 #' qm <- quadmesh(r)
-quadmesh <- function(x, z = x, na.rm = FALSE, ..., texture = NULL) {
+quadmesh <- function(x, z = x, na.rm = FALSE, ..., texture = NULL, texture_filename = NULL) {
   x <- x[[1]]  ## just the oneth raster for now
   exy <- edgesXY(x)
  # ind <- apply(prs(seq(ncol(x) + 1)), 1, p4, nc = ncol(x) + 1)
@@ -96,10 +97,17 @@ quadmesh <- function(x, z = x, na.rm = FALSE, ..., texture = NULL) {
   texcoords <- texture_coordinates(texture, vertices = exy)
 
    ob$texcoords <- t(texcoords)
-   pngfilename <- tempfile(fileext = ".png")
-   message(sprintf("writing texture image to %s", pngfilename))
-   png::writePNG(raster::as.array(texture) / 255, pngfilename)
-   ob$material$texture <- pngfilename
+   if (is.null(texture_filename)) {
+     texture_filename <- tempfile(fileext = ".png")
+   } else {
+     if (!grepl("png$", texture_filename)) {
+       warning(sprintf("'texture filename' does not look like a good PNG filename'%s'",
+                       texture_filename))
+     }
+   }
+      message(sprintf("writing texture image to %s", texture_filename))
+   png::writePNG(raster::as.array(texture) / 255, texture_filename)
+   ob$material$texture <- texture_filename
    ob$material$col <- "grey"
   }
   ob

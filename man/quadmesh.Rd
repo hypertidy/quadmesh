@@ -4,7 +4,8 @@
 \alias{quadmesh}
 \title{Create a quad-type mesh for use in rgl.}
 \usage{
-quadmesh(x, z = x, na.rm = FALSE, ..., texture = NULL)
+quadmesh(x, z = x, na.rm = FALSE, ..., texture = NULL,
+  texture_filename = NULL)
 }
 \arguments{
 \item{x}{raster object for mesh structure}
@@ -16,6 +17,8 @@ quadmesh(x, z = x, na.rm = FALSE, ..., texture = NULL)
 \item{...}{ignored}
 
 \item{texture}{optional input RGB raster, 3-layers}
+
+\item{texture_filename}{optional input file path for PNG texture}
 }
 \value{
 mesh3d
