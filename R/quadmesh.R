@@ -110,6 +110,14 @@ quadmesh <- function(x, z = x, na.rm = FALSE, ..., texture = NULL, texture_filen
    ob$material$texture <- texture_filename
    ob$material$col <- "grey"
   }
+  ## chuck on the original structure md
+  ob$raster_metadata <- list(xmn = raster::xmin(x),
+                             xmx = raster::xmax(x),
+                             ymn = raster::ymin(x),
+                             ymx = raster::ymax(x),
+                             ncols = raster::ncol(x),
+                             nrows = raster::nrow(x),
+                             crs = raster::projection(x))
   ob
 }
 
