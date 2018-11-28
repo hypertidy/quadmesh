@@ -36,7 +36,7 @@ mesh_plot <- function(x, crs = NULL, colfun = NULL, add = FALSE, ...) {
 #' @export
 mesh_plot.BasicRaster <- function(x, crs = NULL, colfun = NULL, add = FALSE, ...) {
   print("converting to single RasterLayer")
-  mesh_plot(x[[1]])
+  mesh_plot(x[[1]], crs = crs, colfun = colfun, add = add, ...)
 }
 #' @name mesh_plot
 #' @export
