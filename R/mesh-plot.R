@@ -53,10 +53,9 @@ mesh_plot.RasterLayer <- function(x, crs = NULL, colfun = NULL, add = FALSE, ...
   qm <- quadmesh::quadmesh(x, na.rm = FALSE)
  if (is.null(colfun)) colfun <- viridis::viridis
   ib <- qm$ib
-  if (is.null(coords)) {
-    ## take the coordinates as given
-    xy <- t(qm$vb[1:2, ])
-  } else {
+  ## take the coordinates as given
+  xy <- t(qm$vb[1:2, ])
+  if (!is.null(coords)) {
     ## apply coordinates as provided explicitly
     ## fudge for test
     coords_fudge <- raster::setExtent(coords, raster::extent(coords) + 1)
