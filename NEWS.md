@@ -1,5 +1,9 @@
 # dev
 
+* The `mesh_plot` function gains true curvilinear grid support by allowing input of `coords`, a two-layer
+ raster of longitude and latitude values for the cell geography. This aligns with the approach used in the
+ `angstroms` package. 
+
 * The `quadmesh` function gains a new argument 'texture_filename' to control the output PNG file. 
 
 # quadmesh 0.2.0
