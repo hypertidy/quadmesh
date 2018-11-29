@@ -6,13 +6,14 @@
 \alias{mesh_plot.RasterLayer}
 \title{Plot as a mesh}
 \usage{
-mesh_plot(x, crs = NULL, colfun = NULL, add = FALSE, ...)
+mesh_plot(x, crs = NULL, colfun = NULL, add = FALSE, ...,
+  coords = NULL)
 
 \method{mesh_plot}{BasicRaster}(x, crs = NULL, colfun = NULL,
-  add = FALSE, ...)
+  add = FALSE, ..., coords = NULL)
 
 \method{mesh_plot}{RasterLayer}(x, crs = NULL, colfun = NULL,
-  add = FALSE, ...)
+  add = FALSE, ..., coords = NULL)
 }
 \arguments{
 \item{x}{object to convert to mesh and plot}
@@ -24,6 +25,8 @@ mesh_plot(x, crs = NULL, colfun = NULL, add = FALSE, ...)
 \item{add}{add to existing plot or start a new one}
 
 \item{...}{ignored}
+
+\item{coords}{optional input raster of coordinates of each cell, see details}
 }
 \value{
 nothing, used for the side-effect of creating or adding to a plot
@@ -37,6 +40,14 @@ define the target map projection in 'PROJ string' format. (There is no
 "reproject" function for quadmesh, this is performed directly on the x-y
 coordinates of the 'quadmesh' output). The 'colfun' argument is used to
 generate colours which are mapped to the input object data as in 'image'.
+
+If `coords` is supplied, it is currently assumed to be a 2-layer `RasterBrick` with
+longitude and latitude as the *cell values*. These are used to geographically locate
+the resulting mesh, and will be transformed to the `crs` if that is supplied. This is
+modelled on the approach to curvilinear grid data used in the `angstroms` package. There
+the function `angstroms::romsmap` and `angstroms::romscoords` are used to separate the complicated
+grid geometry from the grid data itself. A small fudge is applied to extend the coordinates
+by 1 cell to avoid losing any data due to the half cell outer margin (get in touch if this causes problems!).
 }
 \examples{
 mesh_plot(worldll)

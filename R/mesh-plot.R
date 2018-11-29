@@ -12,12 +12,21 @@ scl <- function(x) {
 #' "reproject" function for quadmesh, this is performed directly on the x-y
 #' coordinates of the 'quadmesh' output). The 'colfun' argument is used to
 #' generate colours which are mapped to the input object data as in 'image'.
+#'
+#' If `coords` is supplied, it is currently assumed to be a 2-layer `RasterBrick` with
+#' longitude and latitude as the *cell values*. These are used to geographically locate
+#' the resulting mesh, and will be transformed to the `crs` if that is supplied. This is
+#' modelled on the approach to curvilinear grid data used in the `angstroms` package. There
+#' the function `angstroms::romsmap` and `angstroms::romscoords` are used to separate the complicated
+#' grid geometry from the grid data itself. A small fudge is applied to extend the coordinates
+#' by 1 cell to avoid losing any data due to the half cell outer margin (get in touch if this causes problems!).
+#'
 #' @param x object to convert to mesh and plot
 #' @param crs target map projection
 #' @param colfun colour function to use, `viridis` is the default
 #' @param add add to existing plot or start a new one
 #' @param ... ignored
-#'
+#' @param coords optional input raster of coordinates of each cell, see details
 #' @return nothing, used for the side-effect of creating or adding to a plot
 #' @export
 #'
@@ -29,29 +38,40 @@ scl <- function(x) {
 #' prj <- "+proj=lcc +datum=WGS84 +lon_0=147 +lat_0=-40 +lat_1=-55 +lat_2=-20"
 #' mesh_plot(etopo, crs = prj, add = FALSE, colfun = function(n = 20) grey(seq(0, 1, length = n)))
 #' mesh_plot(worldll, crs = prj, add = TRUE)
-mesh_plot <- function(x, crs = NULL, colfun = NULL, add = FALSE, ...) {
+mesh_plot <- function(x, crs = NULL, colfun = NULL, add = FALSE, ..., coords = NULL) {
   UseMethod("mesh_plot")
 }
 #' @name mesh_plot
 #' @export
-mesh_plot.BasicRaster <- function(x, crs = NULL, colfun = NULL, add = FALSE, ...) {
-  print("converting to single RasterLayer")
-  mesh_plot(x[[1]], crs = crs, colfun = colfun, add = add, ...)
+mesh_plot.BasicRaster <- function(x, crs = NULL, colfun = NULL, add = FALSE, ..., coords = NULL) {
+  if (raster::nlayers(x) > 1L) warning("extracting single RasterLayer from multilayered input")
+  mesh_plot(x[[1]], crs = crs, colfun = colfun, add = add, ..., coords = coords)
 }
 #' @name mesh_plot
 #' @export
-mesh_plot.RasterLayer <- function(x, crs = NULL, colfun = NULL, add = FALSE, ...) {
+mesh_plot.RasterLayer <- function(x, crs = NULL, colfun = NULL, add = FALSE, ..., coords = NULL) {
   qm <- quadmesh::quadmesh(x, na.rm = FALSE)
  if (is.null(colfun)) colfun <- viridis::viridis
   ib <- qm$ib
-  xy <- t(qm$vb[1:2, ])
-
-  isLL <- raster::isLonLat(x)
+  if (is.null(coords)) {
+    ## take the coordinates as given
+    xy <- t(qm$vb[1:2, ])
+  } else {
+    ## apply coordinates as provided explicitly
+    ## fudge for test
+    coords_fudge <- raster::setExtent(coords, raster::extent(coords) + 1)
+    cells <- raster::cellFromXY(coords_fudge, xy)
+    xy <- raster::extract(coords_fudge, cells)
+  }
+  isLL <- raster::isLonLat(x) || !is.null(coords)  ## we just assume it's longlat if coords given
   if (!is.null(crs) ) {
     if (!isLL) {
       xy <- proj4::project(xy, raster::projection(x), inv = TRUE)
     }
-    if (!raster::isLonLat(crs)) xy <- proj4::project(xy, crs)
+    if (!raster::isLonLat(crs)) {
+      xy <- proj4::project(xy, crs)
+      isLL <- FALSE
+    }
   }
   ## we have to remove any infinite vertices
   ## as this affects the entire thing
@@ -75,18 +95,19 @@ mesh_plot.RasterLayer <- function(x, crs = NULL, colfun = NULL, add = FALSE, ...
     id <- id[!bad2]
     cols <- cols[!is.na(cols)]
   }
-  x <- list(x = xx, y = yy, id = id, col = cols)
+  xx <- list(x = xx, y = yy, id = id, col = cols)
 
   if (!add) {
     graphics::plot.new()
-    graphics::plot.window(xlim = range(x$x, finite = TRUE), ylim = range(x$y, finite = TRUE), asp = if (isLL) 1/cos(mean(x$y, na.rm = TRUE) * pi/180) else 1  )
+    graphics::plot.window(xlim = range(xx$x, finite = TRUE), ylim = range(xx$y, finite = TRUE),
+                          asp = if (isLL) 1/cos(mean(xx$y, na.rm = TRUE) * pi/180) else 1  )
   }
   vps <- gridBase::baseViewports()
 
   grid::pushViewport(vps$inner, vps$figure, vps$plot)
 
 
-  grid::grid.polygon(x$x, x$y, x$id, gp = grid::gpar(col = NA, fill = x$col),
+  grid::grid.polygon(xx$x, xx$y, xx$id, gp = grid::gpar(col = NA, fill = xx$col),
                      default.units = "native")
 
 
