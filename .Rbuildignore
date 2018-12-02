@@ -14,3 +14,4 @@
 ^docs$
 ^data/mapbox_sat.rda$
 ^man/figures/quadglobe.png$
+^data-raw/world.topo.bathy.200412.3x5400x2700.png$

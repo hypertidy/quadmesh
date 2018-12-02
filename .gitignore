@@ -8,3 +8,4 @@ data/mapbox_sat.rda
 vignettes/*.html
 vignettes/*.R
 data-raw/roms3d.rds
+data-raw/world.topo.bathy.200412.3x5400x2700.png
