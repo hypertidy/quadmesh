@@ -42,9 +42,18 @@ p4 <- function(xp, nc) {
 #' of a continuous shape, in this case plane-filling quadrilaterals defined
 #' by index of four of the available vertices.
 #'
+#' The `z` argument defaults to the input `x` argument, though may be set to `NULL`, a constant
+#' numeric value, or another raster. If the coordinate system of `z` and `x` don't match the z values
+#' are queried by reprojection.
+#'
 #' Any raster RGB object (3-layers, ranging in 0-255) may be used as
 #' a _texture_ on the resulting mesh3d object.
-#' It is not possible to provide rgl with an object of data for texture, it must be a PNG file.
+#' It is not possible to provide rgl with an object of data for texture, it must be a PNG file and so
+#' the in-memory `texture` argument is written out to PNG file (with a message). The location of the file
+#' may be set explicitly with `texture_filename`.  Currently it's not possible to not use the `texture` object
+#' in-memory.
+#'
+#'
 #' @param x raster object for mesh structure
 #' @param z raster object for height values
 #' @param na.rm remove quads where missing values?
@@ -55,6 +64,7 @@ p4 <- function(xp, nc) {
 #' @export
 #' @importFrom raster extract extent values
 #' @importFrom png writePNG
+#' @importFrom sp SpatialPoints CRS
 #' @examples
 #' library(raster)
 #' data(volcano)

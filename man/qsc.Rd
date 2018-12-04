@@ -2,15 +2,25 @@
 % Please edit documentation in R/qsc.R
 \name{qsc}
 \alias{qsc}
-\title{Title}
+\title{Quadrilateralized Spherical Cube (QSC)}
 \usage{
 qsc()
 }
+\value{
+mesh3d
+}
 \description{
-Title
+The QSC is a set of six equal area projections for each side of the cube. Here
+a raw rendition of the cube is returned as six quad primitives in a `mesh3d` object.
+}
+\details{
+It's not clear if this is useful.
 }
 \examples{
-rgl.clear()
+library(rgl); #rgl.clear()
 wire3d(qsc())
-rglwidget()
+if ( rgl::rgl.useNULL()) rglwidget()
+}
+\references{
+\url{https://github.com/OSGeo/proj.4/wiki/Qsc}
 }

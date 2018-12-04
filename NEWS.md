@@ -1,5 +1,12 @@
 # dev
 
+* The `z` argument of `quadmesh()` may now have a different coordinate system to the 
+ input data `x`.  The mesh coordinates of `x` are silently reprojected if needed and
+  used to extract values in the native coordinate system of `z`. 
+ 
+* A new `qsc` function to return a very simple six quad rendition of the Quadrilateralized Spherical Cube 
+ projection family. 
+ 
 * The `mesh_plot` function gains true curvilinear grid support by allowing input of `coords`, a two-layer
  raster of longitude and latitude values for the cell geography. This aligns with the approach used in the
  `angstroms` package. 

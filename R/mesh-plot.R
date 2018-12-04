@@ -58,7 +58,7 @@ mesh_plot.RasterLayer <- function(x, crs = NULL, colfun = NULL, add = FALSE, ...
   if (!is.null(coords)) {
     ## apply coordinates as provided explicitly
     ## fudge for test  (must be + res because could be any raster)
-    coords_fudge <- raster::setExtent(coords, raster::extent(coords) + res(coords) )
+    coords_fudge <- raster::setExtent(coords, raster::extent(coords) + raster::res(coords) )
     cells <- raster::cellFromXY(coords_fudge, xy)
     xy <- raster::extract(coords_fudge, cells)
   }
