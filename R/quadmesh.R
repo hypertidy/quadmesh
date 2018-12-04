@@ -77,7 +77,16 @@ quadmesh <- function(x, z = x, na.rm = FALSE, ..., texture = NULL, texture_filen
     ind1 <- ind1[,!is.na(values(x))]
   }
   ob <- .mkq3d()
-  if (!is.null(z)) z <- zapsmall(extract(z, exy, method = "bilinear")) else z <- 0
+
+  if (!is.null(z)) {
+    ## wish of https://github.com/hypertidy/quadmesh/issues/17
+    sp_exy <- sp::SpatialPoints(exy, proj4string = sp::CRS(raster::projection(x), doCheckCRSArgs = FALSE))
+    old <- options(warn = -1)
+    z <- zapsmall(extract(z, sp_exy, method = "bilinear"))
+    options(old)
+  } else {
+    z <- 0
+  }
   ob$vb <- t(cbind(exy, z, 1))
   ob$ib <- ind1
 
