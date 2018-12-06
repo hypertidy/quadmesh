@@ -9,17 +9,9 @@
 
 #' @importFrom raster xmin xmax ymin ymax
 edgesXY <- function(x) {
-  ## report to Hijmans 2015-11-06
-  #extract(r, expand.grid(c(xmin(r), xmax(r)), c(ymin(r), ymax(r))), method = "bilinear")
-  #[1]   NA   NA 99.5   NA
-  ## remove this eps fudge once bilinear works
-  eps <- rep(sqrt(.Machine$double.eps), 2L)
   xx <- seq(xmin(x), xmax(x), length = ncol(x) + 1L)
   yy <- seq(ymax(x), ymin(x), length = nrow(x) + 1L)
-  xx[c(1L, length(xx))] <- xx[c(1L, length(xx))] + c(+eps[2], -eps[2])
-  yy[c(1L, length(yy))] <- yy[c(1L, length(yy))] + c(-eps[1], +eps[1])
-  xy <- expand.grid(x = xx,
-                        y = yy)
+  xy <- expand.grid(x = xx, y = yy)
   xy
 }
 
@@ -92,6 +84,11 @@ quadmesh <- function(x, z = x, na.rm = FALSE, ..., texture = NULL, texture_filen
     ## wish of https://github.com/hypertidy/quadmesh/issues/17
     sp_exy <- sp::SpatialPoints(exy, proj4string = sp::CRS(raster::projection(x), doCheckCRSArgs = FALSE))
     old <- options(warn = -1)
+
+    ## rather than add eps to the edgesXY coordinates
+    ## let's extend the z raster a tiny bit
+    z <- raster::setExtent(z, raster::extent(z) + raster::res(z)/1000)
+
     z <- zapsmall(extract(z, sp_exy, method = "bilinear"))
     options(old)
   } else {
