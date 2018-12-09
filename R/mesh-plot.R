@@ -64,14 +64,20 @@ mesh_plot.RasterLayer <- function(x, crs = NULL, colfun = NULL, add = FALSE, ...
   }
   isLL <- raster::isLonLat(x) || !is.null(coords)  ## we just assume it's longlat if coords given
   if (!is.null(crs) ) {
-    if (!isLL) {
-      xy <- proj4::project(xy, raster::projection(x), inv = TRUE)
-    }
     if (!raster::isLonLat(crs)) {
-      xy <- proj4::project(xy, crs)
       isLL <- FALSE
     }
   }
+  srcproj <- raster::projection(x)
+  if (is.na(srcproj) && !is.null(crs)) {
+    if (is.null(coords)) {
+      stop("no projection defined on input raster, and no 'coords' provided - \n either set the CRS of the raster, or supply a two-layer 'coords' brick with longitude and latitude layers")
+    } else {
+      message("coords and crs provided, assuming coords is Longitude, Latitude")
+      srcproj <- "+proj=longlat +datum=WGS84"
+    }
+  }
+  xy <- target_coordinates(xy, src.proj = srcproj, target = crs)
   ## we have to remove any infinite vertices
   ## as this affects the entire thing
   bad <- !is.finite(xy[,1]) | !is.finite(xy[,2])

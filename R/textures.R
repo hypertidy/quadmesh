@@ -1,4 +1,5 @@
-target_coordinates <- function(xy, src.proj = NA_character_, target) {
+target_coordinates <- function(xy, src.proj = NA_character_, target = NULL) {
+  if (is.null(target)) return(xy)
   dst.proj <- raster::projection(target)
   if (!is.na(src.proj) && !is.na(src.proj)) {
     if (raster::isLonLat(src.proj)) {

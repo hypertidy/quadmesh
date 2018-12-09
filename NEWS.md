@@ -1,5 +1,10 @@
 # dev
 
+* Some fixes and additional features for `mesh_plot()` to allow plotting with
+ curvilinear `coords`. 
+
+* New function `qm_as_raster` to round-trip to a RasterLayer. 
+
 * The `z` argument of `quadmesh()` may now have a different coordinate system to the 
  input data `x`.  The mesh coordinates of `x` are silently reprojected if needed and
   used to extract values in the native coordinate system of `z`. 
