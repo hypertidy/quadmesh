@@ -25,6 +25,7 @@ p4 <- function(xp, nc) {
 }
 
 
+
 #' Create a quad-type mesh for use in rgl.
 #'
 #' Convert an object to a \code{\link[rgl]{mesh3d}} quadrangle mesh,
@@ -63,6 +64,12 @@ p4 <- function(xp, nc) {
 #' r <- setExtent(raster(volcano), extent(0, 100, 0, 200))
 #' qm <- quadmesh(r)
 quadmesh <- function(x, z = x, na.rm = FALSE, ..., texture = NULL, texture_filename = NULL) {
+  UseMethod("quadmesh")
+}
+
+#' @name quadmesh
+#' @export
+quadmesh.BasicRaster <- function(x, z = x, na.rm = FALSE, ..., texture = NULL, texture_filename = NULL) {
   x <- x[[1]]  ## just the oneth raster for now
   exy <- edgesXY(x)
  # ind <- apply(prs(seq(ncol(x) + 1)), 1, p4, nc = ncol(x) + 1)
@@ -137,7 +144,16 @@ quadmesh <- function(x, z = x, na.rm = FALSE, ..., texture = NULL, texture_filen
   ob
 }
 
-
+#' @name quadmesh
+#' @export
+quadmesh.matrix <- function(x, z = x, na.rm = FALSE, ..., texture = NULL, texture_filename = NULL) {
+  x <- raster::setExtent(raster::raster(x), raster::extent(0, ncol(x), 0, nrow(x)))
+  if (is.matrix(z)) {
+    #warning("z is a matrix ...")
+    z <- x
+  }
+  quadmesh(x, z = z, na.rm = na.rm, ..., texture = texture, texture_filename = texture_filename)
+}
 
 
 # quad <- function(x, z = x, na.rm = FALSE) {

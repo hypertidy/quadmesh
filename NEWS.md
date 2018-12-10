@@ -1,5 +1,7 @@
 # dev
 
+* `quadmesh()` is now generic with a new method for 'matrix'. 
+
 * Some fixes and additional features for `mesh_plot()` to allow plotting with
  curvilinear `coords`. 
 
