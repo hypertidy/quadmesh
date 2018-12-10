@@ -66,7 +66,7 @@ currently the only available method is for raster." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">quadmesh</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0.9002</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0.9003</span>
       </span>
     </div>
 
@@ -133,7 +133,15 @@ currently the only available method is for <code><a href='https://www.rdocumenta
     </div>
 
     <pre class="usage"><span class='fu'>quadmesh</span>(<span class='no'>x</span>, <span class='kw'>z</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>, <span class='kw'>texture</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>texture_filename</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+  <span class='kw'>texture_filename</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
+
+<span class='co'># S3 method for BasicRaster</span>
+<span class='fu'>quadmesh</span>(<span class='no'>x</span>, <span class='kw'>z</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>,
+  <span class='kw'>texture</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>texture_filename</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
+
+<span class='co'># S3 method for matrix</span>
+<span class='fu'>quadmesh</span>(<span class='no'>x</span>, <span class='kw'>z</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>,
+  <span class='kw'>texture</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>texture_filename</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Changelog • quadmesh</title>
+<title>Triangle mesh. — triangmesh • quadmesh</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,7 +30,9 @@
 
 
 
-<meta property="og:title" content="Changelog" />
+<meta property="og:title" content="Triangle mesh. — triangmesh" />
+
+<meta property="og:description" content="Triangle mesh." />
 
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -50,7 +52,7 @@
   </head>
 
   <body>
-    <div class="container template-news">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -117,43 +119,75 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Changelog <small></small></h1>
-      <small>Source: <a href='https://github.com/hypertidy/quadmesh/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
+    <h1>Triangle mesh.</h1>
+    <small class="dont-index">Source: <a href='https://github.com/hypertidy/quadmesh/blob/master/R/triangmesh.R'><code>R/triangmesh.R</code></a></small>
+    <div class="hidden name"><code>triangmesh.Rd</code></div>
     </div>
 
-    <div id="quadmesh-020" class="section level1">
-<h1 class="page-header">
-<a href="#quadmesh-020" class="anchor"></a>quadmesh 0.2.0<small> 2018-11-13 </small>
-</h1>
-<ul>
-<li><p>The <code>quadmesh</code> functions gains a <code>texture</code> argument, to map on a 3-layer RGB raster (in 0-255) via a temporary PNG file.</p></li>
-<li><p>New function <code>mesh_plot</code> for basic vectorized raster plot with optional near near-lossless projection transformation.</p></li>
-<li><p>Index arrays are now created with integer mode.</p></li>
-<li><p>Added <code>triangulate_quads</code> function to convert quad index to pairs of triangle index.</p></li>
-<li><p>Added supporting information to package.</p></li>
-<li><p>Internal function <code>llh2xyz</code> is now exported to transform from longitude latitude coordinates to geocentric xyz coordinates.</p></li>
-</ul>
-</div>
-    <div id="quadmesh-010" class="section level1">
-<h1 class="page-header">
-<a href="#quadmesh-010" class="anchor"></a>quadmesh 0.1.0<small> 2016-06-12 </small>
-</h1>
-<ul>
-<li>Basic quad mesh support.</li>
-</ul>
-</div>
-  </div>
+    <div class="ref-description">
+    
+    <p>Triangle mesh.</p>
+    
+    </div>
 
+    <pre class="usage"><span class='fu'>triangmesh</span>(<span class='no'>x</span>, <span class='kw'>z</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>, <span class='kw'>texture</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>texture_filename</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
+
+<span class='co'># S3 method for BasicRaster</span>
+<span class='fu'>triangmesh</span>(<span class='no'>x</span>, <span class='kw'>z</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>,
+  <span class='kw'>texture</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>texture_filename</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>x</th>
+      <td><p>raster object for mesh structure</p></td>
+    </tr>
+    <tr>
+      <th>z</th>
+      <td><p>raster object for height values</p></td>
+    </tr>
+    <tr>
+      <th>na.rm</th>
+      <td><p>remove quads where missing values?</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>ignored</p></td>
+    </tr>
+    <tr>
+      <th>texture</th>
+      <td><p>optional input RGB raster, 3-layers</p></td>
+    </tr>
+    <tr>
+      <th>texture_filename</th>
+      <td><p>optional input file path for PNG texture</p></td>
+    </tr>
+    </table>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>mesh3d (primitivetype triangle)</p>
+    
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>raster</span>)
+<span class='no'>r</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/raster/topics/setExtent'>setExtent</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/raster/topics/raster'>raster</a></span>(<span class='no'>volcano</span>), <span class='fu'><a href='https://www.rdocumentation.org/packages/raster/topics/extent'>extent</a></span>(<span class='fl'>0</span>, <span class='fu'><a href='https://www.rdocumentation.org/packages/raster/topics/ncell'>nrow</a></span>(<span class='no'>volcano</span>), <span class='fl'>0</span>, <span class='fu'><a href='https://www.rdocumentation.org/packages/raster/topics/ncell'>ncol</a></span>(<span class='no'>volcano</span>)))
+<span class='no'>tm</span> <span class='kw'>&lt;-</span> <span class='fu'>triangmesh</span>(<span class='no'>r</span>)
+<span class='co'>#rgl::shade3d(tm)</span></div></pre>
+  </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <div id="tocnav">
-      <h2>Contents</h2>
-      <ul class="nav nav-pills nav-stacked">
-        <li><a href="#quadmesh-020">0.2.0</a></li>
-        <li><a href="#quadmesh-010">0.1.0</a></li>
-      </ul>
-    </div>
-  </div>
+    <h2>Contents</h2>
+    <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
+      
+      <li><a href="#value">Value</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
+  </div>
 </div>
 
       <footer>

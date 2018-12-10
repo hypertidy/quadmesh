@@ -1,5 +1,9 @@
 # dev
 
+* New function `triangmesh()` to provide the triangle-interpretation of a raster (bound to 
+ centre coordinates). Textures are not yet supported, nor is overlaying a separate z raster
+ for elevation. 
+ 
 * `quadmesh()` is now generic with a new method for 'matrix'. 
 
 * Some fixes and additional features for `mesh_plot()` to allow plotting with

@@ -45,7 +45,7 @@ install.packages("quadmesh")
 <!-- end list -->
 
 ``` r
-devtools::install_github("mdsumner/quadmesh")
+devtools::install_github("hypertidy/quadmesh")
 ```
 
 Please note that this project is released with a [Contributor Code of
