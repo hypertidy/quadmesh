@@ -2,14 +2,18 @@
 % Please edit documentation in R/quadmesh.R
 \name{quadmesh}
 \alias{quadmesh}
+\alias{quadmesh.BasicRaster}
 \alias{quadmesh.matrix}
 \title{Create a quad-type mesh for use in rgl.}
 \usage{
 quadmesh(x, z = x, na.rm = FALSE, ..., texture = NULL,
   texture_filename = NULL)
 
-quadmesh.matrix(x, z = x, na.rm = FALSE, ..., texture = NULL,
-  texture_filename = NULL)
+\method{quadmesh}{BasicRaster}(x, z = x, na.rm = FALSE, ...,
+  texture = NULL, texture_filename = NULL)
+
+\method{quadmesh}{matrix}(x, z = x, na.rm = FALSE, ...,
+  texture = NULL, texture_filename = NULL)
 }
 \arguments{
 \item{x}{raster object for mesh structure}
