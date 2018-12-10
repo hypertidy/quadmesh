@@ -29,14 +29,32 @@ qm_as_raster <- function(x, index = NULL) {
 
 .raster_meta <- function(x) {
   if ("raster_metadata" %in% names(x)) {
-    x$raster_metadata
+    out <- x$raster_metadata
   } else  {
+    warning("original raster_metadata has been stripped or does not exist, \nif this mesh has been modified the raster may be nonsensical")
+    ucol <- unique(diff(which(diff(x$ib[1, ]) > 1)))
+    ncell <- ncol(x$ib)
+    if (length(ucol) > 1) stop("cannot automatically determine original raster dimensions")
+    urow <- ncell/ucol
+    if (abs(urow - as.integer(urow)) > sqrt(.Machine$double.eps)) {
+      warning("maybe cannot determine original raster dimension properly, has it been subset")
+    }
+    out <- list()
+    out$xmn <- min(x$vb[1, ], na.rm = TRUE)
+    out$xmx <- max(x$vb[1, ], na.rm = TRUE)
+    out$ymn <- min(x$vb[2, ], na.rm = TRUE)
+    out$ymx <- max(x$vb[2, ], na.rm = TRUE)
+
+    out$ncols <- ucol
+    out$nrows <- as.integer(urow)
+    out$crs <- NA_character_
     ## how to do this?
-    stop("no raster metadata available")
+    #stop("no raster metadata available")
     #list(xmn = min(x$vb[1, ], na.rm = TRUE),
     #     xmx = max(x$vb[1, ], na.rm = TRUE),
     #     ymn = min(x$vb[2, ], na.rm = TRUE),
     #     ymx = max(x$vb[2, ], na.rm = TRUE),
     #     ncols = ?)
   }
+  out
 }
