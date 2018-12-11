@@ -9,6 +9,8 @@ test_that("round-trip raster structure works", {
   expect_equal(raster::raster(g), raster::raster(qm_as_raster(qm)))
   x1 <- expect_warning(raster::raster(qm_as_raster(qm1)), "original raster_metadata has been stripped")
   expect_equal(raster::raster(g),x1)
+  expect_error(qm_as_raster(quadmesh(g), index = 0), "index is out of range")
+  expect_error(qm_as_raster(g), "only mesh3d supported")
 
 })
 
