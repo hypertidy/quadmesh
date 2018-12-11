@@ -18,7 +18,8 @@ Imports:
     proj4,
     viridis,
     png,
-    sp
+    sp,
+    geometry
 Suggests: 
     datasets,
     knitr,
