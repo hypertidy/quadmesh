@@ -28,7 +28,8 @@ Suggests:
     rgl,
     testthat,
     ncdf4,
-    covr
+    covr,
+    vdiffr
 URL: https://github.com/hypertidy/quadmesh
 BugReports: https://github.com/hypertidy/quadmesh/issues
 VignetteBuilder: knitr
