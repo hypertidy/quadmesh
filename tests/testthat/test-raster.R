@@ -4,9 +4,16 @@ g <- raster::setExtent(raster::raster(matrix(1:12, 3)),
 
 qm <- quadmesh(g)
 qm1 <- qm
-qm1$raster_meta <- NULL
+qm1$raster_metadata <- NULL
 test_that("round-trip raster structure works", {
   expect_equal(raster::raster(g), raster::raster(qm_as_raster(qm)))
-  expect_equal(raster::raster(g), raster::raster(qm_as_raster(qm1)))
+  x1 <- expect_warning(raster::raster(qm_as_raster(qm1)), "original raster_metadata has been stripped")
+  expect_equal(raster::raster(g),x1)
 
+})
+
+
+test_that("missing values handled", {
+  g[4] <- NA
+  expect_silent(quadmesh(g))
 })

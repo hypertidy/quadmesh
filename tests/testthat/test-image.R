@@ -11,8 +11,13 @@ xy <- cbind(sort(rnorm(raster::ncell(g))), runif(raster::ncell(g)))
 cds <- raster::setValues(raster::brick(g, g), as.matrix(xy))
 library(vdiffr)
 
+
+test_that("warning on multi laer", {
+  expect_warning(mesh_plot(raster::brick(g, g)), "extracting single RasterLayer")
+})
 ## can't get this to match
 func_etopo_plot <- function() mesh_plot(etopo, "+proj=laea +lat_=-90")
+
 
 test_that("mesh_plot works", {
   #  expect_doppelganger("func-etopo-plot", func_etopo_plot)

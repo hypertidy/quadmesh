@@ -20,9 +20,10 @@ prs <- function(x) {
   cbind(head(x, -1), tail(x, -1))
 }
 
-p4 <- function(xp, nc) {
-  (xp + c(0, 0, rep(nc, 2)))[c(1, 2, 4, 3)]
-}
+## what was this for ...
+# p4 <- function(xp, nc) {
+#   (xp + c(0, 0, rep(nc, 2)))[c(1, 2, 4, 3)]
+# }
 
 
 
