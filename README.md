@@ -6,7 +6,7 @@
 [![Travis-CI Build
 Status](https://travis-ci.org/hypertidy/quadmesh.svg?branch=master)](https://travis-ci.org/hypertidy/quadmesh)
 [![AppVeyor build
-status](https://ci.appveyor.com/api/projects/status/github/hypertidy/quadmesh?branch=master&svg=true)](https://ci.appveyor.com/project/hypertidy/quadmesh)
+status](https://ci.appveyor.com/api/projects/status/github/mdsumner/quadmesh-x25a2?branch=master&svg=true)](https://ci.appveyor.com/project/mdsumner/quadmesh-x25a2)
 [![Coverage
 status](https://codecov.io/gh/hypertidy/quadmesh/branch/master/graph/badge.svg)](https://codecov.io/github/hypertidy/quadmesh?branch=master)
 [![CRAN
