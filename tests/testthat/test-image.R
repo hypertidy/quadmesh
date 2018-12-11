@@ -30,5 +30,9 @@ test_that("mesh_plot works", {
 func_mesh_plot <- function()  mesh_plot(g, coords = cds)
 test_that("plot works", {
   expect_doppelganger("func-mesh-plot", func_mesh_plot)
+
+  g[4] <- NA
+  expect_silent(mesh_plot(g))
+
 })
 
