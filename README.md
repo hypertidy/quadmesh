@@ -23,12 +23,15 @@ This package provides helpers for working with this mesh interpretation
 of gridded data to enable
 
   - arbitrary reprojection of raster cells without information loss
-    (`mesh_plot)`.
+    (`mesh_plot`).
   - the corner-based interpretation of a grid (`quadmesh()`).
-  - easy plotting of grids in 3D visualization tools (`quad primitives`
-    in `rgl mesh3d`).
+  - the centre-based interpretation of a grid (`triangmesh()`).
+  - easy plotting of grids in 3D visualization tools (quad or triangle
+    primitives for `rgl::shade3d`).
   - fast polygonization of individual cells, in
     [spex::polygonize](https://CRAN.R-project.org/package=spex).
+  - barycentric interpolation from a triangle mesh (`bary_index()`).
+  - conversion from quad to triangle primitives (`triangulate_quads()`).
 
 You can install:
 
@@ -47,6 +50,11 @@ install.packages("quadmesh")
 ``` r
 devtools::install_github("hypertidy/quadmesh")
 ```
+
+Many aspects of this package have developed in conjunction with the
+[angstroms
+package](https://github.com/AustralianAntarcticDivision/angstroms) for
+dealing with ROMS model output.
 
 Please note that this project is released with a [Contributor Code of
 Conduct](CODE_OF_CONDUCT.md). By participating in this project you agree

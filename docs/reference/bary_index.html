@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Angular coordinates to X, Y, Z. — llh2xyz • quadmesh</title>
+<title>Barycentric triangle index for interpolation — bary_index • quadmesh</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,10 @@
 
 
 
-<meta property="og:title" content="Angular coordinates to X, Y, Z. — llh2xyz" />
+<meta property="og:title" content="Barycentric triangle index for interpolation — bary_index" />
 
-<meta property="og:description" content="Angular coordinates to X, Y, Z." />
+<meta property="og:description" content="This function returns the barycentric weight for a grid of coordinates
+from a geographic raster." />
 
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -119,41 +120,63 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Angular coordinates to X, Y, Z.</h1>
-    <small class="dont-index">Source: <a href='https://github.com/hypertidy/quadmesh/blob/master/R/utils.R'><code>R/utils.R</code></a></small>
-    <div class="hidden name"><code>llh2xyz.Rd</code></div>
+    <h1>Barycentric triangle index for interpolation</h1>
+    <small class="dont-index">Source: <a href='https://github.com/hypertidy/quadmesh/blob/master/R/tri_grid.R'><code>R/tri_grid.R</code></a></small>
+    <div class="hidden name"><code>bary_index.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Angular coordinates to X, Y, Z.</p>
+    <p>This function returns the barycentric weight for a grid of coordinates
+from a geographic raster.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>llh2xyz</span>(<span class='no'>lonlatheight</span>, <span class='kw'>rad</span> <span class='kw'>=</span> <span class='fl'>6378137</span>, <span class='kw'>exag</span> <span class='kw'>=</span> <span class='fl'>1</span>)</pre>
+    <pre class="usage"><span class='fu'>bary_index</span>(<span class='no'>x</span>, <span class='kw'>coords</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>grid</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>lonlatheight</th>
-      <td><p>matrix or data.frame of lon,lat,height values</p></td>
+      <th>x</th>
+      <td><p>a 'RasterLayer' source</p></td>
     </tr>
     <tr>
-      <th>rad</th>
-      <td><p>radius of sphere</p></td>
+      <th>coords</th>
+      <td><p>optional input coordinates</p></td>
     </tr>
     <tr>
-      <th>exag</th>
-      <td><p>exaggeration to apply to height values (added to radius)</p></td>
+      <th>grid</th>
+      <td><p>target 'RasterLayer', a target regular grid</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>ignored</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>matrix</p>
+    <p>RasterLayer</p>
+    
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>It's not as fast as `rasterProject(x, grid)` but it
+also accepts a `coords` argument and so can be used for non-regular raster
+reprojection.</p>
+<p>'coords' may be 'NULL' or longitude, latitude in a 2-layer raster brick or stack as with
+`mesh_plot`.</p>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>raster</span>)</div><div class='output co'>#&gt; <span class='message'>Loading required package: sp</span></div><div class='input'><span class='no'>p_srs</span> <span class='kw'>&lt;-</span> <span class='st'>"+proj=stere +lat_0=-90 +lat_ts=-71"</span>
+<span class='no'>polar</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/raster/topics/raster'>raster</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/raster/topics/extent'>extent</a></span>(-<span class='fl'>5e6</span>, <span class='fl'>5e6</span>, -<span class='fl'>5e6</span>, <span class='fl'>5e6</span>), <span class='kw'>crs</span> <span class='kw'>=</span> <span class='no'>p_srs</span>, <span class='kw'>res</span> <span class='kw'>=</span> <span class='fl'>25000</span>)
+<span class='no'>etopo</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/raster/topics/aggregate'>aggregate</a></span>(<span class='no'>etopo</span>, <span class='kw'>fact</span> <span class='kw'>=</span> <span class='fl'>4</span>)
+<span class='no'>index</span> <span class='kw'>&lt;-</span> <span class='fu'>bary_index</span>(<span class='no'>etopo</span>, <span class='kw'>grid</span> <span class='kw'>=</span> <span class='no'>polar</span>)
+<span class='no'>ok</span> <span class='kw'>&lt;-</span> !<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/NA'>is.na</a></span>(<span class='no'>index</span>$<span class='no'>idx</span>)
+<span class='no'>r</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/raster/topics/setValues'>setValues</a></span>(<span class='no'>polar</span>, <span class='fl'>NA_integer_</span>)
+<span class='no'>r</span>[<span class='no'>ok</span>] <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/raster/topics/rowSums'>colSums</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/matrix'>matrix</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/raster/topics/getValues'>values</a></span>(<span class='no'>etopo</span>)[<span class='no'>index</span>$<span class='no'>tri</span>[, <span class='no'>index</span>$<span class='no'>idx</span>[<span class='no'>ok</span>]]], <span class='kw'>nrow</span> <span class='kw'>=</span> <span class='fl'>3</span>) * <span class='fu'><a href='https://www.rdocumentation.org/packages/raster/topics/transpose'>t</a></span>(<span class='no'>index</span>$<span class='no'>p</span>)[, <span class='no'>ok</span>])
+<span class='fu'><a href='https://www.rdocumentation.org/packages/raster/topics/plot'>plot</a></span>(<span class='no'>r</span>)</div><div class='img'><img src='bary_index-1.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -161,7 +184,11 @@
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
-          </ul>
+
+      <li><a href="#details">Details</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>

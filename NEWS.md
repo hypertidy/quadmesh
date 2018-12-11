@@ -1,5 +1,8 @@
 # dev
 
+* New function `bary_index` to provide a basis for interpolation of a regular grid
+ from triangles. 
+
 * New function `triangmesh()` to provide the triangle-interpretation of a raster (bound to 
  centre coordinates). Textures are not yet supported, nor is overlaying a separate z raster
  for elevation. 
