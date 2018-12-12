@@ -14,6 +14,8 @@ mapbox_sat <- aggregate(mapbox_sat, fact = 4)
 #' @name mapbox_sat
 NULL
 
+
+
 ## TOS says no
 ## https://www.mapbox.com/tos/#[YmtcYmns]
 #usethis::use_data(mapbox_sat, compress = "xz")
