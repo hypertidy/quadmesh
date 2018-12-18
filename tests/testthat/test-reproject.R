@@ -39,5 +39,6 @@ test_that("reprojecting works", {
 })
 
 test_that("globe conversion works", {
-  expect_equivalent(proj4::ptransform(cbind(cds, 0) * pi/180, "+proj=longlat +datum=WGS84", "+proj=geocent +a=6378137.0"), llh2xyz(cbind(cds, 0)))
+  expect_equivalent(reproj::reproj(cbind(cds, 0), source = "+proj=longlat +datum=WGS84",
+                                   target = "+proj=geocent +a=6378137.0"), llh2xyz(cbind(cds, 0)))
 })

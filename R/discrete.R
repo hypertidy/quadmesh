@@ -20,12 +20,36 @@ dquadmesh.default  <- function (x, z = x, na.rm = FALSE, ...,
   }
   ## break the mesh!
   qm$vb <- qm$vb[, qm$ib]
-
-  qm$ib <- matrix(seq_len(ncol(qm$vb)), nrow(qm$vb))
-  ## this needs to be an option to quadmesh, it's prior to the continuous form in this sense
-  ## and we shouldn't be rederiving this constant value here
-  ## also discrete will require exploding out the texture coordinates as well
-  #  qm$vb[3, ] <- rep(colMeans(matrix(qm$vb[3,], 4)), each = 4)
-  qm$vb[3, ] <- rep(z, each = 4)  ## SO MUCH SIMPLER
+  qm$ib <- matrix(seq_len(ncol(qm$vb)), 4L)
+  qm$vb[3L, ] <- rep(z, each = 4L)
   qm
+}
+
+
+#' @name dtriangmesh
+#' @export
+dtriangmesh <- function (x, z = x, na.rm = FALSE, ...,
+                       texture = NULL, texture_filename = NULL) {
+  UseMethod("dtriangmesh")
+}
+#' @name dtriangmesh
+#' @export
+dtriangmesh.default  <- function (x, z = x, na.rm = FALSE, ...,
+                                texture = NULL, texture_filename = NULL) {
+
+  #tm <- triangmesh(x, z = z, na.rm = na.rm, ...,
+  #               texture = texture, texture_filename = texture_filename)
+ ## break the mesh!
+  #tm$vb <- tm$vb[, tm$it]
+
+  #tm$it <- matrix(seq_len(ncol(tm$vb)), 3L)
+  # tm$vb[3L,] <- tapply(tm$vb[3L,], rep(seq_len(ncol(tm$vb)/3), each = 3))
+  tm <- dquadmesh(x, z = z, na.rm = na.rm, ..., texture = texture, texture_filename = NULL)
+  if (inherits(z, "BasicRaster")) {
+    tm$vb[3, ] <- raster::extract(z, t(tm$vb[1:2, ]), type = "bilinear")
+  }
+  tm$primitivetype <- "triangle"
+  tm$it <- triangulate_quads(tm$ib)
+  tm$ib <- NULL
+ tm
 }

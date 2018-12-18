@@ -14,6 +14,17 @@ triangmesh <- function (x, z = x, na.rm = FALSE, ..., texture = NULL, texture_fi
 }
 #' @name triangmesh
 #' @export
+triangmesh.matrix <- function (x, z = x, na.rm = FALSE, ..., texture = NULL, texture_filename = NULL)  {
+  x <- raster::setExtent(raster::raster(x), raster::extent(0, ncol(x), 0, nrow(x)))
+  if (is.matrix(z)) {
+    #warning("z is a matrix ...")
+    z <- x
+  }
+  triangmesh(x, z = z, na.rm = na.rm, ..., texture = texture, texture_filename = texture_filename)
+}
+
+#' @name triangmesh
+#' @export
 triangmesh.BasicRaster <- function (x, z = x, na.rm = FALSE, ..., texture = NULL, texture_filename = NULL)  {
   x <- x[[1]]  ## just the oneth raster for now
 
