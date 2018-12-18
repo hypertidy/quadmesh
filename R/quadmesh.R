@@ -134,6 +134,7 @@ quadmesh.BasicRaster <- function(x, z = x, na.rm = FALSE, ..., texture = NULL, t
    ob$material$texture <- texture_filename
    ob$material$col <- "grey"
   }
+  rproj <- raster::projection(x)
   ## chuck on the original structure md
   ob$raster_metadata <- list(xmn = raster::xmin(x),
                              xmx = raster::xmax(x),
@@ -141,7 +142,9 @@ quadmesh.BasicRaster <- function(x, z = x, na.rm = FALSE, ..., texture = NULL, t
                              ymx = raster::ymax(x),
                              ncols = raster::ncol(x),
                              nrows = raster::nrow(x),
-                             crs = raster::projection(x))
+                             crs = rproj)
+  ob$crs <- rproj
+  class(ob) <- c("quadmesh", "mesh3d", "shape3d")
   ob
 }
 
