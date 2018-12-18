@@ -38,7 +38,7 @@ bary_index <- function(x, coords = NULL, grid = NULL, ...) {
   if (is.null(grid)) grid <- default_grid(xy)
   tri <- tm$it
   a_srs <- "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0"
-  xy <- target_coordinates(xy, a_srs, raster::projection(grid))
+  xy <- target_coordinates(xy, a_srs, raster::projection(grid), xyz = FALSE)
   value <- tm$vb[3, ]
   rxy <- sp::coordinates(grid)
 

@@ -1,9 +1,10 @@
-target_coordinates <- function(xy, src.proj = NA_character_, target = NULL) {
+target_coordinates <- function(xy, src.proj = NA_character_, target = NULL, xyz = FALSE) {
   if (is.null(target)) return(xy)
   dst.proj <- raster::projection(target)
   if (!is.na(src.proj) && !is.na(src.proj)) {
     xy <- reproj::reproj(xy, source = src.proj, target = dst.proj)
    }  ## otherwise we just assume they are in the same crs
+  if (!xyz) xy <- xy[, 1:2, drop = FALSE]
   xy
 }
 

@@ -77,7 +77,7 @@ mesh_plot.RasterLayer <- function(x, crs = NULL, colfun = NULL, add = FALSE, ...
       srcproj <- "+proj=longlat +datum=WGS84"
     }
   }
-  xy <- target_coordinates(xy, src.proj = srcproj, target = crs)
+  xy <- target_coordinates(xy, src.proj = srcproj, target = crs, xyz = FALSE)
   ## we have to remove any infinite vertices
   ## as this affects the entire thing
   bad <- !is.finite(xy[,1]) | !is.finite(xy[,2])
