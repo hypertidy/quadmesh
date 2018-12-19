@@ -1,11 +1,11 @@
 #' @name dquadmesh
-#' @export
+#' @noRd
 dquadmesh <- function (x, z = x, na.rm = FALSE, ...,
                            texture = NULL, texture_filename = NULL) {
  UseMethod("dquadmesh")
 }
 #' @name dquadmesh
-#' @export
+#' @noRd
 dquadmesh.default  <- function (x, z = x, na.rm = FALSE, ...,
                        texture = NULL, texture_filename = NULL) {
 
@@ -27,13 +27,13 @@ dquadmesh.default  <- function (x, z = x, na.rm = FALSE, ...,
 
 
 #' @name dtriangmesh
-#' @export
+#' @noRd
 dtriangmesh <- function (x, z = x, na.rm = FALSE, ...,
                        texture = NULL, texture_filename = NULL) {
   UseMethod("dtriangmesh")
 }
 #' @name dtriangmesh
-#' @export
+#' @noRd
 dtriangmesh.default  <- function (x, z = x, na.rm = FALSE, ...,
                                 texture = NULL, texture_filename = NULL) {
 
