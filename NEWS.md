@@ -1,5 +1,7 @@
 # dev
 
+* New function `dquadmesh` to provide the discrete interpretation of a grid. 
+
 * New function `bary_index` to provide a basis for interpolation of a regular grid
  from triangles. 
 

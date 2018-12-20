@@ -1,3 +1,8 @@
+#' Reprojection methods
+#'
+#' A `quadmesh` method for `reproj::reproj()`.
+#'
+#' @inheritParams reproj::reproj
 #' @importFrom reproj reproj
 #' @export reproj
 #' @export
