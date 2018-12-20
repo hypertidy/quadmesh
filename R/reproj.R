@@ -1,3 +1,7 @@
+#' @importFrom reproj reproj
+#' @export reproj
+#' @export
+#' @name reproj
 reproj.quadmesh <- function(x, target, ..., source = NULL) {
   existingproj <- x$crs
   if (!is.null(source)) {
