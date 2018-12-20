@@ -17,7 +17,7 @@ rglwidget()
 ## ------------------------------------------------------------------------
 
 library(proj4)
-qmtopo$vb[1:2, ] <- t(proj4::project(t(qmtopo$vb[1:2, ]), "+proj=laea +ellps=WGS84 +lat_0=-90"))
+qmtopo$vb[1:2, ] <- t(proj4::project(t(qmtopo$vb[1:2, ]), "+proj=laea +datum=WGS84 +lat_0=-90"))
 open3d()
 shade3d(qmtopo, col = grey(scl(qmtopo$vb[3,qmtopo$ib])))
 aspect3d(1, 1, .1)

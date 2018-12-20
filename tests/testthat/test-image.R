@@ -16,13 +16,13 @@ test_that("warning on multi laer", {
   expect_warning(mesh_plot(raster::brick(g, g)), "extracting single RasterLayer")
 })
 ## can't get this to match
-func_etopo_plot <- function() mesh_plot(etopo, "+proj=laea +lat_=-90")
+func_etopo_plot <- function() mesh_plot(etopo, "+proj=laea +lat_=-90 +datum=WGS84")
 
 
 test_that("mesh_plot works", {
   #  expect_doppelganger("func-etopo-plot", func_etopo_plot)
   expect_silent(func_etopo_plot())
-  expect_message(mesh_plot(g, coords = cds, "+proj=ortho"),
+  expect_message(mesh_plot(g, coords = cds, "+proj=ortho +datum=WGS84"),
                  "coords and crs provided, assuming coords is Longitude, Latitude")
 
 })
