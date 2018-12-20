@@ -1,5 +1,5 @@
 target_coordinates <- function(xy, src.proj = NA_character_, target = NULL, xyz = FALSE) {
-  if (is.null(target)) return(xy)
+  if (is.null(target) || is.na(target)) return(xy)
   dst.proj <- raster::projection(target)
   if (!is.na(src.proj) && !is.na(src.proj)) {
     xy <- reproj::reproj(xy, source = src.proj, target = dst.proj)
