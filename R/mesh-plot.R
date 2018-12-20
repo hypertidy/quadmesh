@@ -33,8 +33,8 @@ scl <- function(x) {
 #' @examples
 #' mesh_plot(worldll)
 #' ## crop otherwise out of bounds from PROJ
-#' mesh_plot(raster::crop(worldll, raster::extent(-179, 179, -89, 89)), crs = "+proj=laea")
-#' mesh_plot(worldll, crs = "+proj=moll")
+#' mesh_plot(raster::crop(worldll, raster::extent(-179, 179, -89, 89)), crs = "+proj=laea +datum=WGS84")
+#' mesh_plot(worldll, crs = "+proj=moll +datum=WGS84")
 #' prj <- "+proj=lcc +datum=WGS84 +lon_0=147 +lat_0=-40 +lat_1=-55 +lat_2=-20"
 #' mesh_plot(etopo, crs = prj, add = FALSE, colfun = function(n = 20) grey(seq(0, 1, length = n)))
 #' mesh_plot(worldll, crs = prj, add = TRUE)
@@ -130,7 +130,7 @@ mesh_plot.RasterLayer <- function(x, crs = NULL, colfun = NULL, add = FALSE, ...
 # # x <- read_stars(f, curvilinear = c("lon", "lat"))
 # # mesh_plot(x, qtile = 56)
 # # # mesh_plot(x, colfun = palr::sstPal, qtile = 67)
-# # # mesh_plot(x, colfun = palr::sstPal, qtile = 67, crs = "+proj=laea +lat_0=-30")
+# # # mesh_plot(x, colfun = palr::sstPal, qtile = 67, crs = "+proj=laea +lat_0=-30 +datum=WGS84")
 # mesh_plot.stars <- function(x, crs = NULL, colfun = NULL, add = FALSE, ..., qtile = FALSE) {
 #   if (is.null(colfun)) colfun <- function(n) grDevices::grey(seq(0, 1, length.out = n))
 #   ## whoa, we might not be curvilinear

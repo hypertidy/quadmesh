@@ -35,7 +35,7 @@ c1 <- structure(c(7998790.05365194, 7939878.81087366, -10507141.6476077,
 test_that("reprojecting works", {
   expect_equivalent(cds, c0)
   ## note that we drop the third coordinate from proj4
-  expect_equivalent(c1, target_coordinates(c0, "+proj=longlat +datum=WGS84", "+proj=laea")[,1:2])
+  expect_equivalent(c1, target_coordinates(c0, "+proj=longlat +datum=WGS84", "+proj=laea +datum=WGS84")[,1:2])
 })
 
 test_that("globe conversion works", {
