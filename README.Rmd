@@ -1,5 +1,7 @@
 ---
 output: github_document
+editor_options: 
+  chunk_output_type: console
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -33,6 +35,8 @@ This package provides helpers for working with this mesh interpretation of gridd
 * barycentric interpolation from a triangle mesh (`bary_index()`). 
 * conversion from quad to triangle primitives (`triangulate_quads()`). 
 
+## Installation
+
 You can install:
 
 * the latest released version from CRAN with
@@ -47,7 +51,160 @@ install.packages("quadmesh")
 devtools::install_github("hypertidy/quadmesh")
 ```
 
+## Examples
+
+Quadmesh provides a number of key features that are not readily available to more commonly used geospatial applications. 
+
+### The corner-based interpretation of a grid
+
+In raster there is an implicit "area-based" interpretion of the extent and value
+of every cell. Coordinates are implicit, and centre-based but the `extent` reflects
+a finite and constant width and height. 
+
+```{r}
+library(quadmesh)
+library(raster)
+r <- raster(matrix(1:12, 3), xmn = 0, xmx = 4, ymn = 0, ymx = 3)
+qm <- quadmesh(r)
+
+op <- par(xpd = NA)
+plot(extent(r) + 0.5, type = "n", axes = FALSE, xlab = "", ylab = "")
+plot(r, col = rep(c("palevioletred3", "aliceblue"), 6), add = TRUE)
+text(coordinates(r), lab = seq_len(ncell(r)))
+plot(extent(r), add = TRUE)
+
+## with quadmesh there are 20 corner coordinates
+points(t(qm$vb[1:2, ]), pch = "x", cex = 2)
+par(op)
+```
+
+Every individual quad is described implicitly by index into the unique corner coordinates. This format is built upon the `mesh3d` class of the `rgl` package. 
+
+```{r}
+## coordinates, transpose here
+qm$vb[1:2, ]
+
+## indexes, also transpose
+qm$ib
+```
+
+
+This separation of geometry (the 20 unique corner coordinates) and topology (12 sets of 4-index) is the key concept of a mesh and is found in many domains that involve computer graphics and modelling. 
+
+### The centre-based interpretation of a grid
+
+A quadmesh is centre-based, and each raster pixel occupies a little rectangle, but the centre-based interpretation is better described by a mesh of *triangles*. 
+
+Every centre point of the grid data is a node in this mesh, while the inside corners with their ambiguous value from 4 neighbouring cells are not explicit. Note that a triangulation
+can be top-left/bottom-right aligned as here, or bottom-left/top-right aligned, or be a mixture. 
+
+
+```{r}
+op <- par(xpd = NA)
+plot(extent(r) + 0.5, type = "n", axes = FALSE, xlab = "", ylab = "")
+plot(r, col = rep(c("palevioletred3", "aliceblue"), 6), add = TRUE)
+
+tri <- triangmesh(r)
+points(t(tri$vb[1:2, ]))
+polygon(t(tri$vb[1:2, head(as.vector(rbind(tri$it, NA)), -1)]))
+par(op)
+```
+
+### Conversion from quad to triangle primitives
+
+Quads are trivially converted into triangle form by splitting each in two. Note that this is
+different again from the centre-based triangle interpretation. 
+
+```{r}
+tri2 <- qm
+tri2$it <- triangulate_quads(tri2$ib)
+tri2$ib <- NULL
+tri2$primtivetype <- "triangle"
+
+op <- par(xpd = NA)
+plot(extent(r) + 0.5, type = "n", axes = FALSE, xlab = "", ylab = "")
+plot(r, col = rep(c("palevioletred3", "aliceblue"), 6), add = TRUE)
+
+
+points(t(tri2$vb[1:2, ]))
+polygon(t(tri2$vb[1:2, head(as.vector(rbind(tri2$it, NA)), -1)]), lwd = 2, lty = 2)
+```
+
+### Arbitrary reprojection of raster cells
+
+The in-built `etopo` data set is used to create a plot in a local map projection. Here each cell is drawn by reprojecting it directly and individually into this new coordinate system. 
+
+```{r}
+library(quadmesh)
+library(raster)
+## VicGrid
+prj <- "+proj=lcc +lat_1=-36 +lat_2=-38 +lat_0=-37 +lon_0=145 +x_0=2500000 +y_0=2500000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"
+er <- crop(etopo, extent(110, 160, -50, -20))
+system.time(mesh_plot(er, crs = prj))
+
+## This is faster to plot and uses much less data that converting explicitly to polygons. 
+
+library(sf)
+p <- st_transform(spex::polygonize(er), prj)
+plot(st_geometry(p), add = TRUE)
+
+system.time(plot(p, border = NA))
+pryr::object_size(er)
+pryr::object_size(p)
+pryr::object_size(quadmesh(er))
+```
+
+The data size and timing benefits are more substantial for larger data sets. 
+
+We get exactly what we asked for from `mesh_plot`, without the complete remodelling of the data required by grid resampling. 
+
+```{r}
+pol <- "+proj=stere +lat_0=-90 +lon_0=147 +datum=WGS84"
+mesh_plot(etopo, crs = pol)
+plot(projectRaster(etopo, crs = pol), col = viridis::viridis(64))
+```
+
+### Easy 3D plotting of grids
+
+The `quadmesh` and `triangmesh` types are extensions of the `rgl` class `mesh3d`, and so 
+are readily used by that package's high level functions such as `shade3d()` and `addNormals()`. 
+
+
+```{r}
+class(qm)
+class(tri)
+
+```
+
+### Fast polygonization of individual cells
+
+The `spex` package has functions `polygonize()` and `qm_rasterToPolygons_sp()` which provide very fast conversion of raster grids to a polygon layer with 5 explicit coordinates for every cell.  (`stars` and `sf` now provide an even faster version by using GDAL). 
+
+```{r}
+rr <- disaggregate(r, fact = 20)
+system.time(spex::polygonize(rr))
+system.time(raster::rasterToPolygons(rr))
+
+## stars has now improved on spex by calling out to GDAL to do the work
+system.time(sf::st_as_sf(stars::st_as_stars(rr), merge = FALSE, as_points = FALSE))
+```
+
+### Barycentric interpoloation from a triangle mesh
+
+Using a triangulation version of a raster grid we can build an index of weightings for 
+a new of of arbitrary coordinates to estimate the implicit value at each point as if
+there were continuous interpolation across each primitive. 
+
+WIP - see `bary_index()` function. 
+
+
+## Development
+
+Have feedback/ideas? Please let me know via [issues](https://github.com/hypertidy/quadmesh/issues/). 
+
 
 Many aspects of this package have developed in conjunction with the [angstroms package](https://github.com/AustralianAntarcticDivision/angstroms) for dealing with ROMS model output. 
+
+
 
 Please note that this project is released with a [Contributor Code of Conduct](CODE_OF_CONDUCT.md). By participating in this project you agree to abide by its terms.

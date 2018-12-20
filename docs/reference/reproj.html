@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>quadmesh: Quadrangle Mesh — quadmesh-package • quadmesh</title>
+<title>Reprojection methods — reproj • quadmesh</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,13 +30,9 @@
 
 
 
-<meta property="og:title" content="quadmesh: Quadrangle Mesh — quadmesh-package" />
+<meta property="og:title" content="Reprojection methods — reproj" />
 
-<meta property="og:description" content="
-Create a standard quadrangle mesh from 'raster' data for flexible
- plotting and conversion to other mesh forms. The standard output 'quadmesh' is an 'mesh3d' object
- used by the 'rgl' package. This is used for plotting raster data in 3D with or without textures, and
- allows the application of a map projection without data loss." />
+<meta property="og:description" content="A `quadmesh` method for `reproj::reproj()`." />
 
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -121,42 +117,48 @@ Create a standard quadrangle mesh from 'raster' data for flexible
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>quadmesh: Quadrangle Mesh</h1>
-    <small class="dont-index">Source: <a href='https://github.com/hypertidy/quadmesh/blob/master/R/quadmesh-package.R'><code>R/quadmesh-package.R</code></a></small>
-    <div class="hidden name"><code>quadmesh-package.Rd</code></div>
+    <h1>Reprojection methods</h1>
+    <small class="dont-index">Source: <a href='https://github.com/hypertidy/quadmesh/blob/master/R/reproj.R'><code>R/reproj.R</code></a></small>
+    <div class="hidden name"><code>reproj.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p><img src='figures/logo.png' align='right' /></p>
-<p>Create a standard quadrangle mesh from 'raster' data for flexible
- plotting and conversion to other mesh forms. The standard output 'quadmesh' is an 'mesh3d' object
- used by the 'rgl' package. This is used for plotting raster data in 3D with or without textures, and
- allows the application of a map projection without data loss.</p>
+    <p>A `quadmesh` method for `reproj::reproj()`.</p>
     
     </div>
 
-        
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p>Useful links:</p><ul>
-<li><p><a href='https://github.com/hypertidy/quadmesh'>https://github.com/hypertidy/quadmesh</a></p></li>
-<li><p>Report bugs at <a href='https://github.com/hypertidy/quadmesh/issues'>https://github.com/hypertidy/quadmesh/issues</a></p></li>
-</ul></div>
+    <pre class="usage"><span class='co'># S3 method for quadmesh</span>
+<span class='fu'>reproj</span>(<span class='no'>x</span>, <span class='no'>target</span>, <span class='no'>...</span>, <span class='kw'>source</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>x</th>
+      <td><p>coordinates</p></td>
+    </tr>
+    <tr>
+      <th>target</th>
+      <td><p>target specification (PROJ.4 string or epsg code)</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>arguments passed to <code>ptransform</code></p></td>
+    </tr>
+    <tr>
+      <th>source</th>
+      <td><p>source specification (PROJ.4 string or epsg code)</p></td>
+    </tr>
+    </table>
     
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      
-      <li><a href="#see-also">See also</a></li>
-          </ul>
-
-    <h2>Author</h2>
-    
-<strong>Maintainer</strong>: Michael D. Sumner <a href='mailto:mdsumner@gmail.com'>mdsumner@gmail.com</a>
-
+      <li><a href="#arguments">Arguments</a></li>
+                </ul>
 
   </div>
 </div>

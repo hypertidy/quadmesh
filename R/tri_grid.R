@@ -36,17 +36,17 @@ bary_index <- function(x, coords = NULL, grid = NULL, ...) {
     xy <- sp::coordinates(x)
   }
   if (is.null(grid)) grid <- default_grid(xy)
-  tri <- tm$it
+
   a_srs <- "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0"
   xy <- target_coordinates(xy, a_srs, raster::projection(grid), xyz = FALSE)
-  value <- tm$vb[3, ]
+  #value <- tm$vb[3, ]
   rxy <- sp::coordinates(grid)
 
  # nn <- RANN::nn2(xy[x$it[1, ], 1:2], rxy, k = 1)
  #  ord <- order(nn$nn.idx)
-  pid0 <- geometry::tsearch(xy[,1], xy[,2], t(tri), rxy[,1], rxy[, 2],
+  pid0 <- geometry::tsearch(xy[,1], xy[,2], t(tm$it), rxy[,1], rxy[, 2],
                             bary = TRUE)
-  pid0$tri <- tri
+  pid0$tri <- tm$it
   pid0
 }
 
