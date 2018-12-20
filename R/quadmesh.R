@@ -32,6 +32,12 @@ prs <- function(x) {
 #' Convert an object to a \code{\link[rgl]{mesh3d}} quadrangle mesh,
 #' currently the only available method is for \code{\link[raster]{raster}}.
 #'
+#' `quadmesh()` generates the cell-based interpretation of a raster (AREA) but applies a continuous
+#' interpretation of the values of the cells to each quad corner. `dquadmesh` splits the mesh and
+#' applies a discrete interpretation directly. Loosely, the quadmesh is a continuous surface and the dquadmesh
+#' is free-floating cells, but it's a little more complicated and depends on the options applied. (The interpolation)
+#' applied in the quadmesh case is not entirely consistent.
+#'
 #' The output is described as a mesh because it is a dense representation
 #' of a continuous shape, in this case plane-filling quadrilaterals defined
 #' by index of four of the available vertices.
@@ -56,6 +62,7 @@ prs <- function(x) {
 #' @param texture_filename optional input file path for PNG texture
 #' @return mesh3d
 #' @export
+#' @aliases dquadmesh
 #' @importFrom raster extract extent values
 #' @importFrom png writePNG
 #' @importFrom sp SpatialPoints CRS
