@@ -121,6 +121,63 @@ mesh_plot.RasterLayer <- function(x, crs = NULL, colfun = NULL, add = FALSE, ...
   invisible(NULL)
 }
 
+
+
+
+mesh_plot.TRI <- function(x, crs = NULL, colfun = NULL, add = FALSE, ..., coords = NULL) {
+  if (is.null(colfun)) colfun <- viridis::viridis
+  idx <- matrix(match(t(as.matrix(x$triangle[c(".vx0", ".vx1", ".vx2")])),
+                     x$vertex$vertex_), nrow = 3)
+  ## take the coordinates as given
+  xy <- as.matrix(x$vertex[c("x_", "y_")])
+  if (!is.null(coords)) {
+   warning("coords given but will be ignored")
+  }
+  srcproj <- x$meta$proj[1]
+  xy <- target_coordinates(xy, src.proj = srcproj, target = crs, xyz = FALSE)
+  ## we have to remove any infinite vertices
+  ## as this affects the entire thing
+  bad <- !is.finite(xy[,1]) | !is.finite(xy[,2])
+  ## but we must identify the bad xy in the index
+  if (any(bad)) idx <- idx[,-which(bad)]
+
+  xx <- xy[c(idx),1]
+  yy <- xy[c(idx),2]
+  ## we need a identifier grouping for each 3-vertex polygon
+  id <- rep(as.integer(factor(x$triangle$object_)), each = 3L)
+
+  ## we also have to deal with any values that are NA
+  ## because they propagate to destroy the id
+ # browser()
+  cols <- colfun(100)[scl(x$object[[1]][id]) * 99 + 1]
+  if (any(is.na(cols))) {
+    colsna <- rep(cols, each = nrow(idx))
+    bad2 <- is.na(colsna)
+    xx <- xx[!bad2]
+    yy <- yy[!bad2]
+    id <- id[!bad2]
+    cols <- cols[!is.na(cols)]
+  }
+
+  xx <- list(x = xx, y = yy, id = id, col = cols)
+isLL <- FALSE
+  if (!add) {
+    graphics::plot.new()
+    graphics::plot.window(xlim = range(xx$x, finite = TRUE), ylim = range(xx$y, finite = TRUE),
+                          asp = if (isLL) 1/cos(mean(xx$y, na.rm = TRUE) * pi/180) else 1  )
+  }
+  vps <- gridBase::baseViewports()
+
+  grid::pushViewport(vps$inner, vps$figure, vps$plot)
+
+
+  grid::grid.polygon(xx$x, xx$y, xx$id, gp = grid::gpar(col = NA, fill = xx$col),
+                     default.units = "native")
+
+
+  grid::popViewport(3)
+  invisible(NULL)
+}
 ## still not working right, triangulating the centres works but triangulating the quads makes a mush
 # # @name mesh_plot
 # # @export
