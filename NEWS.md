@@ -1,5 +1,7 @@
 # dev
 
+* New `mesh_plot()` method for `TRI` objects from silicate/anglr. 
+
 * New function `dquadmesh` to provide the discrete interpretation of a grid. 
 
 * New function `bary_index` to provide a basis for interpolation of a regular grid

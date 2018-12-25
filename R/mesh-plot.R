@@ -48,6 +48,7 @@ mesh_plot.BasicRaster <- function(x, crs = NULL, colfun = NULL, add = FALSE, ...
   if (raster::nlayers(x) > 1L) warning("extracting single RasterLayer from multilayered input")
   mesh_plot(x[[1]], crs = crs, colfun = colfun, add = add, ..., coords = coords)
 }
+#debug <- TRUE
 #' @name mesh_plot
 #' @export
 mesh_plot.RasterLayer <- function(x, crs = NULL, colfun = NULL, add = FALSE, ..., coords = NULL) {
@@ -118,12 +119,15 @@ mesh_plot.RasterLayer <- function(x, crs = NULL, colfun = NULL, add = FALSE, ...
 
 
   grid::popViewport(3)
+  #if (debug) return(xx)
+
   invisible(NULL)
 }
 
 
 
-
+#' @name mesh_plot
+#' @export
 mesh_plot.TRI <- function(x, crs = NULL, colfun = NULL, add = FALSE, ..., coords = NULL) {
   if (is.null(colfun)) colfun <- viridis::viridis
   idx <- matrix(match(t(as.matrix(x$triangle[c(".vx0", ".vx1", ".vx2")])),
@@ -138,18 +142,20 @@ mesh_plot.TRI <- function(x, crs = NULL, colfun = NULL, add = FALSE, ..., coords
   ## we have to remove any infinite vertices
   ## as this affects the entire thing
   bad <- !is.finite(xy[,1]) | !is.finite(xy[,2])
+  ## we need a identifier grouping for each 3-vertex polygon
+  id <- rep(seq_len(dim(idx)[2L]), each = 3)
+
+
   ## but we must identify the bad xy in the index
   if (any(bad)) idx <- idx[,-which(bad)]
 
   xx <- xy[c(idx),1]
   yy <- xy[c(idx),2]
-  ## we need a identifier grouping for each 3-vertex polygon
-  id <- rep(as.integer(factor(x$triangle$object_)), each = 3L)
 
   ## we also have to deal with any values that are NA
   ## because they propagate to destroy the id
- # browser()
-  cols <- colfun(100)[scl(x$object[[1]][id]) * 99 + 1]
+  #browser()
+  cols <- colfun(nrow(x$object))[factor(x$triangle$object_)]
   if (any(is.na(cols))) {
     colsna <- rep(cols, each = nrow(idx))
     bad2 <- is.na(colsna)
@@ -160,6 +166,7 @@ mesh_plot.TRI <- function(x, crs = NULL, colfun = NULL, add = FALSE, ..., coords
   }
 
   xx <- list(x = xx, y = yy, id = id, col = cols)
+
 isLL <- FALSE
   if (!add) {
     graphics::plot.new()
@@ -169,13 +176,10 @@ isLL <- FALSE
   vps <- gridBase::baseViewports()
 
   grid::pushViewport(vps$inner, vps$figure, vps$plot)
-
-
-  grid::grid.polygon(xx$x, xx$y, xx$id, gp = grid::gpar(col = NA, fill = xx$col),
+ grid::grid.polygon(xx$x, xx$y, xx$id, gp = grid::gpar(col = NA, fill = xx$col),
                      default.units = "native")
-
-
   grid::popViewport(3)
+#  if (debug) return(xx)
   invisible(NULL)
 }
 ## still not working right, triangulating the centres works but triangulating the quads makes a mush
