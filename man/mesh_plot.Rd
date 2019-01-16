@@ -4,6 +4,8 @@
 \alias{mesh_plot}
 \alias{mesh_plot.BasicRaster}
 \alias{mesh_plot.RasterLayer}
+\alias{mesh_plot.TRI}
+\alias{mesh_plot.quadmesh}
 \title{Plot as a mesh}
 \usage{
 mesh_plot(x, crs = NULL, colfun = NULL, add = FALSE, ...,
@@ -13,6 +15,12 @@ mesh_plot(x, crs = NULL, colfun = NULL, add = FALSE, ...,
   add = FALSE, ..., coords = NULL)
 
 \method{mesh_plot}{RasterLayer}(x, crs = NULL, colfun = NULL,
+  add = FALSE, ..., coords = NULL)
+
+\method{mesh_plot}{TRI}(x, crs = NULL, colfun = NULL, add = FALSE,
+  ..., coords = NULL)
+
+\method{mesh_plot}{quadmesh}(x, crs = NULL, colfun = NULL,
   add = FALSE, ..., coords = NULL)
 }
 \arguments{

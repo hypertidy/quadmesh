@@ -2,7 +2,10 @@
 #'
 #' A `quadmesh` method for `reproj::reproj()`.
 #'
-#' @inheritParams reproj::reproj
+#' @param x coordinates
+#' @param source source specification (PROJ.4 string or epsg code)
+#' @param target target specification (PROJ.4 string or epsg code)
+#' @param ... arguments passed to [proj4::ptransform()]
 #' @importFrom reproj reproj
 #' @export reproj
 #' @export

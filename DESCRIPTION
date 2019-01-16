@@ -19,7 +19,7 @@ Imports:
     png,
     sp,
     geometry,
-    reproj (>= 0.1.0.9001)
+    reproj (>= 0.2.0)
 Suggests: 
     datasets,
     knitr,

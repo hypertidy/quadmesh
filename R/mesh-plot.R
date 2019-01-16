@@ -182,6 +182,86 @@ isLL <- FALSE
 #  if (debug) return(xx)
   invisible(NULL)
 }
+
+
+
+#debug <- TRUE
+#' @name mesh_plot
+#' @export
+mesh_plot.quadmesh <- function(x, crs = NULL, colfun = NULL, add = FALSE, ..., coords = NULL) {
+  qm <- x
+  if (is.null(colfun)) colfun <- viridis::viridis
+  ib <- qm$ib
+  ## take the coordinates as given
+  xy <- t(qm$vb[1:2, ])
+  if (!is.null(coords)) {
+    ## apply coordinates as provided explicitly
+    ## fudge for test  (must be + res because could be any raster)
+    coords_fudge <- raster::setExtent(coords, raster::extent(coords) + raster::res(coords) )
+    cells <- raster::cellFromXY(coords_fudge, xy)
+    xy <- raster::extract(coords_fudge, cells)
+  }
+  isLL <- raster::isLonLat(x) || !is.null(coords)  ## we just assume it's longlat if coords given
+  if (!is.null(crs) ) {
+    if (!raster::isLonLat(crs)) {
+      isLL <- FALSE
+    }
+  }
+  srcproj <- raster::projection(x)
+  if (is.na(srcproj) && !is.null(crs)) {
+    if (is.null(coords)) {
+      stop("no projection defined on input raster, and no 'coords' provided - \n either set the CRS of the raster, or supply a two-layer 'coords' brick with longitude and latitude layers")
+    } else {
+      message("coords and crs provided, assuming coords is Longitude, Latitude")
+      srcproj <- "+proj=longlat +datum=WGS84"
+    }
+  }
+  xy <- target_coordinates(xy, src.proj = srcproj, target = crs, xyz = FALSE)
+  ## we have to remove any infinite vertices
+  ## as this affects the entire thing
+  bad <- !is.finite(xy[,1]) | !is.finite(xy[,2])
+  ## but we must identify the bad xy in the index
+  if (any(bad)) ib <- ib[,-which(bad)]
+
+  xx <- xy[c(ib),1]
+  yy <- xy[c(ib),2]
+  ## we need a identifier grouping for each 4-vertex polygon
+  id <- rep(seq_len(ncol(ib)), each  = nrow(ib))
+
+  ## we also have to deal with any values that are NA
+  ## because they propagate to destroy the id
+  valx <- colMeans(matrix(qm$vb[3, qm$ib], nrow = 4L))
+  cols <- colfun(100)[scl(valx) * 99 + 1]
+  if (any(is.na(cols))) {
+    colsna <- rep(cols, each = nrow(ib))
+    bad2 <- is.na(colsna)
+    xx <- xx[!bad2]
+    yy <- yy[!bad2]
+    id <- id[!bad2]
+    cols <- cols[!is.na(cols)]
+  }
+  xx <- list(x = xx, y = yy, id = id, col = cols)
+
+  if (!add) {
+    graphics::plot.new()
+    graphics::plot.window(xlim = range(xx$x, finite = TRUE), ylim = range(xx$y, finite = TRUE),
+                          asp = if (isLL) 1/cos(mean(xx$y, na.rm = TRUE) * pi/180) else 1  )
+  }
+  vps <- gridBase::baseViewports()
+
+  grid::pushViewport(vps$inner, vps$figure, vps$plot)
+
+
+  grid::grid.polygon(xx$x, xx$y, xx$id, gp = grid::gpar(col = NA, fill = xx$col),
+                     default.units = "native")
+
+
+  grid::popViewport(3)
+  #if (debug) return(xx)
+
+  invisible(NULL)
+}
+
 ## still not working right, triangulating the centres works but triangulating the quads makes a mush
 # # @name mesh_plot
 # # @export
