@@ -1,4 +1,4 @@
-# dev
+# quadmesh 0.3.0
 
 * Now using the `reproj` package for coordinate transformations. 
 
