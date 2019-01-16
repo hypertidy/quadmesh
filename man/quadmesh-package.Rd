@@ -14,7 +14,7 @@ Create surface forms from matrix or 'raster' data for flexible plotting and
  package. This is used for plotting raster data in 3D (optionally with
  texture), and allows the application of a map projection without data loss.
  There are discrete forms of these continuous surfaces available with
- `dquadmesh` and `dtriangmesh` functions.
+ 'dquadmesh' and 'dtriangmesh' functions.
 }
 \seealso{
 Useful links:
