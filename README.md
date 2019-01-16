@@ -24,14 +24,21 @@ of gridded data to enable
 
   - arbitrary reprojection of raster cells without information loss
     (`mesh_plot`).
-  - the corner-based interpretation of a grid (`quadmesh()`).
-  - the centre-based interpretation of a grid (`triangmesh()`).
+  - the corner-based *continuous* interpretation of a grid
+    (`quadmesh()`).
+  - the centre-based *continuous* interpretation of a grid
+    (`triangmesh()`).
+  - the corner-based *discrete* interpretation of a grid
+    (`dquadmesh()`).
+  - the centre-based *discrete* interpretation of a grid
+    (`dtriangmesh()`).
   - easy plotting of grids in 3D visualization tools (quad or triangle
     primitives for `rgl::shade3d`).
   - fast polygonization of individual cells, in
     [spex::polygonize](https://CRAN.R-project.org/package=spex).
   - barycentric interpolation from a triangle mesh (`bary_index()`).
-  - conversion from quad to triangle primitives (`triangulate_quads()`).
+  - conversion from quad to triangle primitives from the area
+    interpretation (`triangulate_quads()`).
 
 ## Installation
 
@@ -81,7 +88,7 @@ plot(extent(r), add = TRUE)
 points(t(qm$vb[1:2, ]), pch = "x", cex = 2)
 ```
 
-![](README-unnamed-chunk-4-1.png)<!-- -->
+![](man/figures/README-unnamed-chunk-4-1.png)<!-- -->
 
 ``` r
 par(op)
@@ -135,7 +142,7 @@ points(t(tri$vb[1:2, ]))
 polygon(t(tri$vb[1:2, head(as.vector(rbind(tri$it, NA)), -1)]))
 ```
 
-![](README-unnamed-chunk-6-1.png)<!-- -->
+![](man/figures/README-unnamed-chunk-6-1.png)<!-- -->
 
 ``` r
 par(op)
@@ -162,7 +169,7 @@ points(t(tri2$vb[1:2, ]))
 polygon(t(tri2$vb[1:2, head(as.vector(rbind(tri2$it, NA)), -1)]), lwd = 2, lty = 2)
 ```
 
-![](README-unnamed-chunk-7-1.png)<!-- -->
+![](man/figures/README-unnamed-chunk-7-1.png)<!-- -->
 
 ### Arbitrary reprojection of raster cells
 
@@ -178,7 +185,7 @@ prj <- "+proj=lcc +lat_1=-36 +lat_2=-38 +lat_0=-37 +lon_0=145 +x_0=2500000 +y_0=
 er <- crop(etopo, extent(110, 160, -50, -20))
 system.time(mesh_plot(er, crs = prj))
 #>    user  system elapsed 
-#>    0.66    0.12    0.78
+#>    0.80    0.01    0.81
 
 ## This is faster to plot and uses much less data that converting explicitly to polygons. 
 
@@ -188,17 +195,17 @@ p <- st_transform(spex::polygonize(er), prj)
 plot(st_geometry(p), add = TRUE)
 ```
 
-![](README-unnamed-chunk-8-1.png)<!-- -->
+![](man/figures/README-unnamed-chunk-8-1.png)<!-- -->
 
 ``` r
 
 system.time(plot(p, border = NA))
 ```
 
-![](README-unnamed-chunk-8-2.png)<!-- -->
+![](man/figures/README-unnamed-chunk-8-2.png)<!-- -->
 
     #>    user  system elapsed 
-    #>    0.41    0.08    0.48
+    #>    0.49    0.01    0.50
     pryr::object_size(er)
     #> 37.7 kB
     pryr::object_size(p)
@@ -217,13 +224,13 @@ pol <- "+proj=stere +lat_0=-90 +lon_0=147 +datum=WGS84"
 mesh_plot(etopo, crs = pol)
 ```
 
-![](README-unnamed-chunk-9-1.png)<!-- -->
+![](man/figures/README-unnamed-chunk-9-1.png)<!-- -->
 
 ``` r
 plot(projectRaster(etopo, crs = pol), col = viridis::viridis(64))
 ```
 
-![](README-unnamed-chunk-9-2.png)<!-- -->
+![](man/figures/README-unnamed-chunk-9-2.png)<!-- -->
 
 ### Easy 3D plotting of grids
 
@@ -235,7 +242,7 @@ such as `shade3d()` and `addNormals()`.
 class(qm)
 #> [1] "quadmesh" "mesh3d"   "shape3d"
 class(tri)
-#> [1] "mesh3d"  "shape3d"
+#> [1] "triangmesh" "mesh3d"     "shape3d"
 ```
 
 ### Fast polygonization of individual cells
@@ -249,15 +256,15 @@ grids to a polygon layer with 5 explicit coordinates for every cell.
 rr <- disaggregate(r, fact = 20)
 system.time(spex::polygonize(rr))
 #>    user  system elapsed 
-#>    0.09    0.00    0.10
+#>    0.11    0.00    0.11
 system.time(raster::rasterToPolygons(rr))
 #>    user  system elapsed 
-#>    1.65    0.00    1.67
+#>    1.80    0.00    1.79
 
 ## stars has now improved on spex by calling out to GDAL to do the work
 system.time(sf::st_as_sf(stars::st_as_stars(rr), merge = FALSE, as_points = FALSE))
 #>    user  system elapsed 
-#>    0.17    0.01    0.19
+#>    0.19    0.00    0.20
 ```
 
 ### Barycentric interpoloation from a triangle mesh
