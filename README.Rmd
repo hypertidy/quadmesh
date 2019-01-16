@@ -10,7 +10,7 @@ editor_options:
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  fig.path = "README-"
+  fig.path = "man/figures/README-"
 )
 ```
 
@@ -28,12 +28,14 @@ A *quadmesh* is a dense mesh describing a topologically continuous surface of 4-
 This package provides helpers for working with this mesh interpretation of gridded data to enable
 
 * arbitrary reprojection of raster cells without information loss (`mesh_plot`).
-* the corner-based interpretation of a grid (`quadmesh()`).
-* the centre-based interpretation of a grid (`triangmesh()`). 
+* the corner-based *continuous* interpretation of a grid (`quadmesh()`).
+* the centre-based *continuous* interpretation of a grid (`triangmesh()`). 
+* the corner-based *discrete* interpretation of a grid (`dquadmesh()`).
+* the centre-based *discrete* interpretation of a grid (`dtriangmesh()`). 
 * easy plotting of grids in 3D visualization tools (quad or triangle primitives for `rgl::shade3d`).
 * fast polygonization of individual cells, in [spex::polygonize](https://CRAN.R-project.org/package=spex). 
 * barycentric interpolation from a triangle mesh (`bary_index()`). 
-* conversion from quad to triangle primitives (`triangulate_quads()`). 
+* conversion from quad to triangle primitives from the area interpretation (`triangulate_quads()`). 
 
 ## Installation
 
