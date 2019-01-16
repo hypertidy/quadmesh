@@ -4,7 +4,7 @@
 #' This function returns the barycentric weight for a grid of coordinates
 #' from a geographic raster.
 #'
-#' It's not as fast as `rasterProject(x, grid)` but it
+#' It's not as fast as [raster::projectRaster()] (e.g. `projectRaster(x, grid)`) but it
 #' also accepts a `coords` argument and so can be used for non-regular raster
 #' reprojection.
 #'

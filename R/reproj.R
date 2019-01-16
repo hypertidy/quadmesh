@@ -1,6 +1,6 @@
 #' Reprojection methods
 #'
-#' A `quadmesh` method for `reproj::reproj()`.
+#' A `quadmesh` method for [reproj::reproj()].
 #'
 #' @param x coordinates
 #' @param source source specification (PROJ.4 string or epsg code)
