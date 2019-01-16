@@ -138,7 +138,8 @@ shade3d(qm)
 rglwidget()
 
 rgl.clear()
-quads3d(t(qm$vb)[qm$ib,])
+quads3d(t(qm$vb)[qm$ib,], col = rep(c("grey", "black"), each = 4))
+aspect3d(1, 1, 1)
 rglwidget()
 
 ```
@@ -147,6 +148,40 @@ rglwidget()
 The primary means to create this format from a raster is for 3D plotting, but because we have access to the coordinate directly it provides other uses. We can transform the coordinates (i.e. a map projection) or manipulate them and augment the Z value (for example) in flexible ways. 
 
 (The usual way of driving rgl grid surfaces is `rgl.surface` but this is limited to the centre-point interpretation only - more than the x, y, z list interface as image() is, i.e. it can take an individual x,y pair for every cell, but it cannot properly represent the cell-as-area as image can. For this we need to use `shade3d`, and actual `meshd3d` types in `rgl`). 
+
+# Triangle mesh
+
+Alternatively the centre-of-cell interpretation of a raster is available. 
+
+```{r triangles}
+rgl.clear()
+wire3d(qm)
+tm <- triangmesh(r)
+shade3d(tm, col = rep(c("firebrick", "dodgerblue", "grey"), each = 3))
+rglwidget()
+```
+# Discrete forms
+
+There is a discrete form for both quad and triangles meshes. See how each quad has a constant z-value. 
+
+```{r discrete-quad}
+dqm <- dquadmesh(r)
+rgl.clear()
+shade3d(dqm)
+rglwidget()
+```
+
+
+
+When the centre-point interpretation of *triangles* are discrete we actually need to modify their vertices to see that they are separable. 
+
+```{r discrete-triangle}
+dtm <- dtriangmesh(r)
+dtm$vb[3, ] <- jitter(dtm$vb[3, ], 8)
+rgl.clear()
+shade3d(dtm, col = rep(c("firebrick", "dodgerblue", "grey"), each = 3))
+rglwidget()
+```
 
 
 # Quadmesh is a special case
