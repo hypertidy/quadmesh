@@ -8,10 +8,13 @@
 \description{
 \if{html}{\figure{logo.png}{options: align='right'}}
 
-Create a standard quadrangle mesh from 'raster' data for flexible
- plotting and conversion to other mesh forms. The standard output 'quadmesh' is an 'mesh3d' object
- used by the 'rgl' package. This is used for plotting raster data in 3D with or without textures, and
- allows the application of a map projection without data loss.
+Create surface forms from matrix or 'raster' data for flexible plotting and
+ conversion to other mesh types. The functions 'quadmesh' or 'triangmesh'
+ produce a continuous surface as a 'mesh3d' object as used by the 'rgl'
+ package. This is used for plotting raster data in 3D (optionally with
+ texture), and allows the application of a map projection without data loss.
+ There are discrete forms of these continuous surfaces available with
+ `dquadmesh` and `dtriangmesh` functions.
 }
 \seealso{
 Useful links:

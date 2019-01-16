@@ -70,7 +70,28 @@ shade3d(qm)
 rglwidget()
 
 rgl.clear()
-quads3d(t(qm$vb)[qm$ib,])
+quads3d(t(qm$vb)[qm$ib,], col = rep(c("grey", "black"), each = 4))
+aspect3d(1, 1, 1)
 rglwidget()
 
+
+## ----triangles-----------------------------------------------------------
+rgl.clear()
+wire3d(qm)
+tm <- triangmesh(r)
+shade3d(tm, col = rep(c("firebrick", "dodgerblue", "grey"), each = 3))
+rglwidget()
+
+## ----discrete-quad-------------------------------------------------------
+dqm <- dquadmesh(r)
+rgl.clear()
+shade3d(dqm)
+rglwidget()
+
+## ----discrete-triangle---------------------------------------------------
+dtm <- dtriangmesh(r)
+dtm$vb[3, ] <- jitter(dtm$vb[3, ], 8)
+rgl.clear()
+shade3d(dtm, col = rep(c("firebrick", "dodgerblue", "grey"), each = 3))
+rglwidget()
 
