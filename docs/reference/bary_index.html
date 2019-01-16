@@ -64,7 +64,7 @@ from a geographic raster." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">quadmesh</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.2.0.9005</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.3.0</span>
       </span>
     </div>
 
@@ -159,7 +159,7 @@ from a geographic raster.</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>It's not as fast as `rasterProject(x, grid)` but it
+    <p>It's not as fast as [raster::projectRaster()] (e.g. `projectRaster(x, grid)`) but it
 also accepts a `coords` argument and so can be used for non-regular raster
 reprojection.</p>
 <p>'coords' may be 'NULL' or longitude, latitude in a 2-layer raster brick or stack as with
@@ -170,8 +170,11 @@ reprojection.</p>
     <pre class="examples"><div class='input'><span class='fu'>library</span>(<span class='no'>raster</span>)</div><div class='output co'>#&gt; <span class='message'>Loading required package: sp</span></div><div class='input'><span class='no'>p_srs</span> <span class='kw'>&lt;-</span> <span class='st'>"+proj=stere +lat_0=-90 +lat_ts=-71 +datum=WGS84"</span>
 <span class='no'>polar</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/raster/topics/raster'>raster</a></span>(<span class='fu'><a href='http://www.rdocumentation.org/packages/raster/topics/extent'>extent</a></span>(-<span class='fl'>5e6</span>, <span class='fl'>5e6</span>, -<span class='fl'>5e6</span>, <span class='fl'>5e6</span>), <span class='kw'>crs</span> <span class='kw'>=</span> <span class='no'>p_srs</span>, <span class='kw'>res</span> <span class='kw'>=</span> <span class='fl'>25000</span>)
 <span class='no'>etopo</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/raster/topics/aggregate'>aggregate</a></span>(<span class='no'>etopo</span>, <span class='kw'>fact</span> <span class='kw'>=</span> <span class='fl'>4</span>)
-<span class='no'>index</span> <span class='kw'>&lt;-</span> <span class='fu'>bary_index</span>(<span class='no'>etopo</span>, <span class='kw'>grid</span> <span class='kw'>=</span> <span class='no'>polar</span>)</div><div class='output co'>#&gt; <span class='error'>Error in bary_index(etopo, grid = polar): object 'tri' not found</span></div><div class='input'><span class='no'>ok</span> <span class='kw'>&lt;-</span> !<span class='fu'>is.na</span>(<span class='no'>index</span>$<span class='no'>idx</span>)</div><div class='output co'>#&gt; <span class='error'>Error in eval(expr, envir, enclos): object 'index' not found</span></div><div class='input'><span class='no'>r</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/raster/topics/setValues'>setValues</a></span>(<span class='no'>polar</span>, <span class='fl'>NA_integer_</span>)
-<span class='no'>r</span>[<span class='no'>ok</span>] <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/raster/topics/rowSums'>colSums</a></span>(<span class='fu'>matrix</span>(<span class='fu'><a href='http://www.rdocumentation.org/packages/raster/topics/getValues'>values</a></span>(<span class='no'>etopo</span>)[<span class='no'>index</span>$<span class='no'>tri</span>[, <span class='no'>index</span>$<span class='no'>idx</span>[<span class='no'>ok</span>]]], <span class='kw'>nrow</span> <span class='kw'>=</span> <span class='fl'>3</span>) * <span class='fu'><a href='http://www.rdocumentation.org/packages/raster/topics/transpose'>t</a></span>(<span class='no'>index</span>$<span class='no'>p</span>)[, <span class='no'>ok</span>])</div><div class='output co'>#&gt; <span class='error'>Error in matrix(values(etopo)[index$tri[, index$idx[ok]]], nrow = 3): object 'index' not found</span></div><div class='input'><span class='fu'><a href='http://www.rdocumentation.org/packages/raster/topics/plot'>plot</a></span>(<span class='no'>r</span>)</div><div class='img'><img src='bary_index-1.png' alt='' width='700' height='433' /></div></pre>
+<span class='no'>index</span> <span class='kw'>&lt;-</span> <span class='fu'>bary_index</span>(<span class='no'>etopo</span>, <span class='kw'>grid</span> <span class='kw'>=</span> <span class='no'>polar</span>)
+<span class='no'>ok</span> <span class='kw'>&lt;-</span> !<span class='fu'>is.na</span>(<span class='no'>index</span>$<span class='no'>idx</span>)
+<span class='no'>r</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/raster/topics/setValues'>setValues</a></span>(<span class='no'>polar</span>, <span class='fl'>NA_integer_</span>)
+<span class='no'>r</span>[<span class='no'>ok</span>] <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/raster/topics/rowSums'>colSums</a></span>(<span class='fu'>matrix</span>(<span class='fu'><a href='http://www.rdocumentation.org/packages/raster/topics/getValues'>values</a></span>(<span class='no'>etopo</span>)[<span class='no'>index</span>$<span class='no'>tri</span>[, <span class='no'>index</span>$<span class='no'>idx</span>[<span class='no'>ok</span>]]], <span class='kw'>nrow</span> <span class='kw'>=</span> <span class='fl'>3</span>) * <span class='fu'><a href='http://www.rdocumentation.org/packages/raster/topics/transpose'>t</a></span>(<span class='no'>index</span>$<span class='no'>p</span>)[, <span class='no'>ok</span>])
+<span class='fu'><a href='http://www.rdocumentation.org/packages/raster/topics/plot'>plot</a></span>(<span class='no'>r</span>)</div><div class='img'><img src='bary_index-1.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

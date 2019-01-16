@@ -63,7 +63,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">quadmesh</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.2.0.9005</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.3.0</span>
       </span>
     </div>
 
@@ -137,6 +137,14 @@
 
 <span class='co'># S3 method for RasterLayer</span>
 <span class='fu'>mesh_plot</span>(<span class='no'>x</span>, <span class='kw'>crs</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>colfun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>, <span class='kw'>coords</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
+
+<span class='co'># S3 method for TRI</span>
+<span class='fu'>mesh_plot</span>(<span class='no'>x</span>, <span class='kw'>crs</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>colfun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='no'>...</span>, <span class='kw'>coords</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
+
+<span class='co'># S3 method for quadmesh</span>
+<span class='fu'>mesh_plot</span>(<span class='no'>x</span>, <span class='kw'>crs</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>colfun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>, <span class='kw'>coords</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -183,7 +191,7 @@ generate colours which are mapped to the input object data as in 'image'.</p>
 longitude and latitude as the *cell values*. These are used to geographically locate
 the resulting mesh, and will be transformed to the `crs` if that is supplied. This is
 modelled on the approach to curvilinear grid data used in the `angstroms` package. There
-the function `angstroms::romsmap` and `angstroms::romscoords` are used to separate the complicated
+the function [angstroms::romsmap()] and [angstroms::romscoords()] are used to separate the complicated
 grid geometry from the grid data itself. A small fudge is applied to extend the coordinates
 by 1 cell to avoid losing any data due to the half cell outer margin (get in touch if this causes problems!).</p>
     

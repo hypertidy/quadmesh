@@ -191,7 +191,7 @@ system.time(raster::rasterToPolygons(rr))
 system.time(sf::st_as_sf(stars::st_as_stars(rr), merge = FALSE, as_points = FALSE))
 ```
 
-### Barycentric interpoloation from a triangle mesh
+### Barycentric interpolation from a triangle mesh
 
 Using a triangulation version of a raster grid we can build an index of weightings for 
 a new of of arbitrary coordinates to estimate the implicit value at each point as if

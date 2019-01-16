@@ -198,7 +198,7 @@ Consider two kinds of meshes, a simple triangulation and a short piecewise line 
 
 *planar and rgl plots of meshes*
 
-The topology itself may need to be defined in a partiular origin geometry, and for example the Delaunay triangulation for connecting planar x,y points gives a particular mesh - but once this is defined we can transform the original geometry (say it was UTM, zone 55 south) into a global Lambert Azimuthal Equal Area, or onto a geocentric shell with radius 637187m - the relationship between the primitives (triangles, edges) does not change. Not all geometries make sense for a given mesh, but with a mesh we are quite free to choose amongst many sensible alternatives, the primitives provide a straightforward interpolative space along with other physical properties might be assumed to vary. This is the basis of barycentric interpolation and simplistic linear interpolation with depth over time, for example. 
+The topology itself may need to be defined in a particular origin geometry, and for example the Delaunay triangulation for connecting planar x,y points gives a particular mesh - but once this is defined we can transform the original geometry (say it was UTM, zone 55 south) into a global Lambert Azimuthal Equal Area, or onto a geocentric shell with radius 637187m - the relationship between the primitives (triangles, edges) does not change. Not all geometries make sense for a given mesh, but with a mesh we are quite free to choose amongst many sensible alternatives, the primitives provide a straightforward interpolative space along with other physical properties might be assumed to vary. This is the basis of barycentric interpolation and simplistic linear interpolation with depth over time, for example. 
 
 
 # Geometry is purely a table of attributes
@@ -207,7 +207,7 @@ It's the mesh indexing of how the primitives relate to a given geometry that mat
 
 This also opens up the idea that we can store multiple coordinate system choices in one data set. 
 
-There are efficiences for different kinds of mesh, for raster we need only store the cell values and the offset and scale to position the grid. It's completely parameterized, and if we need the centre or corner coordinates they are implicit, no need to generate them. If we store a connected triangular mesh, it becomes wasteful to store every path around each triangle as coordinates, and it's actually error-prone because we need to update all instances of coordinates at any shared boundary. A better approach is to keep the index of each triangle, against a set of shared vertices. We can augment the vertices, transform them and so on and because they are uniquly defined the mesh is automatically correctly updated with no gaps. 
+There are efficiencies for different kinds of mesh, for raster we need only store the cell values and the offset and scale to position the grid. It's completely parameterized, and if we need the centre or corner coordinates they are implicit, no need to generate them. If we store a connected triangular mesh, it becomes wasteful to store every path around each triangle as coordinates, and it's actually error-prone because we need to update all instances of coordinates at any shared boundary. A better approach is to keep the index of each triangle, against a set of shared vertices. We can augment the vertices, transform them and so on and because they are uniquely defined the mesh is automatically correctly updated with no gaps. 
 
 
 

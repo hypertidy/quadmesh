@@ -61,7 +61,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">quadmesh</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.2.0.9005</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.3.0</span>
       </span>
     </div>
 
@@ -119,6 +119,25 @@
       <small>Source: <a href='https://github.com/hypertidy/quadmesh/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="quadmesh-0-3-0" class="section level1">
+<h1 class="page-header">
+<a href="#quadmesh-0-3-0" class="anchor"></a>quadmesh 0.3.0<small> Unreleased </small>
+</h1>
+<ul>
+<li><p>Now using the <code>reproj</code> package for coordinate transformations.</p></li>
+<li><p>New <code><a href="../reference/mesh_plot.html">mesh_plot()</a></code> method for <code>TRI</code> objects from silicate/anglr.</p></li>
+<li><p>New function <code>dquadmesh</code> to provide the discrete interpretation of a grid.</p></li>
+<li><p>New function <code>bary_index</code> to provide a basis for interpolation of a regular grid from triangles.</p></li>
+<li><p>New functions <code><a href="../reference/triangmesh.html">triangmesh()</a></code> and <code>dtriangmesh</code> to provide the triangle-interpretation of a raster (bound to centre coordinates).</p></li>
+<li><p><code><a href="../reference/quadmesh.html">quadmesh()</a></code> is now generic with a new method for ‘matrix’.</p></li>
+<li><p>Some fixes and additional features for <code><a href="../reference/mesh_plot.html">mesh_plot()</a></code> to allow plotting with curvilinear <code>coords</code>.</p></li>
+<li><p>New function <code>qm_as_raster</code> to round-trip to a RasterLayer.</p></li>
+<li><p>The <code>z</code> argument of <code><a href="../reference/quadmesh.html">quadmesh()</a></code> may now have a different coordinate system to the input data <code>x</code>. The mesh coordinates of <code>x</code> are silently reprojected if needed and used to extract values in the native coordinate system of <code>z</code>.</p></li>
+<li><p>A new <code>qsc</code> function to return a very simple six quad rendition of the Quadrilateralized Spherical Cube projection family.</p></li>
+<li><p>The <code>mesh_plot</code> function gains true curvilinear grid support by allowing input of <code>coords</code>, a two-layer raster of longitude and latitude values for the cell geography. This aligns with the approach used in the <code>angstroms</code> package.</p></li>
+<li><p>The <code>quadmesh</code> function gains a new argument ‘texture_filename’ to control the output PNG file.</p></li>
+</ul>
+</div>
     <div id="quadmesh-0-2-0" class="section level1">
 <h1 class="page-header">
 <a href="#quadmesh-0-2-0" class="anchor"></a>quadmesh 0.2.0<small> 2018-11-13 </small>
@@ -146,6 +165,7 @@
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
+        <li><a href="#quadmesh-0-3-0">0.3.0</a></li>
         <li><a href="#quadmesh-0-2-0">0.2.0</a></li>
         <li><a href="#quadmesh-0-1-0">0.1.0</a></li>
       </ul>

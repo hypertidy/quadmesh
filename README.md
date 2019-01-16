@@ -185,7 +185,7 @@ prj <- "+proj=lcc +lat_1=-36 +lat_2=-38 +lat_0=-37 +lon_0=145 +x_0=2500000 +y_0=
 er <- crop(etopo, extent(110, 160, -50, -20))
 system.time(mesh_plot(er, crs = prj))
 #>    user  system elapsed 
-#>    0.80    0.01    0.81
+#>    0.66    0.10    0.76
 
 ## This is faster to plot and uses much less data that converting explicitly to polygons. 
 
@@ -205,7 +205,7 @@ system.time(plot(p, border = NA))
 ![](man/figures/README-unnamed-chunk-8-2.png)<!-- -->
 
     #>    user  system elapsed 
-    #>    0.49    0.01    0.50
+    #>     0.4     0.1     0.5
     pryr::object_size(er)
     #> 37.7 kB
     pryr::object_size(p)
@@ -256,18 +256,18 @@ grids to a polygon layer with 5 explicit coordinates for every cell.
 rr <- disaggregate(r, fact = 20)
 system.time(spex::polygonize(rr))
 #>    user  system elapsed 
-#>    0.11    0.00    0.11
+#>    0.09    0.00    0.09
 system.time(raster::rasterToPolygons(rr))
 #>    user  system elapsed 
-#>    1.80    0.00    1.79
+#>    1.72    0.00    1.71
 
 ## stars has now improved on spex by calling out to GDAL to do the work
 system.time(sf::st_as_sf(stars::st_as_stars(rr), merge = FALSE, as_points = FALSE))
 #>    user  system elapsed 
-#>    0.19    0.00    0.20
+#>    0.19    0.01    0.20
 ```
 
-### Barycentric interpoloation from a triangle mesh
+### Barycentric interpolation from a triangle mesh
 
 Using a triangulation version of a raster grid we can build an index of
 weightings for a new of of arbitrary coordinates to estimate the

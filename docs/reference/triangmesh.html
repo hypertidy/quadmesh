@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Triangle mesh. — triangmesh • quadmesh</title>
+<title>Create a triangle-type mesh for use in rgl. — triangmesh • quadmesh</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,9 +30,10 @@
 
 
 
-<meta property="og:title" content="Triangle mesh. — triangmesh" />
+<meta property="og:title" content="Create a triangle-type mesh for use in rgl. — triangmesh" />
 
-<meta property="og:description" content="Triangle mesh." />
+<meta property="og:description" content="Convert an object to a `mesh3d` ([rgl::tmesh3d()]) triangle mesh,
+with methods for [raster::raster()] and `matrix`." />
 
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -63,7 +64,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">quadmesh</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.2.0.9005</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.3.0</span>
       </span>
     </div>
 
@@ -117,14 +118,15 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Triangle mesh.</h1>
+    <h1>Create a triangle-type mesh for use in rgl.</h1>
     <small class="dont-index">Source: <a href='https://github.com/hypertidy/quadmesh/blob/master/R/triangmesh.R'><code>R/triangmesh.R</code></a></small>
     <div class="hidden name"><code>triangmesh.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Triangle mesh.</p>
+    <p>Convert an object to a `mesh3d` ([rgl::tmesh3d()]) triangle mesh,
+with methods for [raster::raster()] and `matrix`.</p>
     
     </div>
 
@@ -137,6 +139,13 @@
 
 <span class='co'># S3 method for BasicRaster</span>
 <span class='fu'>triangmesh</span>(<span class='no'>x</span>, <span class='kw'>z</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>,
+  <span class='kw'>texture</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>texture_filename</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
+
+<span class='fu'>dtriangmesh</span>(<span class='no'>x</span>, <span class='kw'>z</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>, <span class='kw'>texture</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>texture_filename</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
+
+<span class='co'># S3 method for default</span>
+<span class='fu'>dtriangmesh</span>(<span class='no'>x</span>, <span class='kw'>z</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>,
   <span class='kw'>texture</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>texture_filename</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -172,12 +181,35 @@
 
     <p>mesh3d (primitivetype triangle)</p>
     
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>`triangmesh()` generates the point-based interpretation of a raster (POINT) with the obvious continuous
+interpretation. `dtriangmesh` splits the mesh so that each primitive is independent.  This is more coherent
+than the analogous distinction for quadmesh, though both will appear the same on creation.</p>
+<p>The output is described as a mesh because it is a dense representation
+of a continuous shape, in this case plane-filling triangles defined
+by index of three of the available vertices.</p>
+<p>The `z` argument defaults to the input `x` argument, though may be set to `NULL`, a constant
+numeric value, or another raster. If the coordinate system of `z` and `x` don't match the z values
+are queried by reprojection.</p>
+<p>Any raster RGB object (3-layers, ranging in 0-255) may be used as
+a _texture_ on the resulting mesh3d object.
+It is not possible to provide rgl with an object of data for texture, it must be a PNG file and so
+the in-memory `texture` argument is written out to PNG file (with a message). The location of the file
+may be set explicitly with `texture_filename`.  Currently it's not possible to not use the `texture` object
+in-memory.</p>
+    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'>library</span>(<span class='no'>raster</span>)
 <span class='no'>r</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/raster/topics/setExtent'>setExtent</a></span>(<span class='fu'><a href='http://www.rdocumentation.org/packages/raster/topics/raster'>raster</a></span>(<span class='no'>volcano</span>), <span class='fu'><a href='http://www.rdocumentation.org/packages/raster/topics/extent'>extent</a></span>(<span class='fl'>0</span>, <span class='fu'><a href='http://www.rdocumentation.org/packages/raster/topics/ncell'>nrow</a></span>(<span class='no'>volcano</span>), <span class='fl'>0</span>, <span class='fu'><a href='http://www.rdocumentation.org/packages/raster/topics/ncell'>ncol</a></span>(<span class='no'>volcano</span>)))
 <span class='no'>tm</span> <span class='kw'>&lt;-</span> <span class='fu'>triangmesh</span>(<span class='no'>r</span>)
-<span class='co'>#rgl::shade3d(tm)</span></div></pre>
+<span class='co'>#rgl::shade3d(tm)</span>
+
+<span class='co'>## jitter the mesh just enough to show that they are distinct in the discrete case</span>
+<span class='no'>a</span> <span class='kw'>&lt;-</span> <span class='fu'>dtriangmesh</span>(<span class='no'>r</span>)
+<span class='no'>a</span>$<span class='no'>vb</span>[<span class='fl'>3L</span>, ] <span class='kw'>&lt;-</span> <span class='fu'>jitter</span>(<span class='no'>a</span>$<span class='no'>vb</span>[<span class='fl'>3L</span>, ], <span class='kw'>factor</span> <span class='kw'>=</span> <span class='fl'>10</span>)
+<span class='co'>##rgl.clear(); rgl::shade3d(a, col = "grey"); aspect3d(1, 1, 0.2); rglwidget()</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -185,6 +217,8 @@
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
+
+      <li><a href="#details">Details</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>
