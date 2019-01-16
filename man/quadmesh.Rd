@@ -40,8 +40,8 @@ quadmesh(x, z = x, na.rm = FALSE, ..., texture = NULL,
 mesh3d
 }
 \description{
-Convert an object to a \code{\link[rgl]{mesh3d}} quadrangle mesh,
-currently the only available method is for \code{\link[raster]{raster}}.
+Convert an object to a `mesh3d` ([rgl::qmesh3d()]) quadrangle mesh,
+with methods for [raster::raster()] and `matrix`.
 }
 \details{
 `quadmesh()` generates the cell-based interpretation of a raster (AREA) but applies a continuous

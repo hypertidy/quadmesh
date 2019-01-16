@@ -2,9 +2,11 @@
 % Please edit documentation in R/triangmesh.R
 \name{triangmesh}
 \alias{triangmesh}
+\alias{dtriangmesh}
 \alias{triangmesh.matrix}
 \alias{triangmesh.BasicRaster}
-\title{Triangle mesh.}
+\alias{dtriangmesh.default}
+\title{Create a triangle-type mesh for use in rgl.}
 \usage{
 triangmesh(x, z = x, na.rm = FALSE, ..., texture = NULL,
   texture_filename = NULL)
@@ -13,6 +15,12 @@ triangmesh(x, z = x, na.rm = FALSE, ..., texture = NULL,
   texture = NULL, texture_filename = NULL)
 
 \method{triangmesh}{BasicRaster}(x, z = x, na.rm = FALSE, ...,
+  texture = NULL, texture_filename = NULL)
+
+dtriangmesh(x, z = x, na.rm = FALSE, ..., texture = NULL,
+  texture_filename = NULL)
+
+\method{dtriangmesh}{default}(x, z = x, na.rm = FALSE, ...,
   texture = NULL, texture_filename = NULL)
 }
 \arguments{
@@ -32,11 +40,37 @@ triangmesh(x, z = x, na.rm = FALSE, ..., texture = NULL,
 mesh3d (primitivetype triangle)
 }
 \description{
-Triangle mesh.
+Convert an object to a `mesh3d` ([rgl::tmesh3d()]) triangle mesh,
+with methods for [raster::raster()] and `matrix`.
+}
+\details{
+`triangmesh()` generates the point-based interpretation of a raster (POINT) with the obvious continuous
+interpretation. `dtriangmesh` splits the mesh so that each primitive is independent.  This is more coherent
+than the analogous distinction for quadmesh, though both will appear the same on creation.
+
+The output is described as a mesh because it is a dense representation
+of a continuous shape, in this case plane-filling triangles defined
+by index of three of the available vertices.
+
+The `z` argument defaults to the input `x` argument, though may be set to `NULL`, a constant
+numeric value, or another raster. If the coordinate system of `z` and `x` don't match the z values
+are queried by reprojection.
+
+Any raster RGB object (3-layers, ranging in 0-255) may be used as
+a _texture_ on the resulting mesh3d object.
+It is not possible to provide rgl with an object of data for texture, it must be a PNG file and so
+the in-memory `texture` argument is written out to PNG file (with a message). The location of the file
+may be set explicitly with `texture_filename`.  Currently it's not possible to not use the `texture` object
+in-memory.
 }
 \examples{
 library(raster)
 r <- setExtent(raster(volcano), extent(0, nrow(volcano), 0, ncol(volcano)))
 tm <- triangmesh(r)
 #rgl::shade3d(tm)
+
+## jitter the mesh just enough to show that they are distinct in the discrete case
+a <- dtriangmesh(r)
+a$vb[3L, ] <- jitter(a$vb[3L, ], factor = 10)
+##rgl.clear(); rgl::shade3d(a, col = "grey"); aspect3d(1, 1, 0.2); rglwidget()
 }

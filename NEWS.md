@@ -1,5 +1,7 @@
 # dev
 
+* Now using the `reproj` package for coordinate transformations. 
+
 * New `mesh_plot()` method for `TRI` objects from silicate/anglr. 
 
 * New function `dquadmesh` to provide the discrete interpretation of a grid. 
@@ -7,9 +9,7 @@
 * New function `bary_index` to provide a basis for interpolation of a regular grid
  from triangles. 
 
-* New function `triangmesh()` to provide the triangle-interpretation of a raster (bound to 
- centre coordinates). Textures are not yet supported, nor is overlaying a separate z raster
- for elevation. 
+* New functions `triangmesh()` and `dtriangmesh` to provide the triangle-interpretation of a raster (bound to  centre coordinates). 
  
 * `quadmesh()` is now generic with a new method for 'matrix'. 
 
