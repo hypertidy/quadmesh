@@ -38,3 +38,24 @@ qm$primitivetype <- "triangle"
 rgl::rgl.clear()
 rgl::shade3d(qm, col = "grey")
 rgl::writeSTL("examples/stl/globe_etopo.stl")
+
+
+
+#' https://en.wikipedia.org/wiki/Monkey_saddle
+monkey <- function(q) {
+  xy <- q$vb[1:2, ]
+  q$vb[3L, ] <- xy[1L, ]^3 - 3 * xy[1L, ] * xy[2L, ]^2
+  q
+}
+hp <- function(q, a = 1, b = 1) {
+  xy <- q$vb[1:2, ]
+  q$vb[3L, ] <- ((xy[1, ]^2)/a) - ((xy[2, ]^2)/b)
+ q
+}
+qm <- quadmesh(raster::raster(matrix(0, 20, 20), xmn = -10, xmx = 10, ymn = -10, ymx = 10))
+m <- monkey(qm)
+h <- hp(qm, 1, 1)
+rgl.clear();shade3d(h, col = "white"); aspect3d(1, 1, 1);rglwidget()
+rgl::writeSTL("examples/stl/hyperbolic_paraboloid.stl")
+rgl.clear();shade3d(m, col = "white"); aspect3d(1, 1, 1);rglwidget()
+rgl::writeSTL("examples/stl/monkey_saddle.stl")
