@@ -15,3 +15,9 @@ shade3d( translate3d( icosahedron3d(col = "magenta"), 12, 0, 0) )
 
 
 rgl::writeSTL("examples/stl/shapes.stl")
+
+
+qm <- reproj::reproj(triangmesh(raster::aggregate(etopo, fact = 8)), "+proj=geocent +a=6378")
+rgl::rgl.clear()
+rgl::shade3d(qm, col = "grey")
+rgl::writeSTL("examples/stl/globe_etopo.stl")
