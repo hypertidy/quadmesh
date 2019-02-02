@@ -42,14 +42,23 @@ rgl::writeSTL("examples/stl/globe_etopo.stl")
 
 
 #' https://en.wikipedia.org/wiki/Monkey_saddle
-monkey <- function(q) {
+monkey <- function(q, scale = TRUE) {
   xy <- q$vb[1:2, ]
   q$vb[3L, ] <- xy[1L, ]^3 - 3 * xy[1L, ] * xy[2L, ]^2
+
+  if (scale) {
+    ## just based on x for now
+    q$vb[3L, ] <- scales::rescale(q$vb[3L, ], range(xy[1L, ]))
+  }
   q
 }
-hp <- function(q, a = 1, b = 1) {
+hp <- function(q, a = 1, b = 1, scale = TRUE) {
   xy <- q$vb[1:2, ]
   q$vb[3L, ] <- ((xy[1, ]^2)/a) - ((xy[2, ]^2)/b)
+  if (scale) {
+    ## just based on x for now
+    q$vb[3L, ] <- scales::rescale(q$vb[3L, ], range(xy[1L, ]))
+  }
  q
 }
 qm <- quadmesh(raster::raster(matrix(0, 20, 20), xmn = -10, xmx = 10, ymn = -10, ymx = 10))
