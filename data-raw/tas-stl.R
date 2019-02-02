@@ -18,7 +18,7 @@ rgl::writeSTL("examples/stl/shapes.stl")
 
 library(rgl)
 library(quadmesh)
-qm <- quadmesh(raster::aggregate(etopo, fact = 8)/90)
+qm <- quadmesh(raster::aggregate(etopo, fact = 8)/200)
 #qm <- reproj(qm, target = "+proj=laea +lon_0=147 +lat_0=-42 +unit=km")
 qm$it <- triangulate_quads(qm$ib, clockwise = FALSE)
 qm$ib <- NULL
