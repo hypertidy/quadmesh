@@ -17,7 +17,11 @@ shade3d( translate3d( icosahedron3d(col = "magenta"), 12, 0, 0) )
 rgl::writeSTL("examples/stl/shapes.stl")
 
 
-qm <- reproj::reproj(triangmesh(raster::aggregate(etopo, fact = 8)), "+proj=geocent +a=6378")
+qm <- quadmesh(raster::aggregate(etopo, fact = 8))
+qm <- reproj(qm, target = "+proj=geocent +a=637812")
+qm$it <- triangulate_quads(qm$ib, clockwise = TRUE)
+qm$ib <- NULL
+qm$primitivetype <- "triangle"
 rgl::rgl.clear()
 rgl::shade3d(qm, col = "grey")
 rgl::writeSTL("examples/stl/globe_etopo.stl")
