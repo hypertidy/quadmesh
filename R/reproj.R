@@ -23,3 +23,7 @@ reproj.quadmesh <- function(x, target, ..., source = NULL) {
   x$crs <- target
   x
 }
+
+reproj.triangmesh <- function(x, target, ..., source = NULL) {
+  reproj.quadmesh(x, target = target, source = source)
+}
