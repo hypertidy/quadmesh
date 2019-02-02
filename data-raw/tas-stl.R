@@ -24,5 +24,17 @@ qm$it <- triangulate_quads(qm$ib, clockwise = FALSE)
 qm$ib <- NULL
 qm$primitivetype <- "triangle"
 rgl::rgl.clear()
+rgl::shade3d(addNormals(qm), col = "grey")
+rgl::writeSTL("examples/stl/etopo.stl")
+
+
+library(rgl)
+library(quadmesh)
+qm <- quadmesh(raster::aggregate(etopo, fact = 8)*50)
+qm <- reproj(qm, target = "+proj=geocent +datum=WGS84")
+qm$it <- triangulate_quads(qm$ib, clockwise = FALSE)
+qm$ib <- NULL
+qm$primitivetype <- "triangle"
+rgl::rgl.clear()
 rgl::shade3d(qm, col = "grey")
 rgl::writeSTL("examples/stl/globe_etopo.stl")
