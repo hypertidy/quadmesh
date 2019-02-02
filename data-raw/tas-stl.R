@@ -1,0 +1,5 @@
+raster::plot(etopo)
+x <- raster::crop(etopo, raster::extent(130, 150, -50, -30))
+qm <- reproj::reproj(quadmesh(x), "+proj=laea +lon_0=147 +lat_0=-42 +datum=WGS84")
+rgl::shade3d(qm, col = "grey")
+rgl::writeSTL("examples/stl/tas_etopo.stl")
