@@ -105,7 +105,7 @@ triangmesh.BasicRaster <- function (x, z = x, na.rm = FALSE, ..., texture = NULL
     message(sprintf("writing texture image to %s", texture_filename))
     png::writePNG(raster::as.array(texture) / 255, texture_filename)
     ob$material$texture <- texture_filename
-    ob$material$col <- "grey"
+    ob$material$color <- "grey"
   }
   rproj <- raster::projection(x)
   ## chuck on the original structure md
