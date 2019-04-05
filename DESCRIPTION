@@ -30,8 +30,7 @@ Suggests:
     datasets,
     knitr,
     rmarkdown,
-    palr,
-    rgl,
+    palr
     testthat,
     ncdf4,
     covr,
