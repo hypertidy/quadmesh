@@ -1,4 +1,11 @@
+# quadmesh 0.4.0
+
+* Fixed bug is `mesh3d` creation, partial naming of `material$color` caused various problems. 
+
+
 # quadmesh 0.3.0
+
+* Function `mesh_plot` gains `zlim` and passes `...` to `base::plot()` (for aspect ratios with wildly disparate dwide/high grids). 
 
 * Now using the `reproj` package for coordinate transformations. 
 

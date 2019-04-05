@@ -3,8 +3,11 @@
 
 # quadmesh <img src="man/figures/logo.png" align="right" />
 
-[![Travis-CI Build
+[![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)[![Travis-CI
+Build
 Status](https://travis-ci.org/hypertidy/quadmesh.svg?branch=master)](https://travis-ci.org/hypertidy/quadmesh)
+[![Build
+Status](http://badges.herokuapp.com/travis/hypertidy/quadmesh?branch=master&env=BUILD_NAME=osx_release&label=osx)](https://travis-ci.org/hypertidy/quadmesh)
 [![AppVeyor build
 status](https://ci.appveyor.com/api/projects/status/github/hypertidy/quadmesh?branch=master&svg=true)](https://ci.appveyor.com/project/mdsumner/quadmesh-x25a2)
 [![Coverage
@@ -185,12 +188,12 @@ prj <- "+proj=lcc +lat_1=-36 +lat_2=-38 +lat_0=-37 +lon_0=145 +x_0=2500000 +y_0=
 er <- crop(etopo, extent(110, 160, -50, -20))
 system.time(mesh_plot(er, crs = prj))
 #>    user  system elapsed 
-#>    0.78    0.03    0.82
+#>   0.470   0.012   0.482
 
 ## This is faster to plot and uses much less data that converting explicitly to polygons. 
 
 library(sf)
-#> Linking to GEOS 3.6.1, GDAL 2.2.3, PROJ 4.9.3
+#> Linking to GEOS 3.7.0, GDAL 2.4.0, PROJ 5.2.0
 p <- st_transform(spex::polygonize(er), prj)
 plot(st_geometry(p), add = TRUE)
 ```
@@ -205,7 +208,7 @@ system.time(plot(p, border = NA))
 ![](man/figures/README-unnamed-chunk-8-2.png)<!-- -->
 
     #>    user  system elapsed 
-    #>    0.37    0.07    0.48
+    #>   0.403   0.040   0.443
     pryr::object_size(er)
     #> 37.7 kB
     pryr::object_size(p)
@@ -256,15 +259,15 @@ grids to a polygon layer with 5 explicit coordinates for every cell.
 rr <- disaggregate(r, fact = 20)
 system.time(spex::polygonize(rr))
 #>    user  system elapsed 
-#>    0.10    0.00    0.11
+#>   0.099   0.000   0.098
 system.time(raster::rasterToPolygons(rr))
 #>    user  system elapsed 
-#>    1.73    0.00    1.74
+#>   1.191   0.000   1.192
 
 ## stars has now improved on spex by calling out to GDAL to do the work
 system.time(sf::st_as_sf(stars::st_as_stars(rr), merge = FALSE, as_points = FALSE))
 #>    user  system elapsed 
-#>    0.19    0.02    0.21
+#>   0.107   0.000   0.106
 ```
 
 ### Barycentric interpolation from a triangle mesh

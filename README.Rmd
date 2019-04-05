@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 # quadmesh <img src="man/figures/logo.png" align="right" />
 
 
-[![Travis-CI Build Status](https://travis-ci.org/hypertidy/quadmesh.svg?branch=master)](https://travis-ci.org/hypertidy/quadmesh) [![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/hypertidy/quadmesh?branch=master&svg=true)](https://ci.appveyor.com/project/mdsumner/quadmesh-x25a2)  [![Coverage status](https://codecov.io/gh/hypertidy/quadmesh/branch/master/graph/badge.svg)](https://codecov.io/github/hypertidy/quadmesh?branch=master) [![CRAN status](https://www.r-pkg.org/badges/version/quadmesh)](https://cran.r-project.org/package=quadmesh)[![CRAN\_Download\_Badge](http://cranlogs.r-pkg.org/badges/quadmesh)](https://cran.r-project.org/package=quadmesh)
+[![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)[![Travis-CI Build Status](https://travis-ci.org/hypertidy/quadmesh.svg?branch=master)](https://travis-ci.org/hypertidy/quadmesh) [![Build Status](http://badges.herokuapp.com/travis/hypertidy/quadmesh?branch=master&env=BUILD_NAME=osx_release&label=osx)](https://travis-ci.org/hypertidy/quadmesh) [![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/hypertidy/quadmesh?branch=master&svg=true)](https://ci.appveyor.com/project/mdsumner/quadmesh-x25a2)  [![Coverage status](https://codecov.io/gh/hypertidy/quadmesh/branch/master/graph/badge.svg)](https://codecov.io/github/hypertidy/quadmesh?branch=master) [![CRAN status](https://www.r-pkg.org/badges/version/quadmesh)](https://cran.r-project.org/package=quadmesh)[![CRAN\_Download\_Badge](http://cranlogs.r-pkg.org/badges/quadmesh)](https://cran.r-project.org/package=quadmesh)
 
 
 

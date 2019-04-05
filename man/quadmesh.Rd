@@ -40,12 +40,12 @@ quadmesh(x, z = x, na.rm = FALSE, ..., texture = NULL,
 mesh3d
 }
 \description{
-Convert an object to a `mesh3d` ([rgl::qmesh3d()]) quadrangle mesh,
-with methods for [raster::raster()] and `matrix`.
+Convert an object to a \code{mesh3d} (\code{\link[rgl:qmesh3d]{rgl::qmesh3d()}}) quadrangle mesh,
+with methods for \code{\link[raster:raster]{raster::raster()}} and \code{matrix}.
 }
 \details{
-`quadmesh()` generates the cell-based interpretation of a raster (AREA) but applies a continuous
-interpretation of the values of the cells to each quad corner. `dquadmesh` splits the mesh and
+\code{quadmesh()} generates the cell-based interpretation of a raster (AREA) but applies a continuous
+interpretation of the values of the cells to each quad corner. \code{dquadmesh} splits the mesh and
 applies a discrete interpretation directly. Loosely, the quadmesh is a continuous surface and the dquadmesh
 is free-floating cells, but it's a little more complicated and depends on the options applied. (The interpolation)
 applied in the quadmesh case is not entirely consistent.
@@ -54,15 +54,15 @@ The output is described as a mesh because it is a dense representation
 of a continuous shape, in this case plane-filling quadrilaterals defined
 by index of four of the available vertices.
 
-The `z` argument defaults to the input `x` argument, though may be set to `NULL`, a constant
-numeric value, or another raster. If the coordinate system of `z` and `x` don't match the z values
+The \code{z} argument defaults to the input \code{x} argument, though may be set to \code{NULL}, a constant
+numeric value, or another raster. If the coordinate system of \code{z} and \code{x} don't match the z values
 are queried by reprojection.
 
 Any raster RGB object (3-layers, ranging in 0-255) may be used as
-a _texture_ on the resulting mesh3d object.
+a \emph{texture} on the resulting mesh3d object.
 It is not possible to provide rgl with an object of data for texture, it must be a PNG file and so
-the in-memory `texture` argument is written out to PNG file (with a message). The location of the file
-may be set explicitly with `texture_filename`.  Currently it's not possible to not use the `texture` object
+the in-memory \code{texture} argument is written out to PNG file (with a message). The location of the file
+may be set explicitly with \code{texture_filename}.  Currently it's not possible to not use the \code{texture} object
 in-memory.
 }
 \examples{

@@ -8,31 +8,33 @@
 \alias{mesh_plot.quadmesh}
 \title{Plot as a mesh}
 \usage{
-mesh_plot(x, crs = NULL, colfun = NULL, add = FALSE, ...,
-  coords = NULL)
-
-\method{mesh_plot}{BasicRaster}(x, crs = NULL, colfun = NULL,
-  add = FALSE, ..., coords = NULL)
-
-\method{mesh_plot}{RasterLayer}(x, crs = NULL, colfun = NULL,
-  add = FALSE, ..., coords = NULL)
-
-\method{mesh_plot}{TRI}(x, crs = NULL, colfun = NULL, add = FALSE,
+mesh_plot(x, crs = NULL, colfun = NULL, add = FALSE, zlim = NULL,
   ..., coords = NULL)
 
+\method{mesh_plot}{BasicRaster}(x, crs = NULL, colfun = NULL,
+  add = FALSE, zlim = NULL, ..., coords = NULL)
+
+\method{mesh_plot}{RasterLayer}(x, crs = NULL, colfun = NULL,
+  add = FALSE, zlim = NULL, ..., coords = NULL)
+
+\method{mesh_plot}{TRI}(x, crs = NULL, colfun = NULL, add = FALSE,
+  zlim = NULL, ..., coords = NULL)
+
 \method{mesh_plot}{quadmesh}(x, crs = NULL, colfun = NULL,
-  add = FALSE, ..., coords = NULL)
+  add = FALSE, zlim = NULL, ..., coords = NULL)
 }
 \arguments{
 \item{x}{object to convert to mesh and plot}
 
 \item{crs}{target map projection}
 
-\item{colfun}{colour function to use, `viridis` is the default}
+\item{colfun}{colour function to use, \code{viridis} is the default}
 
 \item{add}{add to existing plot or start a new one}
 
-\item{...}{ignored}
+\item{zlim}{absolute range of data to use for colour scaling (if \code{NULL} the data range is used)}
+
+\item{...}{passed through to \code{base::plot}}
 
 \item{coords}{optional input raster of coordinates of each cell, see details}
 }
@@ -49,11 +51,11 @@ define the target map projection in 'PROJ string' format. (There is no
 coordinates of the 'quadmesh' output). The 'colfun' argument is used to
 generate colours which are mapped to the input object data as in 'image'.
 
-If `coords` is supplied, it is currently assumed to be a 2-layer `RasterBrick` with
-longitude and latitude as the *cell values*. These are used to geographically locate
-the resulting mesh, and will be transformed to the `crs` if that is supplied. This is
-modelled on the approach to curvilinear grid data used in the `angstroms` package. There
-the function [angstroms::romsmap()] and [angstroms::romscoords()] are used to separate the complicated
+If \code{coords} is supplied, it is currently assumed to be a 2-layer \code{RasterBrick} with
+longitude and latitude as the \emph{cell values}. These are used to geographically locate
+the resulting mesh, and will be transformed to the \code{crs} if that is supplied. This is
+modelled on the approach to curvilinear grid data used in the \code{angstroms} package. There
+the function \code{\link[angstroms:romsmap]{angstroms::romsmap()}} and \code{\link[angstroms:romscoords]{angstroms::romscoords()}} are used to separate the complicated
 grid geometry from the grid data itself. A small fudge is applied to extend the coordinates
 by 1 cell to avoid losing any data due to the half cell outer margin (get in touch if this causes problems!).
 }

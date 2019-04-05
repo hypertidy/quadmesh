@@ -40,27 +40,27 @@ dtriangmesh(x, z = x, na.rm = FALSE, ..., texture = NULL,
 mesh3d (primitivetype triangle)
 }
 \description{
-Convert an object to a `mesh3d` ([rgl::tmesh3d()]) triangle mesh,
-with methods for [raster::raster()] and `matrix`.
+Convert an object to a \code{mesh3d} (\code{\link[rgl:tmesh3d]{rgl::tmesh3d()}}) triangle mesh,
+with methods for \code{\link[raster:raster]{raster::raster()}} and \code{matrix}.
 }
 \details{
-`triangmesh()` generates the point-based interpretation of a raster (POINT) with the obvious continuous
-interpretation. `dtriangmesh` splits the mesh so that each primitive is independent.  This is more coherent
+\code{triangmesh()} generates the point-based interpretation of a raster (POINT) with the obvious continuous
+interpretation. \code{dtriangmesh} splits the mesh so that each primitive is independent.  This is more coherent
 than the analogous distinction for quadmesh, though both will appear the same on creation.
 
 The output is described as a mesh because it is a dense representation
 of a continuous shape, in this case plane-filling triangles defined
 by index of three of the available vertices.
 
-The `z` argument defaults to the input `x` argument, though may be set to `NULL`, a constant
-numeric value, or another raster. If the coordinate system of `z` and `x` don't match the z values
+The \code{z} argument defaults to the input \code{x} argument, though may be set to \code{NULL}, a constant
+numeric value, or another raster. If the coordinate system of \code{z} and \code{x} don't match the z values
 are queried by reprojection.
 
 Any raster RGB object (3-layers, ranging in 0-255) may be used as
-a _texture_ on the resulting mesh3d object.
+a \emph{texture} on the resulting mesh3d object.
 It is not possible to provide rgl with an object of data for texture, it must be a PNG file and so
-the in-memory `texture` argument is written out to PNG file (with a message). The location of the file
-may be set explicitly with `texture_filename`.  Currently it's not possible to not use the `texture` object
+the in-memory \code{texture} argument is written out to PNG file (with a message). The location of the file
+may be set explicitly with \code{texture_filename}.  Currently it's not possible to not use the \code{texture} object
 in-memory.
 }
 \examples{

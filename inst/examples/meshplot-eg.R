@@ -1,0 +1,10 @@
+library(quadmesh)
+f <- "~/Git/rasterwise/extdata/historical/historical.nc"
+d <- angstroms::romsdata2d(f, "mrro")
+mesh_plot(d)
+coords <- angstroms::romscoords(f, c("lon", "lat"), transpose = TRUE)
+mesh_plot(d, coords = coords)
+maps::map(add = T)
+mesh_plot(d)
+data("wrld_simpl", package = "maptools")
+it <- subset(wrld_simpl, NAME=="Italy")

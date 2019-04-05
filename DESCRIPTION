@@ -1,18 +1,20 @@
 Package: quadmesh
 Type: Package
 Title: Quadrangle Mesh
-Version: 0.3.0
+Version: 0.4.0
 Authors@R: person("Michael D.","Sumner", role = c("aut", "cre"), email = "mdsumner@gmail.com")
-Description:  Create surface forms from matrix or 'raster' data for flexible plotting and
+Description: Create surface forms from matrix or 'raster' data for flexible plotting and
  conversion to other mesh types. The functions 'quadmesh' or 'triangmesh'
  produce a continuous surface as a 'mesh3d' object as used by the 'rgl'
  package. This is used for plotting raster data in 3D (optionally with
- texture), and allows the application of a map projection without data loss.
+ texture), and allows the application of a map projection without data loss and 
+ many processing applications that are restricted by inflexible regular grid rasters.
  There are discrete forms of these continuous surfaces available with
  'dquadmesh' and 'dtriangmesh' functions.
 License: GPL-3
 LazyData: TRUE
 RoxygenNote: 6.1.1
+Roxygen: list(markdown = TRUE)
 Depends: R (>= 2.10)
 Encoding: UTF-8
 Imports:
@@ -22,7 +24,8 @@ Imports:
     png,
     sp,
     geometry,
-    reproj (>= 0.2.0)
+    reproj (>= 0.2.0),
+    scales
 Suggests: 
     datasets,
     knitr,

@@ -375,8 +375,10 @@ rglwidgetClass = function() {
      * @param {string} property Which material property?
      */
     rglwidgetClass.prototype.getMaterial = function(id, property) {
-      var obj = this.getObj(id),
-          mat = obj.material[property];
+      var obj = this.getObj(id), mat;
+      if (typeof obj.material === "undefined")
+        console.error("material undefined");
+      mat = obj.material[property];
       if (typeof mat === "undefined")
           mat = this.scene.material[property];
       return mat;
@@ -664,7 +666,11 @@ rglwidgetClass = function() {
 
       result = "/* ****** "+type+" object "+id+" fragment shader ****** */\n"+
                "#ifdef GL_ES\n"+
+               "#ifdef GL_FRAGMENT_PRECISION_HIGH\n"+
                "  precision highp float;\n"+
+               "#else\n"+
+               "  precision mediump float;\n"+
+               "#endif\n"+
                "#endif\n"+
                "  varying vec4 vCol; // carries alpha\n"+
                "  varying vec4 vPosition;\n";
@@ -1010,7 +1016,8 @@ rglwidgetClass = function() {
            far = distance + radius,
            hlen,
            aspect = this.vp.width/this.vp.height,
-           z = subscene.par3d.zoom;
+           z = subscene.par3d.zoom,
+           userProjection = subscene.par3d.userProjection;
        if (far < 0.0)
          far = 1.0;
        if (near < far/100.0)
@@ -1033,6 +1040,7 @@ rglwidgetClass = function() {
                           -hlen*z/aspect, hlen*z/aspect,
                           near, far);
        }
+       this.prMatrix.multRight(userProjection);
      };
 
     /**
@@ -1142,6 +1150,8 @@ rglwidgetClass = function() {
         return;
 
       sub.par3d.userMatrix = this.toCanvasMatrix4(sub.par3d.userMatrix);
+      sub.par3d.userProjection = this.toCanvasMatrix4(sub.par3d.userProjection);
+      sub.par3d.userProjection.transpose();
       sub.par3d.listeners = [].concat(sub.par3d.listeners);
       sub.backgroundId = undefined;
       sub.subscenes = [];
@@ -1183,7 +1193,8 @@ rglwidgetClass = function() {
                     "userMatrix", "ids",
                     "dim",
                     "par3d", "userMatrix",
-                    "viewpoint", "finite"],
+                    "viewpoint", "finite",
+                    "pos"],
           i;
         for (i = 0; i < fields.length; i++) {
           if (typeof prevobj[fields[i]] !== "undefined")
@@ -1272,6 +1283,15 @@ rglwidgetClass = function() {
       }
       obj.pnormals = normals;
     };
+    
+    rglwidgetClass.prototype.getAdj = function (pos, offset, text) {
+      switch(pos) {
+        case 1: return [0.5, 1 + offset];
+        case 2: return [1 + offset/text.length, 0.5];
+        case 3: return [0.5, -offset];
+        case 4: return [-offset/text.length, 0.5];
+      }
+    }
 
     /**
      * Initialize object for display
@@ -1294,6 +1314,7 @@ rglwidgetClass = function() {
           is_twosided = (flags & this.f_is_twosided) > 0,
           is_brush = flags & this.f_is_brush,
           gl = this.gl || this.initGL(),
+          polygon_offset,
           texinfo, drawtype, nclipplanes, f, nrows, oldrows,
           i,j,v,v1,v2, mat, uri, matobj, pass, passes, pmode,
           dim, nx, nz, attr;
@@ -1324,7 +1345,11 @@ rglwidgetClass = function() {
       obj.quad = this.flatten([].concat(obj.ids));
       return;
     }
-    
+
+    polygon_offset = this.getMaterial(id, "polygon_offset");
+    if (polygon_offset[0] != 0 || polygon_offset[1] != 0)
+      obj.polygon_offset = polygon_offset;
+
     if (is_transparent) {
       depth_sort = ["triangles", "quads", "surface",
                     "spheres", "sprites", "text"].indexOf(type) >= 0;
@@ -1447,7 +1472,7 @@ rglwidgetClass = function() {
     }
 
     var stride = 3, nc, cofs, nofs, radofs, oofs, tofs, vnew, fnew,
-        nextofs = -1, pointofs = -1, alias, colors, key, selection, filter;
+        nextofs = -1, pointofs = -1, alias, colors, key, selection, filter, adj, pos, offset;
 
     obj.alias = undefined;
     
@@ -1552,14 +1577,21 @@ rglwidgetClass = function() {
       fnew = new Array(4*f.length);
       alias = new Array(v.length);
       last = v.length;
+      adj = this.flatten(obj.adj);
+      if (typeof obj.pos !== "undefined") {
+        pos = this.flatten(obj.pos);
+        offset = adj[0];
+      }
       for (i=0; i < v.length; i++) {
-        vnew[i]  = v[i].concat([0,-0.5]).concat(obj.adj[0]);
+        if (typeof pos !== "undefined")
+          adj = this.getAdj(pos[i % pos.length], offset, obj.texts[i]);
+        vnew[i]  = v[i].concat([0,-0.5]).concat(adj);
         fnew[4*i] = f[i];
-        vnew[last] = v[i].concat([1,-0.5]).concat(obj.adj[0]);
+        vnew[last] = v[i].concat([1,-0.5]).concat(adj);
         fnew[4*i+1] = last++;
-        vnew[last] = v[i].concat([1, 1.5]).concat(obj.adj[0]);
+        vnew[last] = v[i].concat([1, 1.5]).concat(adj);
         fnew[4*i+2] = last++;
-        vnew[last] = v[i].concat([0, 1.5]).concat(obj.adj[0]);
+        vnew[last] = v[i].concat([0, 1.5]).concat(adj);
         fnew[4*i+3] = last++;
         alias[i] = [last-3, last-2, last-1];
         for (j=0; j < 4; j++) {
@@ -1612,6 +1644,8 @@ rglwidgetClass = function() {
       obj.userMatrix = new CanvasMatrix4(obj.userMatrix);
       obj.objects = this.flatten([].concat(obj.ids));
       is_lit = false;
+      for (i=0; i < obj.objects.length; i++)
+        this.initObj(obj.objects[i]);
     }
 
     if (is_lit && !fixed_quads) {
@@ -1963,7 +1997,22 @@ rglwidgetClass = function() {
       result.sort(compare);
       return result;
     };
-
+    
+    rglwidgetClass.prototype.disableArrays = function(obj, enabled) {
+      var gl = this.gl || this.initGL(),
+          objLocs = ["normLoc", "texLoc", "ofsLoc", "pointLoc", "nextLoc"],
+          thisLocs = ["posLoc", "colLoc"], i, attr;
+      for (i = 0; i < objLocs.length; i++) 
+        if (enabled[objLocs[i]]) gl.disableVertexAttribArray(obj[objLocs[i]]);
+      for (i = 0; i < thisLocs.length; i++)
+        if (enabled[thisLocs[i]]) gl.disableVertexAttribArray(this[objLocs[i]]);
+      if (typeof obj.userAttributes !== "undefined") {
+      	for (attr in obj.userAttribSizes) {  // Not all attributes may have been used
+      	  gl.disableVertexAttribArray( obj.userAttribLocations[attr] );
+      	}
+      }
+    }
+    
     /**
      * Draw an object in a subscene
      * @param { number } id - object to draw
@@ -1989,7 +2038,8 @@ rglwidgetClass = function() {
           gl = this.gl || this.initGL(),
           mat,
           sphereMV, baseofs, ofs, sscale, i, count, light,
-          pass, mode, pmode, attr;
+          pass, mode, pmode, attr,
+          enabled = {};
 
       if (typeof id !== "number") {
         this.alertOnce("drawObj id is "+typeof id);
@@ -2025,7 +2075,7 @@ rglwidgetClass = function() {
       }        
 
       this.setDepthTest(id);
-
+      
       if (sprites_3d) {
         var norigs = obj.vertices.length,
             savenorm = new CanvasMatrix4(this.normMatrix);
@@ -2042,6 +2092,12 @@ rglwidgetClass = function() {
         return;
       } else {
         gl.useProgram(obj.prog);
+      }
+
+      if (typeof obj.polygon_offset !== "undefined") {
+        gl.polygonOffset(obj.polygon_offset[0],
+                          obj.polygon_offset[1]);
+        gl.enable(gl.POLYGON_OFFSET_FILL);
       }
 
       if (sprite_3d) {
@@ -2082,6 +2138,7 @@ rglwidgetClass = function() {
         gl.uniform1f( obj.shininessLoc, obj.shininess);
         for (i=0; i < subscene.lights.length; i++) {
           light = this.getObj(subscene.lights[i]);
+          if (!light.initialized) this.initObj(subscene.lights[i]);
           gl.uniform3fv( obj.ambientLoc[i], this.componentProduct(light.ambient, obj.ambient));
           gl.uniform3fv( obj.specularLoc[i], this.componentProduct(light.specular, obj.specular));
           gl.uniform3fv( obj.diffuseLoc[i], light.diffuse);
@@ -2101,6 +2158,7 @@ rglwidgetClass = function() {
       }
 
       gl.enableVertexAttribArray( this.posLoc );
+      enabled.posLoc = true;
 
       var nc = obj.colorCount;
       count = obj.vertexCount;
@@ -2111,6 +2169,7 @@ rglwidgetClass = function() {
             scount = count, indices;
         gl.vertexAttribPointer(this.posLoc,  3, gl.FLOAT, false, 4*this.sphere.vOffsets.stride,  0);
         gl.enableVertexAttribArray(obj.normLoc );
+        enabled.normLoc = true;
         gl.vertexAttribPointer(obj.normLoc,  3, gl.FLOAT, false, 4*this.sphere.vOffsets.stride,  0);
         gl.disableVertexAttribArray( this.colLoc );
         var sphereNorm = new CanvasMatrix4();
@@ -2124,6 +2183,7 @@ rglwidgetClass = function() {
 
         if (has_texture) {
           gl.enableVertexAttribArray( obj.texLoc );
+          enabled.texLoc = true;
           gl.vertexAttribPointer(obj.texLoc, 2, gl.FLOAT, false, 4*this.sphere.vOffsets.stride,
                                  4*this.sphere.vOffsets.tofs);
           gl.activeTexture(gl.TEXTURE0);
@@ -2163,6 +2223,11 @@ rglwidgetClass = function() {
           gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.sphere.ibuf);
           gl.drawElements(gl.TRIANGLES, this.sphere.sphereCount, gl.UNSIGNED_SHORT, 0);
         }
+        
+        this.disableArrays(obj, enabled);
+        if (typeof obj.polygon_offset !== "undefined") 
+          gl.disable(gl.POLYGON_OFFSET_FILL);
+          
         return;
       } else {
         if (obj.colorCount === 1) {
@@ -2170,17 +2235,20 @@ rglwidgetClass = function() {
           gl.vertexAttrib4fv( this.colLoc, new Float32Array(obj.onecolor));
         } else {
           gl.enableVertexAttribArray( this.colLoc );
+          enabled.colLoc = true;
           gl.vertexAttribPointer(this.colLoc, 4, gl.FLOAT, false, 4*obj.vOffsets.stride, 4*obj.vOffsets.cofs);
         }
       }
 
       if (is_lit && obj.vOffsets.nofs > 0) {
         gl.enableVertexAttribArray( obj.normLoc );
+        enabled.normLoc = true;
         gl.vertexAttribPointer(obj.normLoc, 3, gl.FLOAT, false, 4*obj.vOffsets.stride, 4*obj.vOffsets.nofs);
       }
 
       if (has_texture || type === "text") {
         gl.enableVertexAttribArray( obj.texLoc );
+        enabled.texLoc = true;
         gl.vertexAttribPointer(obj.texLoc, 2, gl.FLOAT, false, 4*obj.vOffsets.stride, 4*obj.vOffsets.tofs);
         gl.activeTexture(gl.TEXTURE0);
         gl.bindTexture(gl.TEXTURE_2D, obj.texture);
@@ -2189,6 +2257,7 @@ rglwidgetClass = function() {
 
       if (fixed_quads) {
         gl.enableVertexAttribArray( obj.ofsLoc );
+        enabled.ofsLoc = true;
         gl.vertexAttribPointer(obj.ofsLoc, 2, gl.FLOAT, false, 4*obj.vOffsets.stride, 4*obj.vOffsets.oofs);
       }
 
@@ -2267,8 +2336,10 @@ rglwidgetClass = function() {
                           
         if ((is_lines || pmode === "lines") && fat_lines) {
           gl.enableVertexAttribArray(obj.pointLoc);
+          enabled.pointLoc = true;
           gl.vertexAttribPointer(obj.pointLoc, 2, gl.FLOAT, false, 4*obj.vOffsets.stride, 4*obj.vOffsets.pointofs);
           gl.enableVertexAttribArray(obj.nextLoc );
+          enabled.nextLoc = true;
           gl.vertexAttribPointer(obj.nextLoc, 3, gl.FLOAT, false, 4*obj.vOffsets.stride, 4*obj.vOffsets.nextofs);
           gl.uniform1f(obj.aspectLoc, this.vp.width/this.vp.height);
           gl.uniform1f(obj.lwdLoc, this.getMaterial(id, "lwd")/this.vp.height);
@@ -2277,7 +2348,11 @@ rglwidgetClass = function() {
         gl.vertexAttribPointer(this.posLoc,  3, gl.FLOAT, false, 4*obj.vOffsets.stride,  4*obj.vOffsets.vofs);
 
         gl.drawElements(gl[mode], count, obj.index_uint ? gl.UNSIGNED_INT : gl.UNSIGNED_SHORT, 0);
+        this.disableArrays(obj, enabled);
      }
+     
+     if (typeof obj.polygon_offset !== "undefined") 
+       gl.disable(gl.POLYGON_OFFSET_FILL);
    };
 
     /**
@@ -2960,6 +3035,38 @@ rglwidgetClass = function() {
         this.el = el;
         this.webGLoptions = el.rglinstance.scene.webGLoptions;
         this.initCanvas();
+      }
+      if (typeof Shiny !== "undefined") {
+        var self = this;
+        Shiny.addCustomMessageHandler("shinyGetPar3d",
+          function(message) {
+            var i, param, 
+                subscene = self.getObj(message.subscene),
+                parameters = [].concat(message.parameters),
+                result = {tag: message.tag, subscene: message.subscene};
+            if (typeof subscene !== "undefined") {
+              for (i = 0; i < parameters.length; i++) {
+                param = parameters[i];
+                result[param] = subscene.par3d[param];
+              };
+            } else {
+              console.log("subscene "+message.subscene+" undefined.")
+            }
+            Shiny.setInputValue("par3d:shinyPar3d", result, {priority: "event"});
+          });
+          
+        Shiny.addCustomMessageHandler("shinySetPar3d",
+          function(message) {
+            var param = message.parameter, 
+                subscene = self.getObj(message.subscene);
+            if (typeof subscene !== "undefined") {
+              subscene.par3d[param] = message.value;
+              subscene.initialized = false;
+              self.drawScene();
+            } else {
+              console.log("subscene "+message.subscene+" undefined.")
+            }
+          })
       }
     };
 

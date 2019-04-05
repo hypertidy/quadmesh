@@ -25,11 +25,12 @@ scl <- function(x) {
 #' @param crs target map projection
 #' @param colfun colour function to use, `viridis` is the default
 #' @param add add to existing plot or start a new one
-#' @param ... ignored
+#' @param zlim absolute range of data to use for colour scaling (if `NULL` the data range is used)
+#' @param ... passed through to `base::plot`
 #' @param coords optional input raster of coordinates of each cell, see details
 #' @return nothing, used for the side-effect of creating or adding to a plot
 #' @export
-#'
+#' @importFrom scales rescale
 #' @examples
 #' ##mesh_plot(worldll)
 #' ## crop otherwise out of bounds from PROJ
@@ -39,19 +40,19 @@ scl <- function(x) {
 #' prj <- "+proj=lcc +datum=WGS84 +lon_0=147 +lat_0=-40 +lat_1=-55 +lat_2=-20"
 #' mesh_plot(etopo, crs = prj, add = FALSE, colfun = function(n = 20) grey(seq(0, 1, length = n)))
 #' mesh_plot(worldll, crs = prj, add = TRUE)
-mesh_plot <- function(x, crs = NULL, colfun = NULL, add = FALSE, ..., coords = NULL) {
+mesh_plot <- function(x, crs = NULL, colfun = NULL, add = FALSE, zlim = NULL, ..., coords = NULL) {
   UseMethod("mesh_plot")
 }
 #' @name mesh_plot
 #' @export
-mesh_plot.BasicRaster <- function(x, crs = NULL, colfun = NULL, add = FALSE, ..., coords = NULL) {
+mesh_plot.BasicRaster <- function(x, crs = NULL, colfun = NULL, add = FALSE, zlim = NULL, ..., coords = NULL) {
   if (raster::nlayers(x) > 1L) warning("extracting single RasterLayer from multilayered input")
-  mesh_plot(x[[1]], crs = crs, colfun = colfun, add = add, ..., coords = coords)
+  mesh_plot(x[[1]], crs = crs, colfun = colfun, add = add, zlim = zlim, ..., coords = coords)
 }
 #debug <- TRUE
 #' @name mesh_plot
 #' @export
-mesh_plot.RasterLayer <- function(x, crs = NULL, colfun = NULL, add = FALSE, ..., coords = NULL) {
+mesh_plot.RasterLayer <- function(x, crs = NULL, colfun = NULL, add = FALSE, zlim = NULL, ..., coords = NULL) {
   qm <- quadmesh::quadmesh(x, na.rm = FALSE)
  if (is.null(colfun)) colfun <- viridis::viridis
   ib <- qm$ib
@@ -93,7 +94,7 @@ mesh_plot.RasterLayer <- function(x, crs = NULL, colfun = NULL, add = FALSE, ...
 
   ## we also have to deal with any values that are NA
   ## because they propagate to destroy the id
-  cols <- colfun(100)[scl(values(x)) * 99 + 1]
+  cols <- if (is.null(zlim)) colfun(100)[scl(values(x)) * 99 + 1] else colfun(100)[scales::rescale(values(x), c(1, 100), zlim)]
   if (any(is.na(cols))) {
     colsna <- rep(cols, each = nrow(ib))
     bad2 <- is.na(colsna)
@@ -103,11 +104,11 @@ mesh_plot.RasterLayer <- function(x, crs = NULL, colfun = NULL, add = FALSE, ...
     cols <- cols[!is.na(cols)]
   }
   xx <- list(x = xx, y = yy, id = id, col = cols)
-
+## if (isLL) 1/cos(mean(xx$y, na.rm = TRUE) * pi/180) else 1
   if (!add) {
     graphics::plot.new()
     graphics::plot.window(xlim = range(xx$x, finite = TRUE), ylim = range(xx$y, finite = TRUE),
-                          asp = if (isLL) 1/cos(mean(xx$y, na.rm = TRUE) * pi/180) else 1  )
+                          ...)
   }
   vps <- gridBase::baseViewports()
 
@@ -128,7 +129,7 @@ mesh_plot.RasterLayer <- function(x, crs = NULL, colfun = NULL, add = FALSE, ...
 
 #' @name mesh_plot
 #' @export
-mesh_plot.TRI <- function(x, crs = NULL, colfun = NULL, add = FALSE, ..., coords = NULL) {
+mesh_plot.TRI <- function(x, crs = NULL, colfun = NULL, add = FALSE, zlim = NULL, ..., coords = NULL) {
   if (is.null(colfun)) colfun <- viridis::viridis
   idx <- matrix(match(t(as.matrix(x$triangle[c(".vx0", ".vx1", ".vx2")])),
                      x$vertex$vertex_), nrow = 3)
@@ -188,7 +189,7 @@ isLL <- FALSE
 #debug <- TRUE
 #' @name mesh_plot
 #' @export
-mesh_plot.quadmesh <- function(x, crs = NULL, colfun = NULL, add = FALSE, ..., coords = NULL) {
+mesh_plot.quadmesh <- function(x, crs = NULL, colfun = NULL, add = FALSE, zlim = NULL, ..., coords = NULL) {
   qm <- x
   if (is.null(colfun)) colfun <- viridis::viridis
   ib <- qm$ib
@@ -231,7 +232,9 @@ mesh_plot.quadmesh <- function(x, crs = NULL, colfun = NULL, add = FALSE, ..., c
   ## we also have to deal with any values that are NA
   ## because they propagate to destroy the id
   valx <- colMeans(matrix(qm$vb[3, qm$ib], nrow = 4L))
-  cols <- colfun(100)[scl(valx) * 99 + 1]
+  #cols <- colfun(100)[scl(valx) * 99 + 1]
+  cols <- if (is.null(zlim)) colfun(100)[scl(valx) * 99 + 1] else colfun(100)[scales::rescale(valx, c(1, 100), zlim)]
+
   if (any(is.na(cols))) {
     colsna <- rep(cols, each = nrow(ib))
     bad2 <- is.na(colsna)

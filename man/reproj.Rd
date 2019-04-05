@@ -12,10 +12,10 @@
 
 \item{target}{target specification (PROJ.4 string or epsg code)}
 
-\item{...}{arguments passed to [proj4::ptransform()]}
+\item{...}{arguments passed to \code{\link[proj4:ptransform]{proj4::ptransform()}}}
 
 \item{source}{source specification (PROJ.4 string or epsg code)}
 }
 \description{
-A `quadmesh` method for [reproj::reproj()].
+A \code{quadmesh} method for \code{\link[reproj:reproj]{reproj::reproj()}}.
 }

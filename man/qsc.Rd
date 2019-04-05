@@ -11,7 +11,7 @@ mesh3d
 }
 \description{
 The QSC is a set of six equal area projections for each side of the cube. Here
-a raw rendition of the cube is returned as six quad primitives in a `mesh3d` object.
+a raw rendition of the cube is returned as six quad primitives in a \code{mesh3d} object.
 }
 \details{
 It's not clear if this is useful.

@@ -12,7 +12,8 @@ Create surface forms from matrix or 'raster' data for flexible plotting and
  conversion to other mesh types. The functions 'quadmesh' or 'triangmesh'
  produce a continuous surface as a 'mesh3d' object as used by the 'rgl'
  package. This is used for plotting raster data in 3D (optionally with
- texture), and allows the application of a map projection without data loss.
+ texture), and allows the application of a map projection without data loss and 
+ many processing applications that are restricted by inflexible regular grid rasters.
  There are discrete forms of these continuous surfaces available with
  'dquadmesh' and 'dtriangmesh' functions.
 }
