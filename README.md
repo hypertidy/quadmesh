@@ -60,7 +60,8 @@ install.packages("quadmesh")
 <!-- end list -->
 
 ``` r
-devtools::install_github("hypertidy/quadmesh")
+## install.packages("remotes")
+remotes::install_github("hypertidy/quadmesh")
 ```
 
 ## Examples
@@ -188,7 +189,7 @@ prj <- "+proj=lcc +lat_1=-36 +lat_2=-38 +lat_0=-37 +lon_0=145 +x_0=2500000 +y_0=
 er <- crop(etopo, extent(110, 160, -50, -20))
 system.time(mesh_plot(er, crs = prj))
 #>    user  system elapsed 
-#>   0.470   0.012   0.482
+#>   0.451   0.012   0.464
 
 ## This is faster to plot and uses much less data that converting explicitly to polygons. 
 
@@ -208,7 +209,7 @@ system.time(plot(p, border = NA))
 ![](man/figures/README-unnamed-chunk-8-2.png)<!-- -->
 
     #>    user  system elapsed 
-    #>   0.403   0.040   0.443
+    #>   0.375   0.032   0.408
     pryr::object_size(er)
     #> 37.7 kB
     pryr::object_size(p)
@@ -259,15 +260,15 @@ grids to a polygon layer with 5 explicit coordinates for every cell.
 rr <- disaggregate(r, fact = 20)
 system.time(spex::polygonize(rr))
 #>    user  system elapsed 
-#>   0.099   0.000   0.098
+#>   0.098   0.000   0.097
 system.time(raster::rasterToPolygons(rr))
 #>    user  system elapsed 
-#>   1.191   0.000   1.192
+#>   1.178   0.001   1.178
 
 ## stars has now improved on spex by calling out to GDAL to do the work
 system.time(sf::st_as_sf(stars::st_as_stars(rr), merge = FALSE, as_points = FALSE))
 #>    user  system elapsed 
-#>   0.107   0.000   0.106
+#>   0.103   0.000   0.103
 ```
 
 ### Barycentric interpolation from a triangle mesh

@@ -124,7 +124,8 @@
 <ul>
 <li>the latest development version from Github with</li>
 </ul>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"hypertidy/quadmesh"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="co">## install.packages("remotes")</span></a>
+<a class="sourceLine" id="cb2-2" data-line-number="2">remotes<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/remotes/topics/install_github">install_github</a></span>(<span class="st">"hypertidy/quadmesh"</span>)</a></code></pre></div>
 </div>
 <div id="examples" class="section level2">
 <h2 class="hasAnchor">
@@ -213,7 +214,7 @@
 <a class="sourceLine" id="cb9-5" data-line-number="5">er &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/raster/topics/crop">crop</a></span>(etopo, <span class="kw"><a href="https://www.rdocumentation.org/packages/raster/topics/extent">extent</a></span>(<span class="dv">110</span>, <span class="dv">160</span>, <span class="dv">-50</span>, <span class="dv">-20</span>))</a>
 <a class="sourceLine" id="cb9-6" data-line-number="6"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.time">system.time</a></span>(<span class="kw"><a href="reference/mesh_plot.html">mesh_plot</a></span>(er, <span class="dt">crs =</span> prj))</a>
 <a class="sourceLine" id="cb9-7" data-line-number="7"><span class="co">#&gt;    user  system elapsed </span></a>
-<a class="sourceLine" id="cb9-8" data-line-number="8"><span class="co">#&gt;   0.465   0.047   0.513</span></a>
+<a class="sourceLine" id="cb9-8" data-line-number="8"><span class="co">#&gt;   0.512   0.044   0.556</span></a>
 <a class="sourceLine" id="cb9-9" data-line-number="9"></a>
 <a class="sourceLine" id="cb9-10" data-line-number="10"><span class="co">## This is faster to plot and uses much less data that converting explicitly to polygons. </span></a>
 <a class="sourceLine" id="cb9-11" data-line-number="11"></a>
@@ -226,7 +227,7 @@
 <a class="sourceLine" id="cb10-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.time">system.time</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/raster/topics/plot">plot</a></span>(p, <span class="dt">border =</span> <span class="ot">NA</span>))</a></code></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-8-2.png" width="700"></p>
 <pre><code><a href="https://www.rdocumentation.org/packages/pryr/topics/object_size">#&gt;    user  system elapsed 
-#&gt;    0.49    0.00    0.49
+#&gt;   0.510   0.004   0.514
 pryr::object_size(er)
 #&gt; 37.7 kB
 pryr::object_size(p)
@@ -260,12 +261,12 @@ pryr::object_size(quadmesh(er))
 <a class="sourceLine" id="cb15-4" data-line-number="4"><span class="co">#&gt;     0.1     0.0     0.1</span></a>
 <a class="sourceLine" id="cb15-5" data-line-number="5"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.time">system.time</a></span>(raster<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/raster/topics/rasterToPolygons">rasterToPolygons</a></span>(rr))</a>
 <a class="sourceLine" id="cb15-6" data-line-number="6"><span class="co">#&gt;    user  system elapsed </span></a>
-<a class="sourceLine" id="cb15-7" data-line-number="7"><span class="co">#&gt;   1.275   0.000   1.275</span></a>
+<a class="sourceLine" id="cb15-7" data-line-number="7"><span class="co">#&gt;   1.262   0.000   1.263</span></a>
 <a class="sourceLine" id="cb15-8" data-line-number="8"></a>
 <a class="sourceLine" id="cb15-9" data-line-number="9"><span class="co">## stars has now improved on spex by calling out to GDAL to do the work</span></a>
 <a class="sourceLine" id="cb15-10" data-line-number="10"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.time">system.time</a></span>(sf<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/sf/topics/st_as_sf">st_as_sf</a></span>(stars<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/stars/topics/st_as_stars">st_as_stars</a></span>(rr), <span class="dt">merge =</span> <span class="ot">FALSE</span>, <span class="dt">as_points =</span> <span class="ot">FALSE</span>))</a>
 <a class="sourceLine" id="cb15-11" data-line-number="11"><span class="co">#&gt;    user  system elapsed </span></a>
-<a class="sourceLine" id="cb15-12" data-line-number="12"><span class="co">#&gt;   0.110   0.004   0.113</span></a></code></pre></div>
+<a class="sourceLine" id="cb15-12" data-line-number="12"><span class="co">#&gt;   0.118   0.000   0.117</span></a></code></pre></div>
 </div>
 <div id="barycentric-interpolation-from-a-triangle-mesh" class="section level3">
 <h3 class="hasAnchor">

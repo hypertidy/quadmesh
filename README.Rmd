@@ -50,7 +50,8 @@ install.packages("quadmesh")
 * the latest development version from Github with
 
 ```{r,eval=FALSE}
-devtools::install_github("hypertidy/quadmesh")
+## install.packages("remotes")
+remotes::install_github("hypertidy/quadmesh")
 ```
 
 ## Examples
