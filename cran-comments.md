@@ -6,7 +6,7 @@ Thanks!
 
 * ubuntu 18.04, R 3.5.3
 * win-builder (devel and release)
-* osx (travis)
+* osx (rhub)
 
 ## R CMD check results
 
