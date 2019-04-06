@@ -17,7 +17,7 @@ scl <- function(x) {
 #' longitude and latitude as the *cell values*. These are used to geographically locate
 #' the resulting mesh, and will be transformed to the `crs` if that is supplied. This is
 #' modelled on the approach to curvilinear grid data used in the `angstroms` package. There
-#' the function [angstroms::romsmap()] and [angstroms::romscoords()] are used to separate the complicated
+#' the function `angstroms::romsmap()` and `angstroms::romscoords()`` are used to separate the complicated
 #' grid geometry from the grid data itself. A small fudge is applied to extend the coordinates
 #' by 1 cell to avoid losing any data due to the half cell outer margin (get in touch if this causes problems!).
 #'

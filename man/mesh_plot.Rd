@@ -55,7 +55,7 @@ If \code{coords} is supplied, it is currently assumed to be a 2-layer \code{Rast
 longitude and latitude as the \emph{cell values}. These are used to geographically locate
 the resulting mesh, and will be transformed to the \code{crs} if that is supplied. This is
 modelled on the approach to curvilinear grid data used in the \code{angstroms} package. There
-the function \code{\link[angstroms:romsmap]{angstroms::romsmap()}} and \code{\link[angstroms:romscoords]{angstroms::romscoords()}} are used to separate the complicated
+the function \code{angstroms::romsmap()} and `angstroms::romscoords()`` are used to separate the complicated
 grid geometry from the grid data itself. A small fudge is applied to extend the coordinates
 by 1 cell to avoid losing any data due to the half cell outer margin (get in touch if this causes problems!).
 }
