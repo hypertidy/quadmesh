@@ -125,7 +125,20 @@ mesh_plot.RasterLayer <- function(x, crs = NULL, colfun = NULL, add = FALSE, zli
   invisible(NULL)
 }
 
-
+#' @name mesh_plot
+#' @export
+mesh_plot.stars <- function(x,  crs = NULL, colfun = NULL, add = FALSE, zlim = NULL, ..., coords = NULL) {
+  r <- raster::raster(x[[1]])
+  r <- raster::setExtent(r, raster::extent(0, ncol(r), 0, nrow(r)))
+  dims <- attr(x, "dimensions")
+  if (is.null(coords) ) { 
+    if (attr(attr(x, "dimensions"), "raster")$curvilinear) {
+      coords <- raster::setExtent(raster::brick(raster::raster(dims[[1]]$values), raster::raster(dims[[2]]$values)), 
+                             raster::extent(r))
+    }  ## rectilinear case etc. 
+  }
+  quadmesh::mesh_plot(r, crs = crs, coords = coords, colfun = colfun, add = add, zlim = zlim, ...)
+}
 
 #' @name mesh_plot
 #' @export
