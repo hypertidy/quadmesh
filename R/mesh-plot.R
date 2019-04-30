@@ -10,8 +10,8 @@ scl <- function(x) {
 #' The mesh may be reprojected prior to plotting using the 'crs' argument to
 #' define the target map projection in 'PROJ string' format. (There is no
 #' "reproject" function for quadmesh, this is performed directly on the x-y
-#' coordinates of the 'quadmesh' output). The 'colfun' argument is used to
-#' generate colours which are mapped to the input object data as in 'image'.
+#' coordinates of the 'quadmesh' output). The 'col' argument are mapped to the input pplied
+#' object data as in 'image', and applied relative to 'zlim' if su.
 #'
 #' If `coords` is supplied, it is currently assumed to be a 2-layer `RasterBrick` with
 #' longitude and latitude as the *cell values*. These are used to geographically locate
@@ -23,7 +23,7 @@ scl <- function(x) {
 #'
 #' @param x object to convert to mesh and plot
 #' @param crs target map projection
-#' @param colfun colour function to use, `viridis` is the default
+#' @param col colours to use, defaults to that used by [graphics::image()]
 #' @param add add to existing plot or start a new one
 #' @param zlim absolute range of data to use for colour scaling (if `NULL` the data range is used)
 #' @param ... passed through to `base::plot`
@@ -38,23 +38,28 @@ scl <- function(x) {
 #' mesh_plot(rr, crs = "+proj=laea +datum=WGS84")
 #' mesh_plot(worldll, crs = "+proj=moll +datum=WGS84")
 #' prj <- "+proj=lcc +datum=WGS84 +lon_0=147 +lat_0=-40 +lat_1=-55 +lat_2=-20"
-#' mesh_plot(etopo, crs = prj, add = FALSE, colfun = function(n = 20) grey(seq(0, 1, length = n)))
+#' mesh_plot(etopo, crs = prj, add = FALSE, col = grey(seq(0, 1, length = 20)))
 #' mesh_plot(worldll, crs = prj, add = TRUE)
-mesh_plot <- function(x, crs = NULL, colfun = NULL, add = FALSE, zlim = NULL, ..., coords = NULL) {
+mesh_plot <- function(x, crs = NULL, col = NULL, add = FALSE, zlim = NULL, ..., coords = NULL) {
+  if ("colfun" %in% names(list(...))) {
+    warning("argument colfun is deprecated, please use 'col' as per base plot")
+  }
+
   UseMethod("mesh_plot")
 }
 #' @name mesh_plot
 #' @export
-mesh_plot.BasicRaster <- function(x, crs = NULL, colfun = NULL, add = FALSE, zlim = NULL, ..., coords = NULL) {
+mesh_plot.BasicRaster <- function(x, crs = NULL, col = NULL, add = FALSE, zlim = NULL, ..., coords = NULL) {
   if (raster::nlayers(x) > 1L) warning("extracting single RasterLayer from multilayered input")
-  mesh_plot(x[[1]], crs = crs, colfun = colfun, add = add, zlim = zlim, ..., coords = coords)
+  mesh_plot(x[[1]], crs = crs, col = col, add = add, zlim = zlim, ..., coords = coords)
 }
 #debug <- TRUE
 #' @name mesh_plot
 #' @export
-mesh_plot.RasterLayer <- function(x, crs = NULL, colfun = NULL, add = FALSE, zlim = NULL, ..., coords = NULL) {
+mesh_plot.RasterLayer <- function(x, crs = NULL, col = NULL, add = FALSE, zlim = NULL, ..., coords = NULL) {
   qm <- quadmesh::quadmesh(x, na.rm = FALSE)
- if (is.null(colfun)) colfun <- viridis::viridis
+  if (is.null(col)) col <- hcl.colors(12, "YlOrRd",
+                                      rev = TRUE)
   ib <- qm$ib
   ## take the coordinates as given
   xy <- t(qm$vb[1:2, ])
@@ -94,7 +99,8 @@ mesh_plot.RasterLayer <- function(x, crs = NULL, colfun = NULL, add = FALSE, zli
 
   ## we also have to deal with any values that are NA
   ## because they propagate to destroy the id
-  cols <- if (is.null(zlim)) colfun(100)[scl(values(x)) * 99 + 1] else colfun(100)[scales::rescale(values(x), c(1, 100), zlim)]
+  lc <- length(col)
+  cols <- if (is.null(zlim)) col[scales::rescale(values(x), c(1, lc))] else col[scales::rescale(values(x), c(1, lc), zlim)]
   if (any(is.na(cols))) {
     colsna <- rep(cols, each = nrow(ib))
     bad2 <- is.na(colsna)
@@ -129,8 +135,9 @@ mesh_plot.RasterLayer <- function(x, crs = NULL, colfun = NULL, add = FALSE, zli
 
 #' @name mesh_plot
 #' @export
-mesh_plot.TRI <- function(x, crs = NULL, colfun = NULL, add = FALSE, zlim = NULL, ..., coords = NULL) {
-  if (is.null(colfun)) colfun <- viridis::viridis
+mesh_plot.TRI <- function(x, crs = NULL, col = NULL, add = FALSE, zlim = NULL, ..., coords = NULL) {
+  if (is.null(col)) col <- hcl.colors(12, "YlOrRd",
+                                      rev = TRUE)
   idx <- matrix(match(t(as.matrix(x$triangle[c(".vx0", ".vx1", ".vx2")])),
                      x$vertex$vertex_), nrow = 3)
   ## take the coordinates as given
@@ -156,7 +163,7 @@ mesh_plot.TRI <- function(x, crs = NULL, colfun = NULL, add = FALSE, zlim = NULL
   ## we also have to deal with any values that are NA
   ## because they propagate to destroy the id
   #browser()
-  cols <- colfun(nrow(x$object))[factor(x$triangle$object_)]
+  cols <- colorRampPalette(col)(nrow(x$object))[factor(x$triangle$object_)]
   if (any(is.na(cols))) {
     colsna <- rep(cols, each = nrow(idx))
     bad2 <- is.na(colsna)
@@ -189,9 +196,10 @@ isLL <- FALSE
 #debug <- TRUE
 #' @name mesh_plot
 #' @export
-mesh_plot.quadmesh <- function(x, crs = NULL, colfun = NULL, add = FALSE, zlim = NULL, ..., coords = NULL) {
+mesh_plot.quadmesh <- function(x, crs = NULL, col = NULL, add = FALSE, zlim = NULL, ..., coords = NULL) {
   qm <- x
-  if (is.null(colfun)) colfun <- viridis::viridis
+  if (is.null(col)) col <- hcl.colors(12, "YlOrRd",
+                                      rev = TRUE)
   ib <- qm$ib
   ## take the coordinates as given
   xy <- t(qm$vb[1:2, ])
@@ -232,8 +240,10 @@ mesh_plot.quadmesh <- function(x, crs = NULL, colfun = NULL, add = FALSE, zlim =
   ## we also have to deal with any values that are NA
   ## because they propagate to destroy the id
   valx <- colMeans(matrix(qm$vb[3, qm$ib], nrow = 4L))
-  #cols <- colfun(100)[scl(valx) * 99 + 1]
-  cols <- if (is.null(zlim)) colfun(100)[scl(valx) * 99 + 1] else colfun(100)[scales::rescale(valx, c(1, 100), zlim)]
+
+
+  lc <- length(col)
+  cols <- if (is.null(zlim)) col[scales::rescale(valx, c(1, lc))] else col[scales::rescale(valx, c(1, lc), zlim)]
 
   if (any(is.na(cols))) {
     colsna <- rep(cols, each = nrow(ib))
