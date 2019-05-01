@@ -31,6 +31,7 @@ scl <- function(x) {
 #' @return nothing, used for the side-effect of creating or adding to a plot
 #' @export
 #' @importFrom scales rescale
+#' @importFrom grDevices hcl.colors colorRampPalette
 #' @examples
 #' ##mesh_plot(worldll)
 #' ## crop otherwise out of bounds from PROJ
@@ -133,23 +134,57 @@ mesh_plot.RasterLayer <- function(x, crs = NULL, col = NULL, add = FALSE, zlim =
 
 #' @name mesh_plot
 #' @export
-mesh_plot.stars <- function(x,  crs = NULL, colfun = NULL, add = FALSE, zlim = NULL, ..., coords = NULL) {
-  r <- raster::raster(x[[1]])
-  r <- raster::setExtent(r, raster::extent(0, ncol(r), 0, nrow(r)))
-  dims <- attr(x, "dimensions")
-  if (is.null(coords) ) { 
+mesh_plot.stars <- function(x,  crs = NULL, col = NULL, add = FALSE, zlim = NULL, ..., coords = NULL) {
+  attr(x[[1]], "units") <- NULL
+  class(x[[1]]) <- "array"
+  dm <- dim(x[[1]])
+  if (length(dm) == 2) r <- raster::raster(t(x[[1]]))
+  if (length(dm) == 3) r <- raster::raster(t(x[[1]][,,1L, drop = TRUE]))
+  if (length(dm) == 4) r <- raster::raster(t(x[[1]][,,1L, 1L, drop = TRUE]))
+  if (length(dm) == 5) r <- raster::raster(t(x[[1]][,,1L, 1L, 1L, drop = TRUE]))
+   ## etc, do your own slicing ...
+
+
+  #r <- raster::setExtent(r, raster::extent(0, ncol(r), 0, nrow(r)))
+  if (is.null(coords) ) {
+    dims <- attr(x, "dimensions")
+    #r <- raster::setExtent(r, raster::extent(0, ncol(r), 0, nrow(r)))
     if (attr(attr(x, "dimensions"), "raster")$curvilinear) {
-      coords <- raster::setExtent(raster::brick(raster::raster(dims[[1]]$values), raster::raster(dims[[2]]$values)), 
-                             raster::extent(r))
-    }  ## rectilinear case etc. 
+      coords <- raster::t(raster::setExtent(raster::brick(raster::raster(dims[[1]]$values), raster::raster(dims[[2]]$values)),
+                             raster::extent(r)))
+    } else {
+
+
+      dims[[1]]
+      offs <- c(dims[[1]]$offset, dims[[2]]$offset)
+      del <- c(dims[[1]]$delta, dims[[2]]$delta)
+      if (any(is.na(offs))) {
+        ## rectilinear case
+        X <- if (is.na(offs[1])) dims[[1]]$values else seq(offs[1], by = del[1], length.out = ncol(r))
+        Y <- if (is.na(offs[2])) dims[[2]]$values else sort(seq(offs[2], by = del[2], length.out = nrow(r)))
+#        if (flip_y) Y <- rev(Y)
+        xy <- expand.grid(X, Y)
+        coords <- raster::setValues(raster::brick(raster::raster(r), raster::raster(r)),
+                                    as.matrix(xy))
+
+      } else {
+        ## regular case
+      ylim <- sort(c(offs[2], offs[2] + nrow(r) * del[2]))
+      ext <- raster::extent(offs[1], offs[1] + ncol(r) * del[1],
+                            ylim[1], ylim[2])
+      raster::projection(r) <- dims[[1]]$refsys
+      r <- raster::setExtent(r, ext)
+      }
+    }
   }
-  quadmesh::mesh_plot(r, crs = crs, coords = coords, colfun = colfun, add = add, zlim = zlim, ...)
+ # browser()
+  mesh_plot(r, crs = crs, coords = coords, col = col, add = add, zlim = zlim, ...)
 }
 
 #' @name mesh_plot
 #' @export
 mesh_plot.TRI <- function(x, crs = NULL, col = NULL, add = FALSE, zlim = NULL, ..., coords = NULL) {
-  if (is.null(col)) col <- hcl.colors(12, "YlOrRd",
+  if (is.null(col)) col <- grDevices::hcl.colors(12, "YlOrRd",
                                       rev = TRUE)
   idx <- matrix(match(t(as.matrix(x$triangle[c(".vx0", ".vx1", ".vx2")])),
                      x$vertex$vertex_), nrow = 3)

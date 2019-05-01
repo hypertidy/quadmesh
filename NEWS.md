@@ -1,3 +1,7 @@
+# quadmesh 0.4.0.9001
+
+* Function `mesh_plot()` now handles stars objects, only plotting the first x-y slice. 
+
 # quadmesh 0.4.0
 
 * Fixed bug is `mesh3d` creation, partial naming of `material$color` caused various problems. 

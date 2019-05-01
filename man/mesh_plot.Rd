@@ -4,31 +4,35 @@
 \alias{mesh_plot}
 \alias{mesh_plot.BasicRaster}
 \alias{mesh_plot.RasterLayer}
+\alias{mesh_plot.stars}
 \alias{mesh_plot.TRI}
 \alias{mesh_plot.quadmesh}
 \title{Plot as a mesh}
 \usage{
-mesh_plot(x, crs = NULL, colfun = NULL, add = FALSE, zlim = NULL,
-  ..., coords = NULL)
+mesh_plot(x, crs = NULL, col = NULL, add = FALSE, zlim = NULL, ...,
+  coords = NULL)
 
-\method{mesh_plot}{BasicRaster}(x, crs = NULL, colfun = NULL,
+\method{mesh_plot}{BasicRaster}(x, crs = NULL, col = NULL,
   add = FALSE, zlim = NULL, ..., coords = NULL)
 
-\method{mesh_plot}{RasterLayer}(x, crs = NULL, colfun = NULL,
+\method{mesh_plot}{RasterLayer}(x, crs = NULL, col = NULL,
   add = FALSE, zlim = NULL, ..., coords = NULL)
 
-\method{mesh_plot}{TRI}(x, crs = NULL, colfun = NULL, add = FALSE,
+\method{mesh_plot}{stars}(x, crs = NULL, col = NULL, add = FALSE,
   zlim = NULL, ..., coords = NULL)
 
-\method{mesh_plot}{quadmesh}(x, crs = NULL, colfun = NULL,
-  add = FALSE, zlim = NULL, ..., coords = NULL)
+\method{mesh_plot}{TRI}(x, crs = NULL, col = NULL, add = FALSE,
+  zlim = NULL, ..., coords = NULL)
+
+\method{mesh_plot}{quadmesh}(x, crs = NULL, col = NULL, add = FALSE,
+  zlim = NULL, ..., coords = NULL)
 }
 \arguments{
 \item{x}{object to convert to mesh and plot}
 
 \item{crs}{target map projection}
 
-\item{colfun}{colour function to use, \code{viridis} is the default}
+\item{col}{colours to use, defaults to that used by \code{\link[graphics:image]{graphics::image()}}}
 
 \item{add}{add to existing plot or start a new one}
 
@@ -48,8 +52,8 @@ Convert to a quadmesh and plot in efficient vectorized form using 'grid'.
 The mesh may be reprojected prior to plotting using the 'crs' argument to
 define the target map projection in 'PROJ string' format. (There is no
 "reproject" function for quadmesh, this is performed directly on the x-y
-coordinates of the 'quadmesh' output). The 'colfun' argument is used to
-generate colours which are mapped to the input object data as in 'image'.
+coordinates of the 'quadmesh' output). The 'col' argument are mapped to the input pplied
+object data as in 'image', and applied relative to 'zlim' if su.
 
 If \code{coords} is supplied, it is currently assumed to be a 2-layer \code{RasterBrick} with
 longitude and latitude as the \emph{cell values}. These are used to geographically locate
@@ -66,6 +70,6 @@ rr <- raster::crop(worldll, raster::extent(-179, 179, -89, 89))
 mesh_plot(rr, crs = "+proj=laea +datum=WGS84")
 mesh_plot(worldll, crs = "+proj=moll +datum=WGS84")
 prj <- "+proj=lcc +datum=WGS84 +lon_0=147 +lat_0=-40 +lat_1=-55 +lat_2=-20"
-mesh_plot(etopo, crs = prj, add = FALSE, colfun = function(n = 20) grey(seq(0, 1, length = n)))
+mesh_plot(etopo, crs = prj, add = FALSE, col = grey(seq(0, 1, length = 20)))
 mesh_plot(worldll, crs = prj, add = TRUE)
 }
