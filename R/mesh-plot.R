@@ -155,7 +155,7 @@ mesh_plot.stars <- function(x,  crs = NULL, col = NULL, add = FALSE, zlim = NULL
     } else {
 
 
-      dims[[1]]
+      #dims[[1]]
       offs <- c(dims[[1]]$offset, dims[[2]]$offset)
       del <- c(dims[[1]]$delta, dims[[2]]$delta)
       if (any(is.na(offs))) {
