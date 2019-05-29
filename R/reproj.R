@@ -13,7 +13,9 @@
 reproj.quadmesh <- function(x, target, ..., source = NULL) {
   existingproj <- x$crs
   x$vb[1:3, ] <- t(reproj::reproj(t(x$vb[1:3, ]), target = target, source = existingproj))
-  x$crs <- target
+  x$raster_metadata <- x$crs <- NULL
+  warning("quadmesh raster information cannot be preserved after reprojection, dropping to mesh3d class")
+  class(x) <- setdiff( class(x), "quadmesh")
   x
 }
 
