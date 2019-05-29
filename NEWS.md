@@ -1,4 +1,6 @@
-# quadmesh 0.4.0.9001
+# quadmesh 0.4.0.9002
+
+* Simplified use of `reproj()` by relying on upcoming new version. 
 
 * Function `mesh_plot()` now handles stars objects, only plotting the first x-y slice. 
 
