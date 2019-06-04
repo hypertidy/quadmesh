@@ -47,7 +47,9 @@ prs <- function(x) {
 #' are queried by reprojection.
 #'
 #' Any raster RGB object (3-layers, ranging in 0-255) may be used as
-#' a _texture_ on the resulting mesh3d object.
+#' a _texture_ on the resulting mesh3d object. If `texture` is a palette raster it will be
+#' auto-expanded to RGB.
+#'
 #' It is not possible to provide rgl with an object of data for texture, it must be a PNG file and so
 #' the in-memory `texture` argument is written out to PNG file (with a message). The location of the file
 #' may be set explicitly with `texture_filename`.  Currently it's not possible to not use the `texture` object
@@ -117,8 +119,14 @@ quadmesh.BasicRaster <- function(x, z = x, na.rm = FALSE, ..., texture = NULL, t
       stop("texture must be a 3-layer raster with RGB values (in 0-255)")
     }
     if (!raster::nlayers(texture) == 3L) {
-      stop("texture must be a 3-layer raster with RGB values (in 0-255)")
-    }
+      if (raster::nlayers(texture) == 1 && length(texture@legend@colortable) > 0) {
+        texture <- raster::setValues(raster::brick(texture[[1]], texture[[1]], texture[[1]]),
+                             t(grDevices::col2rgb(texture@legend@colortable[raster::values(texture) + 1])))
+      } else {
+        stop("texture must be a 3-layer raster with RGB values (in 0-255)")
+
+      }
+      }
 
     exy <- target_coordinates(exy, src.proj = raster::projection(x),
                               target = texture)

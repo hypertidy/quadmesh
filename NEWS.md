@@ -1,5 +1,9 @@
-# quadmesh 0.4.0.9002
+# quadmesh 0.4.0.9003
 
+* New feature in `quadmesh()` to auto-expand a palette raster to the required RGB brick
+ for the `texture` argument.  Motivated by 
+ https://gis.stackexchange.com/questions/324552/creating-3d-image-from-hgt-files. 
+ 
 * Simplified use of `reproj()` by relying on upcoming new version. 
 
 * Function `mesh_plot()` now handles stars objects, only plotting the first x-y slice. 
