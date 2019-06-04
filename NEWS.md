@@ -1,4 +1,7 @@
-# quadmesh 0.4.0.9003
+# quadmesh 0.4.0.9004
+
+* WIP new `use_crs()` facility to set the projection in use when setting up a `mesh_plot`. Subsequent calls to `mesh_plot(, add = TRUE)` will automatically project to the coordinate system
+ in use. `use_crs()` will set or get the PROJ string. 
 
 * New feature in `quadmesh()` to auto-expand a palette raster to the required RGB brick
  for the `texture` argument.  Motivated by 

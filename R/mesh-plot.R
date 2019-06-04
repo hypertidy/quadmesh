@@ -45,7 +45,6 @@ mesh_plot <- function(x, crs = NULL, col = NULL, add = FALSE, zlim = NULL, ..., 
   if ("colfun" %in% names(list(...))) {
     warning("argument colfun is deprecated, please use 'col' as per base plot")
   }
-
   UseMethod("mesh_plot")
 }
 #' @name mesh_plot
@@ -58,7 +57,11 @@ mesh_plot.BasicRaster <- function(x, crs = NULL, col = NULL, add = FALSE, zlim =
 #' @name mesh_plot
 #' @export
 mesh_plot.RasterLayer <- function(x, crs = NULL, col = NULL, add = FALSE, zlim = NULL, ..., coords = NULL) {
-  qm <- quadmesh::quadmesh(x, na.rm = FALSE)
+
+  if (add && is.null(crs)) crs <- use_crs()
+  if (!is.null(crs)) use_crs(crs) else use_crs(raster::projection(x))
+
+   qm <- quadmesh::quadmesh(x, na.rm = FALSE)
   if (is.null(col)) col <- hcl.colors(12, "YlOrRd",
                                       rev = TRUE)
   ib <- qm$ib
@@ -135,7 +138,11 @@ mesh_plot.RasterLayer <- function(x, crs = NULL, col = NULL, add = FALSE, zlim =
 #' @name mesh_plot
 #' @export
 mesh_plot.stars <- function(x,  crs = NULL, col = NULL, add = FALSE, zlim = NULL, ..., coords = NULL) {
-  attr(x[[1]], "units") <- NULL
+
+  if (add && is.null(crs)) crs <- use_crs()
+  if (!is.null(crs)) use_crs(crs) else use_crs(raster::projection(x))
+
+   attr(x[[1]], "units") <- NULL
   class(x[[1]]) <- "array"
   dm <- dim(x[[1]])
   if (length(dm) == 2) r <- raster::raster(t(x[[1]]))
@@ -184,7 +191,11 @@ mesh_plot.stars <- function(x,  crs = NULL, col = NULL, add = FALSE, zlim = NULL
 #' @name mesh_plot
 #' @export
 mesh_plot.TRI <- function(x, crs = NULL, col = NULL, add = FALSE, zlim = NULL, ..., coords = NULL) {
-  if (is.null(col)) col <- grDevices::hcl.colors(12, "YlOrRd",
+
+  if (add && is.null(crs)) crs <- use_crs()
+  if (!is.null(crs)) use_crs(crs) else use_crs(raster::projection(x))
+
+   if (is.null(col)) col <- grDevices::hcl.colors(12, "YlOrRd",
                                       rev = TRUE)
   idx <- matrix(match(t(as.matrix(x$triangle[c(".vx0", ".vx1", ".vx2")])),
                      x$vertex$vertex_), nrow = 3)
@@ -245,7 +256,13 @@ isLL <- FALSE
 #' @name mesh_plot
 #' @export
 mesh_plot.quadmesh <- function(x, crs = NULL, col = NULL, add = FALSE, zlim = NULL, ..., coords = NULL) {
-  qm <- x
+
+  srcproj <- x$crs
+  if (add && is.null(crs)) crs <- use_crs()
+  if (!is.null(crs)) use_crs(crs) else use_crs(srcproj)
+
+
+   qm <- x
   if (is.null(col)) col <- hcl.colors(12, "YlOrRd",
                                       rev = TRUE)
   ib <- qm$ib
@@ -264,7 +281,7 @@ mesh_plot.quadmesh <- function(x, crs = NULL, col = NULL, add = FALSE, zlim = NU
       isLL <- FALSE
     }
   }
-  srcproj <- raster::projection(x)
+
   if (is.na(srcproj) && !is.null(crs)) {
     if (is.null(coords)) {
       stop("no projection defined on input raster, and no 'coords' provided - \n either set the CRS of the raster, or supply a two-layer 'coords' brick with longitude and latitude layers")
