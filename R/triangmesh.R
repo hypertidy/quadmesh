@@ -139,11 +139,14 @@ dtriangmesh.default <- function (x, z = x, na.rm = FALSE, ..., texture = NULL, t
 
   ## break the mesh!
   tm$vb <- tm$vb[, tm$it]
-  tm$texcoords <- tm$texcoords[, tm$it]
-
-  tm$it <- matrix(seq_len(ncol(tm$vb)), 3L)
   if (!is.null(tm$texcoords)) {
+    tm$texcoords <- tm$texcoords[, tm$it]
 
   }
+  tm$it <- matrix(seq_len(ncol(tm$vb)), 3L)
+
+  tm$vb[3, ] <- rep(apply(matrix(tm$vb[3, tm$it, drop = FALSE], 3L), 2, mean),
+                    each = 3L)
+
   tm
 }
