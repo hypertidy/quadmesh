@@ -9,23 +9,65 @@
 \alias{mesh_plot.quadmesh}
 \title{Plot as a mesh}
 \usage{
-mesh_plot(x, crs = NULL, col = NULL, add = FALSE, zlim = NULL, ...,
-  coords = NULL)
+mesh_plot(
+  x,
+  crs = NULL,
+  col = NULL,
+  add = FALSE,
+  zlim = NULL,
+  ...,
+  coords = NULL
+)
 
-\method{mesh_plot}{BasicRaster}(x, crs = NULL, col = NULL,
-  add = FALSE, zlim = NULL, ..., coords = NULL)
+\method{mesh_plot}{BasicRaster}(
+  x,
+  crs = NULL,
+  col = NULL,
+  add = FALSE,
+  zlim = NULL,
+  ...,
+  coords = NULL
+)
 
-\method{mesh_plot}{RasterLayer}(x, crs = NULL, col = NULL,
-  add = FALSE, zlim = NULL, ..., coords = NULL)
+\method{mesh_plot}{RasterLayer}(
+  x,
+  crs = NULL,
+  col = NULL,
+  add = FALSE,
+  zlim = NULL,
+  ...,
+  coords = NULL
+)
 
-\method{mesh_plot}{stars}(x, crs = NULL, col = NULL, add = FALSE,
-  zlim = NULL, ..., coords = NULL)
+\method{mesh_plot}{stars}(
+  x,
+  crs = NULL,
+  col = NULL,
+  add = FALSE,
+  zlim = NULL,
+  ...,
+  coords = NULL
+)
 
-\method{mesh_plot}{TRI}(x, crs = NULL, col = NULL, add = FALSE,
-  zlim = NULL, ..., coords = NULL)
+\method{mesh_plot}{TRI}(
+  x,
+  crs = NULL,
+  col = NULL,
+  add = FALSE,
+  zlim = NULL,
+  ...,
+  coords = NULL
+)
 
-\method{mesh_plot}{quadmesh}(x, crs = NULL, col = NULL, add = FALSE,
-  zlim = NULL, ..., coords = NULL)
+\method{mesh_plot}{quadmesh}(
+  x,
+  crs = NULL,
+  col = NULL,
+  add = FALSE,
+  zlim = NULL,
+  ...,
+  coords = NULL
+)
 }
 \arguments{
 \item{x}{object to convert to mesh and plot}

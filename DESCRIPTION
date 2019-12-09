@@ -13,7 +13,7 @@ Description: Create surface forms from matrix or 'raster' data for flexible plot
  'dquadmesh' and 'dtriangmesh' functions.
 License: GPL-3
 LazyData: TRUE
-RoxygenNote: 6.1.1
+RoxygenNote: 7.0.2
 Roxygen: list(markdown = TRUE)
 Depends: R (>= 2.10)
 Encoding: UTF-8
@@ -42,4 +42,3 @@ BugReports: https://github.com/hypertidy/quadmesh/issues
 VignetteBuilder: knitr
 ByteCompile: true
 Remotes: hypertidy/reproj
-
