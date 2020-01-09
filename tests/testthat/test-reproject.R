@@ -38,7 +38,4 @@ test_that("reprojecting works", {
   expect_equivalent(c1, target_coordinates(c0, "+proj=longlat +datum=WGS84", "+proj=laea +datum=WGS84")[,1:2])
 })
 
-test_that("globe conversion works", {
-  expect_equivalent(reproj::reproj(cbind(cds, 0), source = "+proj=longlat +datum=WGS84",
-                                   target = "+proj=geocent +a=6378137.0"), llh2xyz(cbind(cds, 0)))
-})
+
