@@ -8,29 +8,20 @@
 \alias{quadmesh.matrix}
 \title{Create a quad-type mesh for use in rgl.}
 \usage{
-dquadmesh(
-  x,
-  z = x,
-  na.rm = FALSE,
-  ...,
-  texture = NULL,
-  texture_filename = NULL
-)
+dquadmesh(x, z = x, na.rm = FALSE, ..., texture = NULL,
+  texture_filename = NULL)
 
-\method{dquadmesh}{default}(
-  x,
-  z = x,
-  na.rm = FALSE,
-  ...,
-  texture = NULL,
-  texture_filename = NULL
-)
+\method{dquadmesh}{default}(x, z = x, na.rm = FALSE, ...,
+  texture = NULL, texture_filename = NULL)
 
-quadmesh(x, z = x, na.rm = FALSE, ..., texture = NULL, texture_filename = NULL)
+quadmesh(x, z = x, na.rm = FALSE, ..., texture = NULL,
+  texture_filename = NULL)
 
-\method{quadmesh}{BasicRaster}(x, z = x, na.rm = FALSE, ..., texture = NULL, texture_filename = NULL)
+\method{quadmesh}{BasicRaster}(x, z = x, na.rm = FALSE, ...,
+  texture = NULL, texture_filename = NULL)
 
-\method{quadmesh}{matrix}(x, z = x, na.rm = FALSE, ..., texture = NULL, texture_filename = NULL)
+\method{quadmesh}{matrix}(x, z = x, na.rm = FALSE, ...,
+  texture = NULL, texture_filename = NULL)
 }
 \arguments{
 \item{x}{raster object for mesh structure}
