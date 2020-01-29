@@ -43,3 +43,4 @@ test_that("globe conversion works", {
                                    target = "+proj=geocent +a=6378137.0"), llh2xyz(cbind(cds, 0)))
 
 })
+
