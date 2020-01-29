@@ -10,6 +10,8 @@
 #' 'data-raw/worldll.R'.
 #' @docType data
 #' @name worldll
+#' @importFrom reproj reproj
+#' @export reproj
 NULL
 
 #' World topography map
