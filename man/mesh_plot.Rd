@@ -9,23 +9,65 @@
 \alias{mesh_plot.quadmesh}
 \title{Plot as a mesh}
 \usage{
-mesh_plot(x, crs = NULL, col = NULL, add = FALSE, zlim = NULL, ...,
-  coords = NULL)
+mesh_plot(
+  x,
+  crs = NULL,
+  col = NULL,
+  add = FALSE,
+  zlim = NULL,
+  ...,
+  coords = NULL
+)
 
-\method{mesh_plot}{BasicRaster}(x, crs = NULL, col = NULL,
-  add = FALSE, zlim = NULL, ..., coords = NULL)
+\method{mesh_plot}{BasicRaster}(
+  x,
+  crs = NULL,
+  col = NULL,
+  add = FALSE,
+  zlim = NULL,
+  ...,
+  coords = NULL
+)
 
-\method{mesh_plot}{RasterLayer}(x, crs = NULL, col = NULL,
-  add = FALSE, zlim = NULL, ..., coords = NULL)
+\method{mesh_plot}{RasterLayer}(
+  x,
+  crs = NULL,
+  col = NULL,
+  add = FALSE,
+  zlim = NULL,
+  ...,
+  coords = NULL
+)
 
-\method{mesh_plot}{stars}(x, crs = NULL, col = NULL, add = FALSE,
-  zlim = NULL, ..., coords = NULL)
+\method{mesh_plot}{stars}(
+  x,
+  crs = NULL,
+  col = NULL,
+  add = FALSE,
+  zlim = NULL,
+  ...,
+  coords = NULL
+)
 
-\method{mesh_plot}{TRI}(x, crs = NULL, col = NULL, add = FALSE,
-  zlim = NULL, ..., coords = NULL)
+\method{mesh_plot}{TRI}(
+  x,
+  crs = NULL,
+  col = NULL,
+  add = FALSE,
+  zlim = NULL,
+  ...,
+  coords = NULL
+)
 
-\method{mesh_plot}{quadmesh}(x, crs = NULL, col = NULL, add = FALSE,
-  zlim = NULL, ..., coords = NULL)
+\method{mesh_plot}{quadmesh}(
+  x,
+  crs = NULL,
+  col = NULL,
+  add = FALSE,
+  zlim = NULL,
+  ...,
+  coords = NULL
+)
 }
 \arguments{
 \item{x}{object to convert to mesh and plot}
@@ -71,5 +113,5 @@ mesh_plot(rr, crs = "+proj=laea +datum=WGS84")
 mesh_plot(worldll, crs = "+proj=moll +datum=WGS84")
 prj <- "+proj=lcc +datum=WGS84 +lon_0=147 +lat_0=-40 +lat_1=-55 +lat_2=-20"
 mesh_plot(etopo, crs = prj, add = FALSE, col = grey(seq(0, 1, length = 20)))
-mesh_plot(worldll, crs = prj, add = TRUE)
+mesh_plot(rr, crs = prj, add = TRUE)
 }

@@ -40,7 +40,7 @@ scl <- function(x) {
 #' mesh_plot(worldll, crs = "+proj=moll +datum=WGS84")
 #' prj <- "+proj=lcc +datum=WGS84 +lon_0=147 +lat_0=-40 +lat_1=-55 +lat_2=-20"
 #' mesh_plot(etopo, crs = prj, add = FALSE, col = grey(seq(0, 1, length = 20)))
-#' mesh_plot(worldll, crs = prj, add = TRUE)
+#' mesh_plot(rr, crs = prj, add = TRUE)
 mesh_plot <- function(x, crs = NULL, col = NULL, add = FALSE, zlim = NULL, ..., coords = NULL) {
   if ("colfun" %in% names(list(...))) {
     warning("argument colfun is deprecated, please use 'col' as per base plot")
@@ -61,7 +61,8 @@ mesh_plot.RasterLayer <- function(x, crs = NULL, col = NULL, add = FALSE, zlim =
   if (add && is.null(crs)) crs <- use_crs()
   if (!is.null(crs)) use_crs(crs) else use_crs(raster::projection(x))
 
-   qm <- quadmesh::quadmesh(x, na.rm = FALSE)
+  qm <- suppressWarnings(reproj::reproj(quadmesh::quadmesh(x, na.rm = FALSE), use_crs()))
+
   if (is.null(col)) col <- hcl.colors(12, "YlOrRd",
                                       rev = TRUE)
   ib <- qm$ib
@@ -74,23 +75,6 @@ mesh_plot.RasterLayer <- function(x, crs = NULL, col = NULL, add = FALSE, zlim =
     cells <- raster::cellFromXY(coords_fudge, xy)
     xy <- raster::extract(coords_fudge, cells)
   }
-  isLL <- raster::isLonLat(x) || !is.null(coords)  ## we just assume it's longlat if coords given
-  if (!is.null(crs) ) {
-    if (!raster::isLonLat(crs)) {
-      isLL <- FALSE
-    }
-  }
-  srcproj <- raster::projection(x)
-  if (is.na(srcproj) && !is.null(crs)) {
-    if (is.null(coords)) {
-      stop("no projection defined on input raster, and no 'coords' provided - \n either set the CRS of the raster, or supply a two-layer 'coords' brick with longitude and latitude layers")
-    } else {
-      message("coords and crs provided, assuming coords is Longitude, Latitude")
-      srcproj <- "+proj=longlat +datum=WGS84"
-    }
-  }
-  xy <- target_coordinates(xy, src.proj = srcproj, target = crs, xyz = FALSE)
-  ## we have to remove any infinite vertices
   ## as this affects the entire thing
   bad <- !is.finite(xy[,1]) | !is.finite(xy[,2])
   ## but we must identify the bad xy in the index

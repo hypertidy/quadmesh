@@ -8,20 +8,50 @@
 \alias{dtriangmesh.default}
 \title{Create a triangle-type mesh for use in rgl.}
 \usage{
-triangmesh(x, z = x, na.rm = FALSE, ..., texture = NULL,
-  texture_filename = NULL)
+triangmesh(
+  x,
+  z = x,
+  na.rm = FALSE,
+  ...,
+  texture = NULL,
+  texture_filename = NULL
+)
 
-\method{triangmesh}{matrix}(x, z = x, na.rm = FALSE, ...,
-  texture = NULL, texture_filename = NULL)
+\method{triangmesh}{matrix}(
+  x,
+  z = x,
+  na.rm = FALSE,
+  ...,
+  texture = NULL,
+  texture_filename = NULL
+)
 
-\method{triangmesh}{BasicRaster}(x, z = x, na.rm = FALSE, ...,
-  texture = NULL, texture_filename = NULL)
+\method{triangmesh}{BasicRaster}(
+  x,
+  z = x,
+  na.rm = FALSE,
+  ...,
+  texture = NULL,
+  texture_filename = NULL
+)
 
-dtriangmesh(x, z = x, na.rm = FALSE, ..., texture = NULL,
-  texture_filename = NULL)
+dtriangmesh(
+  x,
+  z = x,
+  na.rm = FALSE,
+  ...,
+  texture = NULL,
+  texture_filename = NULL
+)
 
-\method{dtriangmesh}{default}(x, z = x, na.rm = FALSE, ...,
-  texture = NULL, texture_filename = NULL)
+\method{dtriangmesh}{default}(
+  x,
+  z = x,
+  na.rm = FALSE,
+  ...,
+  texture = NULL,
+  texture_filename = NULL
+)
 }
 \arguments{
 \item{x}{raster object for mesh structure}

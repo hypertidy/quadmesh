@@ -6,7 +6,7 @@
 \alias{_PACKAGE}
 \title{quadmesh: Quadrangle Mesh}
 \description{
-\if{html}{\figure{logo.png}{options: align='right'}}
+\if{html}{\figure{logo.png}{options: align='right' alt='logo' width='120'}}
 
 Create surface forms from matrix or 'raster' data for flexible plotting and
  conversion to other mesh types. The functions 'quadmesh' or 'triangmesh'
