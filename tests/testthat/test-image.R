@@ -9,6 +9,8 @@ tri <- structure(c(1L, 2L, 5L, 2L, 3L, 6L, 3L, 4L, 7L, 2L, 5L, 6L, 3L,
 set.seed(1)
 xy <- cbind(sort(rnorm(raster::ncell(g))), runif(raster::ncell(g)))
 cds <- raster::setValues(raster::brick(g, g), as.matrix(xy))
+
+
 library(vdiffr)
 
 
@@ -22,8 +24,6 @@ func_etopo_plot <- function() mesh_plot(etopo, "+proj=laea +lat_0=-90 +datum=WGS
 test_that("mesh_plot works", {
   #  expect_doppelganger("func-etopo-plot", func_etopo_plot)
   suppressWarnings(func_etopo_plot())
-  expect_message(mesh_plot(g, coords = cds, "+proj=ortho +datum=WGS84"),
-                 "coords and crs provided, assuming coords is Longitude, Latitude")
 
 })
 
