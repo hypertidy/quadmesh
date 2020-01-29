@@ -10,7 +10,6 @@ set.seed(1)
 xy <- cbind(sort(rnorm(raster::ncell(g))), runif(raster::ncell(g)))
 cds <- raster::setValues(raster::brick(g, g), as.matrix(xy))
 
-
 library(vdiffr)
 
 
@@ -24,7 +23,7 @@ func_etopo_plot <- function() mesh_plot(etopo, "+proj=laea +lat_0=-90 +datum=WGS
 test_that("mesh_plot works", {
   #  expect_doppelganger("func-etopo-plot", func_etopo_plot)
   suppressWarnings(func_etopo_plot())
-
+  expect_warning(mesh_plot(g, coords = cds, crs = "+proj=laea +lat_0=-90 +datum=WGS84"))
 })
 
 func_mesh_plot <- function()  mesh_plot(g, coords = cds)
@@ -32,7 +31,7 @@ test_that("plot works", {
   expect_doppelganger("func-mesh-plot", func_mesh_plot)
 
   g[4] <- NA
-  expect_silent(mesh_plot(g))
+  expect_warning(mesh_plot(g))
 
 })
 

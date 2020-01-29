@@ -61,7 +61,7 @@ mesh_plot.RasterLayer <- function(x, crs = NULL, col = NULL, add = FALSE, zlim =
   if (add && is.null(crs)) crs <- use_crs()
   if (!is.null(crs)) use_crs(crs) else use_crs(raster::projection(x))
 
-  qm <- suppressWarnings(reproj::reproj(quadmesh::quadmesh(x, na.rm = FALSE), use_crs()))
+  qm <- quadmesh::quadmesh(x, na.rm = FALSE)
 
   if (is.null(col)) col <- hcl.colors(12, "YlOrRd",
                                       rev = TRUE)
@@ -75,6 +75,7 @@ mesh_plot.RasterLayer <- function(x, crs = NULL, col = NULL, add = FALSE, zlim =
     cells <- raster::cellFromXY(coords_fudge, xy)
     xy <- raster::extract(coords_fudge, cells)
   }
+  xy <- reproj::reproj(xy, target = use_crs(), source = qm$crs)
   ## as this affects the entire thing
   bad <- !is.finite(xy[,1]) | !is.finite(xy[,2])
   ## but we must identify the bad xy in the index
