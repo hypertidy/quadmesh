@@ -1,5 +1,7 @@
 ## quadmesh 0.4.1
 
+A small patch release to guard against problems for an upcoming reproj release. 
+
 Thanks!
 
 ## Test environments
@@ -14,4 +16,4 @@ Thanks!
 
 ## Reverse dependencies
 
-The reverse dependency 'spex' passes check against this version. 
+The reverse dependencies lazyraster and 'spex' pass check against this version. 
