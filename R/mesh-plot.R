@@ -41,7 +41,8 @@ scl <- function(x) {
 #' safe_etopo <- raster::crop(etopo, raster::extent(-80, 120, -70, 90))
 #' gcol <- grey(seq(0, 1, length = 20))
 #' mesh_plot(safe_etopo, crs = prj, add = FALSE, col = gcol, colfun = NULL)
-#' mesh_plot(worldll, crs = prj, add = TRUE)
+#' safe_worldll <- raster::crop(worldll, safe_etopo)
+#' mesh_plot(safe_worldll, crs = prj, add = TRUE)
 mesh_plot <- function(x, crs = NULL, colfun = NULL, add = FALSE, zlim = NULL, ..., coords = NULL) {
   UseMethod("mesh_plot")
 }
@@ -82,6 +83,7 @@ mesh_plot.RasterLayer <- function(x, crs = NULL, colfun = NULL, add = FALSE, zli
       srcproj <- "+proj=longlat +datum=WGS84"
     }
   }
+
   xy <- target_coordinates(xy, src.proj = srcproj, target = crs, xyz = FALSE)
   ## we have to remove any infinite vertices
   ## as this affects the entire thing

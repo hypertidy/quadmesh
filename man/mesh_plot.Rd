@@ -104,5 +104,6 @@ prj <- "+proj=lcc +datum=WGS84 +lon_0=0 +lat_0=-40 +lat_1=-55 +lat_2=-20"
 safe_etopo <- raster::crop(etopo, raster::extent(-80, 120, -70, 90))
 gcol <- grey(seq(0, 1, length = 20))
 mesh_plot(safe_etopo, crs = prj, add = FALSE, col = gcol, colfun = NULL)
-mesh_plot(worldll, crs = prj, add = TRUE)
+safe_worldll <- raster::crop(worldll, safe_etopo)
+mesh_plot(safe_worldll, crs = prj, add = TRUE)
 }
