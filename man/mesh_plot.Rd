@@ -8,20 +8,55 @@
 \alias{mesh_plot.quadmesh}
 \title{Plot as a mesh}
 \usage{
-mesh_plot(x, crs = NULL, colfun = NULL, add = FALSE, zlim = NULL,
-  ..., coords = NULL)
+mesh_plot(
+  x,
+  crs = NULL,
+  colfun = NULL,
+  add = FALSE,
+  zlim = NULL,
+  ...,
+  coords = NULL
+)
 
-\method{mesh_plot}{BasicRaster}(x, crs = NULL, colfun = NULL,
-  add = FALSE, zlim = NULL, ..., coords = NULL)
+\method{mesh_plot}{BasicRaster}(
+  x,
+  crs = NULL,
+  colfun = NULL,
+  add = FALSE,
+  zlim = NULL,
+  ...,
+  coords = NULL
+)
 
-\method{mesh_plot}{RasterLayer}(x, crs = NULL, colfun = NULL,
-  add = FALSE, zlim = NULL, ..., coords = NULL)
+\method{mesh_plot}{RasterLayer}(
+  x,
+  crs = NULL,
+  colfun = NULL,
+  add = FALSE,
+  zlim = NULL,
+  ...,
+  coords = NULL
+)
 
-\method{mesh_plot}{TRI}(x, crs = NULL, colfun = NULL, add = FALSE,
-  zlim = NULL, ..., coords = NULL)
+\method{mesh_plot}{TRI}(
+  x,
+  crs = NULL,
+  colfun = NULL,
+  add = FALSE,
+  zlim = NULL,
+  ...,
+  coords = NULL
+)
 
-\method{mesh_plot}{quadmesh}(x, crs = NULL, colfun = NULL,
-  add = FALSE, zlim = NULL, ..., coords = NULL)
+\method{mesh_plot}{quadmesh}(
+  x,
+  crs = NULL,
+  colfun = NULL,
+  add = FALSE,
+  zlim = NULL,
+  ...,
+  coords = NULL
+)
 }
 \arguments{
 \item{x}{object to convert to mesh and plot}
@@ -65,7 +100,9 @@ by 1 cell to avoid losing any data due to the half cell outer margin (get in tou
 rr <- raster::crop(worldll, raster::extent(-179, 179, -89, 89))
 mesh_plot(rr, crs = "+proj=laea +datum=WGS84")
 mesh_plot(worldll, crs = "+proj=moll +datum=WGS84")
-prj <- "+proj=lcc +datum=WGS84 +lon_0=147 +lat_0=-40 +lat_1=-55 +lat_2=-20"
-mesh_plot(etopo, crs = prj, add = FALSE, colfun = function(n = 20) grey(seq(0, 1, length = n)))
+prj <- "+proj=lcc +datum=WGS84 +lon_0=0 +lat_0=-40 +lat_1=-55 +lat_2=-20"
+safe_etopo <- raster::crop(etopo, raster::extent(-80, 120, -70, 90))
+gcol <- grey(seq(0, 1, length = 20))
+mesh_plot(safe_etopo, crs = prj, add = FALSE, col = gcol, colfun = NULL)
 mesh_plot(worldll, crs = prj, add = TRUE)
 }

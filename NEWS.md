@@ -1,3 +1,7 @@
+# quadmesh 0.4.1
+
+* Patch release to improve example plot that would sometimes crash. 
+
 # quadmesh 0.4.0
 
 * Fixed bug is `mesh3d` creation, partial naming of `material$color` caused various problems. 
