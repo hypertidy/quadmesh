@@ -1,23 +1,23 @@
+## from a raster, calculate values at cell corners
+## TODO: remove need for raster functions values(), dim()
+## and port into mesh3d package (allow in-mem rasters, not lazy ones)
 exy <- function(x, ...) {
   v <- raster::values(x)
   nr <- dim(x)[1]
   nc <- dim(x)[2]
   m <- matrix(v, nc, nr)
   ## top left
-  (tl <- cbind(NA_integer_, rbind(NA_integer_, m)))
+  tl <- cbind(NA_integer_, rbind(NA_integer_, m))
   ## top right
-  (tr <- cbind(NA_integer_, rbind(m, NA_integer_)))
+  tr <- cbind(NA_integer_, rbind(m, NA_integer_))
   ## bottom left
-  (bl <- cbind(rbind(NA_integer_, m), NA_integer_))
+  bl <- cbind(rbind(NA_integer_, m), NA_integer_)
   ## bottom right
-  (br <- cbind(rbind(m, NA_integer_), NA_integer_))
+  br <- cbind(rbind(m, NA_integer_), NA_integer_)
 
-  evals <- colMeans(rbind(c(tl),
-                               c(tr),
-                               c(bl),
-                               c(br)), na.rm = TRUE)
-
-  evals
+ .colMeans(matrix(c(tl, tr, bl, br), 4L, byrow = TRUE),
+                  m = 4L, n = (nr + 1L) * (nc + 1L),
+                 na.rm = TRUE)
 }
 
 
