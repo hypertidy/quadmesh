@@ -1,19 +1,28 @@
-mesh_plot_mesh3d <-
+#' @name mesh_plot
+#' @export
+mesh_plot.mesh3d <-
   function (x,
             crs = NULL, col = NULL,
             add = FALSE, zlim = NULL,
-                              ..., coords = NULL) {
-    xx <- x$vb[1L, x$ib]
-    yy <- x$vb[2L, x$ib]
-    if (!is.null(x$ib)) id <- x$ib
-    if (!is.null(x$it)) id <- x$it
-    id <- rep(seq_len(ncol(id)), each = nrow(id))
+            ..., coords = NULL) {
+
+    if (!is.null(x$ib)) {
+      id <- x$ib
+    }
+    if (!is.null(x$it)) {
+      id <- x$it
+    }
+    xx <- x$vb[1L, id]
+    yy <- x$vb[2L, id]
+
+    ID <- rep(seq_len(ncol(id)), each = nrow(id))
 
     ## TODO: determine face or vertex colouring and
     ## expand to face (with a message that vertex not supported)
     ## if colours present, otherwise build colours from z
-    cols <- viridis::viridis(100)[scales::rescale(x$vb[3L, x$ib[1,]], c(1, 100))]
-    xx <- list(x = xx, y = yy, id = id, col = cols)
+    cols <- viridis::viridis(100)[scales::rescale(x$vb[3L, id[1L, ]], c(1, 100))]
+    xx <- list(x = xx, y = yy, id = ID, col = cols)
+
     ## if (isLL) 1/cos(mean(xx$y, na.rm = TRUE) * pi/180) else 1
     if (!add) {
       graphics::plot.new()
@@ -36,3 +45,16 @@ mesh_plot_mesh3d <-
 
   }
 
+#' @name mesh_plot
+#' @export
+mesh_plot.default  <- function (x,
+                                crs = NULL, col = NULL,
+                                add = FALSE, zlim = NULL,
+                                ..., coords = NULL) {
+ mesh_plot(as.mesh3d(x, ...),
+           crs = crs,
+           col = col,
+           add = add,
+           zlim = zlim,
+           coords = coords)
+}
