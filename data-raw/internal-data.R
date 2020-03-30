@@ -9,7 +9,9 @@ library(raster)
 #                    as_raster(lazyraster::lazyraster(f, band = 3), dm,)),
 #                extent(-180, 180, -90, 90))
 bm <- setExtent(raster::brick(f), extent(-180, 180, -90, 90))
-projection(bm) <- "+init=epsg:4326"
+projection(bm) <- "+proj=longlat +datum=WGS84"
 
 bm <- aggregate(bm, fact = 25)
-usethis::use_data(bm, internal=TRUE)
+.hcl_colors <- hcl.colors(12, "YlOrRd", rev = TRUE)
+
+usethis::use_data(.hcl_colors, bm, internal=TRUE, overwrite = TRUE)

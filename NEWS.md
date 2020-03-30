@@ -1,5 +1,7 @@
 # quadmesh 0.4.0.9004
 
+* Fixed failing CRAN test by internalizing use of hcl.colors(). 
+
 * `mesh_plot()` now has a method for mesh3d. Intention is
  to use mesh3d as the common basis for mesh_plot(). 
 * WIP new `use_crs()` facility to set the projection in use when setting up a `mesh_plot`. Subsequent calls to `mesh_plot(, add = TRUE)` will automatically project to the coordinate system

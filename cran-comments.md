@@ -1,4 +1,6 @@
-## quadmesh 0.4.0
+## quadmesh 
+
+* Fixed CRAN problem with hcl.colors() only available in later R. 
 
 Thanks!
 

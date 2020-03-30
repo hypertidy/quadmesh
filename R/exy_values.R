@@ -73,7 +73,7 @@ as_mesh3d_matrix <- function(x,...) {
 
 as_mesh3d_raster <- function(x, ...) {
   v <- vxy_raster(x)
-  exy <- quadmesh::edgesXY(x)
+  exy <- edgesXY(x)
   nc <- x@ncols
   nc1 <- nc + 1
   aa <- t(prs(seq(nc1)))

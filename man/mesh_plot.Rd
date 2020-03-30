@@ -8,7 +8,6 @@
 \alias{mesh_plot.TRI}
 \alias{mesh_plot.quadmesh}
 \alias{mesh_plot.mesh3d}
-\alias{mesh_plot.default}
 \title{Plot as a mesh}
 \usage{
 mesh_plot(
@@ -80,16 +79,6 @@ mesh_plot(
   ...,
   coords = NULL
 )
-
-\method{mesh_plot}{default}(
-  x,
-  crs = NULL,
-  col = NULL,
-  add = FALSE,
-  zlim = NULL,
-  ...,
-  coords = NULL
-)
 }
 \arguments{
 \item{x}{object to convert to mesh and plot}
@@ -128,12 +117,7 @@ grid geometry from the grid data itself. A small fudge is applied to extend the 
 by 1 cell to avoid losing any data due to the half cell outer margin (get in touch if this causes problems!).
 }
 \examples{
-##mesh_plot(worldll)
-## crop otherwise out of bounds from PROJ
+mesh_plot(worldll)
 rr <- raster::crop(worldll, raster::extent(-179, 179, -89, 89))
 mesh_plot(rr, crs = "+proj=laea +datum=WGS84")
-mesh_plot(worldll, crs = "+proj=moll +datum=WGS84")
-prj <- "+proj=lcc +datum=WGS84 +lon_0=147 +lat_0=-40 +lat_1=-55 +lat_2=-20"
-mesh_plot(etopo, crs = prj, add = FALSE, col = grey(seq(0, 1, length = 20)))
-mesh_plot(rr, crs = prj, add = TRUE)
 }
