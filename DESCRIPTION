@@ -24,7 +24,7 @@ Imports:
     png,
     sp,
     geometry,
-    reproj (>= 0.4.1.9002),
+    reproj (>= 0.4.0),
     scales
 Suggests: 
     datasets,
@@ -35,7 +35,6 @@ Suggests:
     testthat (>= 2.1.0),
     ncdf4,
     covr,
-    vdiffr,
     proj4
 URL: https://github.com/hypertidy/quadmesh
 BugReports: https://github.com/hypertidy/quadmesh/issues

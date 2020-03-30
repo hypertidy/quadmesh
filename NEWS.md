@@ -1,5 +1,7 @@
 # quadmesh 0.4.0.9004
 
+* quadmesh now works with upcoming release of reproj (> 0.4.0). 
+
 * Fixed failing CRAN test by internalizing use of hcl.colors(). 
 
 * `mesh_plot()` now has a method for mesh3d. Intention is
