@@ -6,9 +6,8 @@ Thanks!
 
 ## Test environments
 
-* ubuntu 18.04, R 3.5.3
+* ubuntu 18.04, R 3.6.3
 * win-builder (devel and release)
-* osx (rhub)
 
 ## R CMD check results
 

@@ -1,4 +1,6 @@
-# quadmesh 0.4.0.9004
+# quadmesh 0.4.5
+
+* Remove failing test comparing unimportant differences in geocentric transformation. 
 
 * quadmesh now works with upcoming release of reproj (> 0.4.0). 
 

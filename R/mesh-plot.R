@@ -37,7 +37,7 @@ scl <- function(x) {
 #' rr <- raster::crop(worldll, raster::extent(-179, 179, -89, 89))
 #' mesh_plot(rr, crs = "+proj=laea +datum=WGS84")
 mesh_plot <- function(x, crs = NULL, col = NULL, add = FALSE, zlim = NULL, ..., coords = NULL) {
-  warning("quadmesh::mesh_plot() is to be deprecated\n a future release will use the 'anglr' package, not yet on CRAN")
+  message("quadmesh::mesh_plot() is to be deprecated\n a future release will use the 'anglr' package, soon to be on CRAN")
   UseMethod("mesh_plot")
 }
 #' @name mesh_plot
