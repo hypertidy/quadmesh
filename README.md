@@ -208,7 +208,7 @@ er <- crop(etopo, extent(110, 160, -50, -20))
 #>  but +towgs84= values preserved
 system.time(mesh_plot(er, crs = prj))
 #>    user  system elapsed 
-#>   0.644   0.020   0.664
+#>   0.641   0.020   0.662
 
 ## This is faster to plot and uses much less data that converting explicitly to polygons. 
 
@@ -228,7 +228,7 @@ system.time(plot(p, border = NA))
 ![](man/figures/README-unnamed-chunk-8-2.png)<!-- -->
 
     #>    user  system elapsed 
-    #>   0.417   0.012   0.429
+    #>   0.407   0.020   0.427
     pryr::object_size(er)
     #> Registered S3 method overwritten by 'pryr':
     #>   method      from
@@ -299,15 +299,15 @@ grids to a polygon layer with 5 explicit coordinates for every cell.
 rr <- disaggregate(r, fact = 20)
 system.time(spex::polygonize(rr))
 #>    user  system elapsed 
-#>   0.099   0.000   0.100
+#>   0.094   0.000   0.095
 system.time(raster::rasterToPolygons(rr))
 #>    user  system elapsed 
-#>   0.693   0.000   0.693
+#>   0.659   0.000   0.660
 
 ## stars has now improved on spex by calling out to GDAL to do the work
 system.time(sf::st_as_sf(stars::st_as_stars(rr), merge = FALSE, as_points = FALSE))
 #>    user  system elapsed 
-#>   0.084   0.000   0.084
+#>   0.076   0.004   0.081
 ```
 
 ### Barycentric interpolation from a triangle mesh
@@ -330,5 +330,5 @@ package](https://github.com/AustralianAntarcticDivision/angstroms) for
 dealing with ROMS model output.
 
 Please note that this project is released with a [Contributor Code of
-Conduct](CODE_OF_CONDUCT.md). By participating in this project you agree
-to abide by its terms.
+Conduct](https://github.com/hypertidy/quadmesh/blob/master/CODE_OF_CONDUCT.md).
+By participating in this project you agree to abide by its terms.
