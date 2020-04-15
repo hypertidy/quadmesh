@@ -1,5 +1,7 @@
 # quadmesh 0.4.5
 
+* Moved large examples/ folder from inst/ to data-raw/ to avoid it being installed. 
+
 * Remove failing test comparing unimportant differences in geocentric transformation. 
 
 * quadmesh now works with upcoming release of reproj (> 0.4.0). 

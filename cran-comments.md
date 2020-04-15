@@ -2,6 +2,8 @@
 
 * Fixed CRAN problem with hcl.colors() only available in later R. 
 
+* Removed large doc folder as reported on CRAN checks. 
+
 Thanks!
 
 ## Test environments
