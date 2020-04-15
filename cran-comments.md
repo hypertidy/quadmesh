@@ -1,4 +1,4 @@
-## quadmesh 
+## quadmesh 0.4.5
 
 * Fixed CRAN problem with hcl.colors() only available in later R. 
 
@@ -15,7 +15,8 @@ Thanks!
 
 0 errors | 0 warnings | 0 notes
 
-* There are warnings on solaris and osx but not things I can fix as far as I can tell: 
+* There are warnings on solaris and osx requiring update to pandoc-citeproc (afaict). 
+
 https://cran.r-project.org/web/checks/check_results_quadmesh.html. 
 
 

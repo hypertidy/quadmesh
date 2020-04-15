@@ -1,22 +1,31 @@
 # Platform
 
-|field    |value                                  |
-|:--------|:--------------------------------------|
-|version  |R version 3.5.3 RC (2019-03-03 r76192) |
-|os       |Windows 10 x64                         |
-|system   |x86_64, mingw32                        |
-|ui       |RStudio                                |
-|language |(EN)                                   |
-|collate  |English_Australia.1252                 |
-|ctype    |English_Australia.1252                 |
-|tz       |Australia/Hobart                       |
-|date     |2019-04-06                             |
+|field    |value                        |
+|:--------|:----------------------------|
+|version  |R version 3.6.3 (2020-02-29) |
+|os       |Ubuntu 18.04.4 LTS           |
+|system   |x86_64, linux-gnu            |
+|ui       |X11                          |
+|language |(EN)                         |
+|collate  |en_AU.UTF-8                  |
+|ctype    |en_AU.UTF-8                  |
+|tz       |Australia/Hobart             |
+|date     |2020-04-15                   |
 
 # Dependencies
 
-|package  |old   |new   |<U+0394>  |
+|package  |old   |new   |Δ  |
 |:--------|:-----|:-----|:--|
-|quadmesh |0.3.0 |0.4.0 |*  |
+|quadmesh |0.4.0 |0.4.5 |*  |
+|isoband  |NA    |0.2.1 |*  |
+|reproj   |NA    |0.4.2 |*  |
 
 # Revdeps
+
+## Failed to check (2)
+
+|package    |version |error |warning |note |
+|:----------|:-------|:-----|:-------|:----|
+|lazyraster |?       |      |        |     |
+|spex       |?       |      |        |     |
 
