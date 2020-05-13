@@ -1,14 +1,11 @@
-## quadmesh 0.4.5
+## quadmesh 0.5.0
 
-* Fixed CRAN problem with hcl.colors() only available in later R. 
-
-* Removed large doc folder as reported on CRAN checks. 
 
 Thanks!
 
 ## Test environments
 
-* ubuntu 18.04, R 3.6.3
+* Windows 4.0.0
 * win-builder (devel and release)
 
 ## R CMD check results
@@ -22,4 +19,4 @@ https://cran.r-project.org/web/checks/check_results_quadmesh.html.
 
 ## Reverse dependencies
 
-The reverse dependency 'spex' passes check against this version. 
+The reverse dependency 'lazyraster' and 'spex' pass check against this version. 

@@ -1,3 +1,6 @@
+# quadmesh 0.5.0
+
+
 # quadmesh 0.4.5
 
 * Moved large examples/ folder from inst/ to data-raw/ to avoid it being installed. 
