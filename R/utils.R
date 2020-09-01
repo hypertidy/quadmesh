@@ -19,3 +19,16 @@ llh2xyz <- function(lonlatheight, rad = 6378137.0, exag = 1) {
 
   cbind(x, y, z)
 }
+
+.ok_ll <- function(x, ...) {
+  UseMethod(".ok_ll")
+}
+.ok_ll.matrix <- function (x, ...)
+{
+  .ok_ll(c(range(x[, 1L], na.rm = TRUE), range(x[, 2L],
+                                                   na.rm = TRUE)))
+}
+.ok_ll.numeric <- function (x, ...)
+{
+  x[1] >= -360 && x[2] <= 360 && x[3] >= -90 && x[4] <= 91
+}

@@ -4,9 +4,16 @@
 \name{worldll}
 \alias{worldll}
 \title{World raster map}
+\format{
+An object of class \code{RasterLayer} of dimension 180 x 360 x 1.
+}
+\usage{
+worldll
+}
 \description{
 A rasterized version of \code{wrld_simpl}, created by burning the country
 polygon ID number into a one-degree world raster. (This is a very
 out of date polygon data set used for example only).See code in
 'data-raw/worldll.R'.
 }
+\keyword{datasets}

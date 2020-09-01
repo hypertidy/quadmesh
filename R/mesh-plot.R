@@ -43,7 +43,7 @@ scl <- function(x) {
 #' mesh_plot(rr, crs = prj, add = TRUE)
 mesh_plot <- function(x, crs = NULL, col = NULL, add = FALSE, zlim = NULL, ..., coords = NULL) {
   if ("colfun" %in% names(list(...))) {
-    warning("argument colfun is deprecated, please use 'col' as per base plot")
+    stop("argument colfun is defunct, please use 'col' as per base plot")
   }
   UseMethod("mesh_plot")
 }
@@ -51,13 +51,15 @@ mesh_plot <- function(x, crs = NULL, col = NULL, add = FALSE, zlim = NULL, ..., 
 #' @export
 mesh_plot.BasicRaster <- function(x, crs = NULL, col = NULL, add = FALSE, zlim = NULL, ..., coords = NULL) {
   if (raster::nlayers(x) > 1L) warning("extracting single RasterLayer from multilayered input")
-  mesh_plot(x[[1]], crs = crs, col = col, add = add, zlim = zlim, ..., coords = coords)
+  mesh_plot(x[[1L]], crs = crs, col = col, add = add, zlim = zlim, ..., coords = coords)
 }
 #debug <- TRUE
 #' @name mesh_plot
 #' @export
 mesh_plot.RasterLayer <- function(x, crs = NULL, col = NULL, add = FALSE, zlim = NULL, ..., coords = NULL) {
 
+  crs_wasnull <- FALSE
+  if (is.null(crs)) crs_wasnull <- TRUE
   if (add && is.null(crs)) crs <- use_crs()
   if (!is.null(crs)) use_crs(crs) else use_crs(raster::projection(x))
 
@@ -74,8 +76,12 @@ mesh_plot.RasterLayer <- function(x, crs = NULL, col = NULL, add = FALSE, zlim =
     coords_fudge <- raster::setExtent(coords, raster::extent(coords) + raster::res(coords) )
     cells <- raster::cellFromXY(coords_fudge, xy)
     xy <- raster::extract(coords_fudge, cells)
+    if (!crs_wasnull && !.ok_ll(xy)) warning("'coords' do not look like longlat, so 'crs' arg won't work\n please see Details in '?quadmesh'")
+
   }
-  xy <- reproj::reproj(xy, target = use_crs(), source = qm$crs)
+  if (!is.na(use_crs()) && !is.na(qm$crs)) {
+   xy <- reproj::reproj(xy, target = use_crs(), source = qm$crs)
+  }
   ## as this affects the entire thing
   bad <- !is.finite(xy[,1]) | !is.finite(xy[,2])
   ## but we must identify the bad xy in the index
@@ -98,6 +104,7 @@ mesh_plot.RasterLayer <- function(x, crs = NULL, col = NULL, add = FALSE, zlim =
     id <- id[!bad2]
     cols <- cols[!is.na(cols)]
   }
+
   xx <- list(x = xx, y = yy, id = id, col = cols)
 ## if (isLL) 1/cos(mean(xx$y, na.rm = TRUE) * pi/180) else 1
   if (!add) {

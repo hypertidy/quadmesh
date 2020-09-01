@@ -4,9 +4,16 @@
 \name{xymap}
 \alias{xymap}
 \title{World map}
+\format{
+An object of class \code{matrix} with 82403 rows and 2 columns.
+}
+\usage{
+xymap
+}
 \description{
 The world coastline coordinates. A simple matrix of lon, lat, separated by NA.
 }
 \details{
 From the maps package, see 'data-raw/xymap.R'.
 }
+\keyword{datasets}

@@ -25,12 +25,12 @@ Imports:
     sp,
     geometry,
     reproj (>= 0.4.0),
-    scales
+    scales,
+    palr
 Suggests: 
     datasets,
     knitr,
     rmarkdown,
-    palr,
     rgl,
     testthat,
     ncdf4,

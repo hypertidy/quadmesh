@@ -78,7 +78,9 @@ mesh_plot(
   add = FALSE,
   zlim = NULL,
   ...,
-  coords = NULL
+  coords = NULL,
+  prefer_quad = TRUE,
+  breaks = NULL
 )
 
 \method{mesh_plot}{default}(
@@ -111,6 +113,8 @@ nothing, used for the side-effect of creating or adding to a plot
 }
 \description{
 Convert to a quadmesh and plot in efficient vectorized form using 'grid'.
+
+Plot mesh
 }
 \details{
 The mesh may be reprojected prior to plotting using the 'crs' argument to
@@ -126,6 +130,10 @@ modelled on the approach to curvilinear grid data used in the \code{angstroms} p
 the function \code{angstroms::romsmap()} and `angstroms::romscoords()`` are used to separate the complicated
 grid geometry from the grid data itself. A small fudge is applied to extend the coordinates
 by 1 cell to avoid losing any data due to the half cell outer margin (get in touch if this causes problems!).
+
+If 'color' is present on the object it is used. This can be overridden by
+using the 'col' argument, and controlled with 'zlim' and 'breaks' in the usual
+\code{\link[graphics:image]{graphics::image()}} way.
 }
 \examples{
 ##mesh_plot(worldll)

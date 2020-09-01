@@ -4,8 +4,15 @@
 \name{etopo}
 \alias{etopo}
 \title{World topography map}
+\format{
+An object of class \code{RasterLayer} of dimension 135 x 540 x 1.
+}
+\usage{
+etopo
+}
 \description{
 A simplified version of 'Etopo2'. The Etopo2 data set was
 reduced 20X to create this raster layer of global relief. See code
 in 'data-raw/topo.R'.
 }
+\keyword{datasets}
