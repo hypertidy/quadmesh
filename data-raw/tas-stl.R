@@ -68,3 +68,9 @@ rgl.clear();shade3d(h, col = "white"); aspect3d(1, 1, 1);rglwidget()
 rgl::writeSTL("examples/stl/hyperbolic_paraboloid.stl")
 rgl.clear();shade3d(m, col = "white"); aspect3d(1, 1, 1);rglwidget()
 rgl::writeSTL("examples/stl/monkey_saddle.stl")
+
+rgl.clear();shade3d(Rvcg::, col = "white"); aspect3d(1, 1, 1);rglwidget()
+
+rgl::writeSTL("examples/stl/humface.stl")
+
+uluru <- raster::raster("../rvs")

@@ -5,7 +5,7 @@
 \alias{xymap}
 \title{World map}
 \format{
-An object of class \code{matrix} with 82403 rows and 2 columns.
+An object of class \code{matrix} (inherits from \code{array}) with 82403 rows and 2 columns.
 }
 \usage{
 xymap

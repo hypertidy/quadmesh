@@ -74,16 +74,4 @@ mesh_plot.mesh3d <-
 
   }
 
-#' @name mesh_plot
-#' @export
-mesh_plot.default  <- function (x,
-                                crs = NULL, col = NULL,
-                                add = FALSE, zlim = NULL,
-                                ..., coords = NULL) {
- mesh_plot(as.mesh3d(x, ...),
-           crs = crs,
-           col = col,
-           add = add,
-           zlim = zlim,
-           coords = coords)
-}
+

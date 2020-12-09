@@ -49,7 +49,7 @@ quadmesh(x, z = x, na.rm = FALSE, ..., texture = NULL, texture_filename = NULL)
 mesh3d
 }
 \description{
-Convert an object to a \code{mesh3d} (\code{\link[rgl:qmesh3d]{rgl::qmesh3d()}}) quadrangle mesh,
+Convert an object to a \code{mesh3d} (\code{\link[rgl:mesh3d]{rgl::qmesh3d()}}) quadrangle mesh,
 with methods for \code{\link[raster:raster]{raster::raster()}} and \code{matrix}.
 }
 \details{

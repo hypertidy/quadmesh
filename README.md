@@ -3,6 +3,10 @@
 
 # quadmesh <img src="man/figures/logo.png" align="right" />
 
+<!-- badges: start -->
+
+[![R build
+status](https://github.com/hypertidy/quadmesh/workflows/R-CMD-check/badge.svg)](https://github.com/hypertidy/quadmesh/actions)
 [![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)[![Travis-CI
 Build
 Status](https://travis-ci.org/hypertidy/quadmesh.svg?branch=master)](https://travis-ci.org/hypertidy/quadmesh)
@@ -14,6 +18,13 @@ status](https://ci.appveyor.com/api/projects/status/github/hypertidy/quadmesh?br
 status](https://codecov.io/gh/hypertidy/quadmesh/branch/master/graph/badge.svg)](https://codecov.io/github/hypertidy/quadmesh?branch=master)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/quadmesh)](https://cran.r-project.org/package=quadmesh)[![CRAN\_Download\_Badge](http://cranlogs.r-pkg.org/badges/quadmesh)](https://cran.r-project.org/package=quadmesh)
+[![R build
+status](https://github.com/hypertidy/quadmesh/workflows/pkgdown;/badge.svg)](https://github.com/hypertidy/quadmesh/actions)
+[![R build
+status](https://github.com/hypertidy/quadmesh/workflows/pkgdown/badge.svg)](https://github.com/hypertidy/quadmesh/actions)
+[![R build
+status](https://github.com/hypertidy/quadmesh/workflows/test-coverage/badge.svg)](https://github.com/hypertidy/quadmesh/actions)
+<!-- badges: end -->
 
 A *quadmesh* is a dense mesh describing a topologically continuous
 surface of 4-corner primitives. This is also known as a *cell-based
@@ -77,6 +88,9 @@ the `extent` reflects a finite and constant width and height.
 
 ``` r
 library(quadmesh)
+#> Registered S3 method overwritten by 'quadmesh':
+#>   method          from  
+#>   reproj.quadmesh reproj
 library(raster)
 #> Loading required package: sp
 r <- raster(matrix(1:12, 3), xmn = 0, xmx = 4, ymn = 0, ymx = 3)
@@ -105,12 +119,12 @@ corner coordinates. This format is built upon the `mesh3d` class of the
 ``` r
 ## coordinates, transpose here
 qm$vb[1:2, ]
-#>   [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10] [,11] [,12] [,13]
-#> x    0    1    2    3    4    0    1    2    3     4     0     1     2
-#> y    3    3    3    3    3    2    2    2    2     2     1     1     1
-#>   [,14] [,15] [,16] [,17] [,18] [,19] [,20]
-#> x     3     4     0     1     2     3     4
-#> y     1     1     0     0     0     0     0
+#>   [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10] [,11] [,12] [,13] [,14]
+#> x    0    1    2    3    4    0    1    2    3     4     0     1     2     3
+#> y    3    3    3    3    3    2    2    2    2     2     1     1     1     1
+#>   [,15] [,16] [,17] [,18] [,19] [,20]
+#> x     4     0     1     2     3     4
+#> y     1     0     0     0     0     0
 
 ## indexes, also transpose
 qm$ib
@@ -187,14 +201,19 @@ library(raster)
 ## VicGrid
 prj <- "+proj=lcc +lat_1=-36 +lat_2=-38 +lat_0=-37 +lon_0=145 +x_0=2500000 +y_0=2500000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"
 er <- crop(etopo, extent(110, 160, -50, -20))
+#> Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO"): Discarded datum WGS_1984 in CRS definition,
+#>  but +towgs84= values preserved
+
+#> Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO"): Discarded datum WGS_1984 in CRS definition,
+#>  but +towgs84= values preserved
 system.time(mesh_plot(er, crs = prj))
 #>    user  system elapsed 
-#>   0.451   0.012   0.464
+#>   0.641   0.020   0.662
 
 ## This is faster to plot and uses much less data that converting explicitly to polygons. 
 
 library(sf)
-#> Linking to GEOS 3.7.0, GDAL 2.4.0, PROJ 5.2.0
+#> Linking to GEOS 3.8.0, GDAL 3.0.4, PROJ 7.0.0
 p <- st_transform(spex::polygonize(er), prj)
 plot(st_geometry(p), add = TRUE)
 ```
@@ -209,9 +228,12 @@ system.time(plot(p, border = NA))
 ![](man/figures/README-unnamed-chunk-8-2.png)<!-- -->
 
     #>    user  system elapsed 
-    #>   0.375   0.032   0.408
+    #>   0.407   0.020   0.427
     pryr::object_size(er)
-    #> 37.7 kB
+    #> Registered S3 method overwritten by 'pryr':
+    #>   method      from
+    #>   print.bytes Rcpp
+    #> 39.6 kB
     pryr::object_size(p)
     #> 1.68 MB
     pryr::object_size(quadmesh(er))
@@ -232,6 +254,23 @@ mesh_plot(etopo, crs = pol)
 
 ``` r
 plot(projectRaster(etopo, crs = pol), col = viridis::viridis(64))
+#> Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO"): Discarded datum WGS_1984 in CRS definition,
+#>  but +towgs84= values preserved
+#> Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO"): Discarded datum Unknown based on WGS84 ellipsoid in CRS definition,
+#>  but +towgs84= values preserved
+#> Warning in rgdal::rawTransform(projfrom, projto, nrow(xy), xy[, 1], xy[, : NOT
+#> UPDATED FOR PROJ >= 6
+#> Warning in rgdal::rawTransform(projection(obj), crs, nrow(xy), xy[, 1], : NOT
+#> UPDATED FOR PROJ >= 6
+#> Warning in rgdal::rawTransform(projto_int, projfrom, nrow(xy), xy[, 1], : NOT
+#> UPDATED FOR PROJ >= 6
+#> Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO"): Discarded datum WGS_1984 in CRS definition,
+#>  but +towgs84= values preserved
+#> Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO"): Discarded datum Unknown based on WGS84 ellipsoid in CRS definition,
+#>  but +towgs84= values preserved
+
+#> Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO"): Discarded datum Unknown based on WGS84 ellipsoid in CRS definition,
+#>  but +towgs84= values preserved
 ```
 
 ![](man/figures/README-unnamed-chunk-9-2.png)<!-- -->
@@ -260,15 +299,15 @@ grids to a polygon layer with 5 explicit coordinates for every cell.
 rr <- disaggregate(r, fact = 20)
 system.time(spex::polygonize(rr))
 #>    user  system elapsed 
-#>   0.098   0.000   0.097
+#>   0.094   0.000   0.095
 system.time(raster::rasterToPolygons(rr))
 #>    user  system elapsed 
-#>   1.178   0.001   1.178
+#>   0.659   0.000   0.660
 
 ## stars has now improved on spex by calling out to GDAL to do the work
 system.time(sf::st_as_sf(stars::st_as_stars(rr), merge = FALSE, as_points = FALSE))
 #>    user  system elapsed 
-#>   0.103   0.000   0.103
+#>   0.076   0.004   0.081
 ```
 
 ### Barycentric interpolation from a triangle mesh
@@ -291,5 +330,5 @@ package](https://github.com/AustralianAntarcticDivision/angstroms) for
 dealing with ROMS model output.
 
 Please note that this project is released with a [Contributor Code of
-Conduct](CODE_OF_CONDUCT.md). By participating in this project you agree
-to abide by its terms.
+Conduct](https://github.com/hypertidy/quadmesh/blob/master/CODE_OF_CONDUCT.md).
+By participating in this project you agree to abide by its terms.

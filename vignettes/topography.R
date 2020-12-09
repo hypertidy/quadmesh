@@ -39,9 +39,9 @@ rglwidget()
 
 ## -----------------------------------------------------------------------------
 library(raster)
-plot(etopo, col = palr::bathyDeepPal(20))
+plot(etopo, col = palr::bathy_deep_pal(20))
 prj <- "+proj=stere +lat_ts=-71 +lat_0=-90 +lon_0=147 +datum=WGS84"
-mesh_plot(etopo, crs = prj, asp = 1, colfun = palr::bathyDeepPal)
+mesh_plot(etopo, crs = prj, asp = 1, col = palr::bathy_deep_pal(20))
 xy <- proj4::project(xymap, prj)
 lines(xy)
 

@@ -8,7 +8,6 @@
 \alias{mesh_plot.TRI}
 \alias{mesh_plot.quadmesh}
 \alias{mesh_plot.mesh3d}
-\alias{mesh_plot.default}
 \title{Plot as a mesh}
 \usage{
 mesh_plot(
@@ -81,16 +80,6 @@ mesh_plot(
   coords = NULL,
   prefer_quad = TRUE,
   breaks = NULL
-)
-
-\method{mesh_plot}{default}(
-  x,
-  crs = NULL,
-  col = NULL,
-  add = FALSE,
-  zlim = NULL,
-  ...,
-  coords = NULL
 )
 }
 \arguments{

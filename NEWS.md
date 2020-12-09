@@ -1,4 +1,17 @@
-# quadmesh 0.4.0.9004
+# quadmesh 0.4.5
+
+* Moved large examples/ folder from inst/ to data-raw/ to avoid it being installed. 
+
+* Remove failing test comparing unimportant differences in geocentric transformation. 
+
+* quadmesh now works with upcoming release of reproj (> 0.4.0). 
+
+* Fixed failing CRAN test by internalizing use of hcl.colors(). 
+
+* `mesh_plot()` now has a method for mesh3d. Intention is
+ to use mesh3d as the common basis for mesh_plot(). 
+* WIP new `use_crs()` facility to set the projection in use when setting up a `mesh_plot`. Subsequent calls to `mesh_plot(, add = TRUE)` will automatically project to the coordinate system
+ in use. `use_crs()` will set or get the PROJ string. 
 
 * `mesh_plot()` now has a method for mesh3d. Intention is
  to use mesh3d as the common basis for mesh_plot(). Now using palr package for colour handling. 
