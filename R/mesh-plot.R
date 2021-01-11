@@ -64,7 +64,10 @@ mesh_plot.RasterLayer <- function(x, crs = NULL, col = NULL, add = FALSE, zlim =
   if (!is.null(crs)) use_crs(crs) else use_crs(raster::projection(x))
 
   qm <- quadmesh::quadmesh(x, na.rm = FALSE)
-
+  if (!is.null(coords) && is.na(qm$crs)) {
+    ## we need this otherwise no reprojection is done in the case where coords and crs are both given
+    qm$crs <- "+proj=longlat +datum=WGS84"  ## assume
+  }
   if (is.null(col)) col <- hcl.colors(12, "YlOrRd",
                                       rev = TRUE)
   ib <- qm$ib
@@ -79,7 +82,9 @@ mesh_plot.RasterLayer <- function(x, crs = NULL, col = NULL, add = FALSE, zlim =
     if (!crs_wasnull && !.ok_ll(xy)) warning("'coords' do not look like longlat, so 'crs' arg won't work\n please see Details in '?quadmesh'")
 
   }
+
   if (!is.na(use_crs()) && !is.na(qm$crs)) {
+
    xy <- reproj::reproj(xy, target = use_crs(), source = qm$crs)
   }
   ## as this affects the entire thing

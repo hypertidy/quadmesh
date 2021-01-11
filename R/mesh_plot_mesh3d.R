@@ -6,6 +6,9 @@
 #' using the 'col' argument, and controlled with 'zlim' and 'breaks' in the usual
 #' [graphics::image()] way.
 #' @name mesh_plot
+#' @param prefer_quad set to `TRUE` by default, if but may be `FALSE` to assume use of triangle rather than quad primitives -
+#' this covers the case for when a mesh3d object may have quads *and* triangles in the same mesh
+#' @param breaks argument passed along to [palr::image_pal()]
 #' @export
 mesh_plot.mesh3d <-
   function (x,

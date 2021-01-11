@@ -29,7 +29,7 @@ prs <- function(x) {
 
 #' Create a quad-type mesh for use in rgl.
 #'
-#' Convert an object to a `mesh3d` ([rgl::qmesh3d()]) quadrangle mesh,
+#' Convert an object to a `mesh3d` quadrangle mesh,
 #' with methods for [raster::raster()] and `matrix`.
 #'
 #' `quadmesh()` generates the cell-based interpretation of a raster (AREA) but applies a continuous

@@ -12,6 +12,6 @@
 ^cran-comments\.md$
 ^CODE_OF_CONDUCT\.md$
 ^data/mapbox_sat.rda$
-^man/figures/quadglobe.png$
+^data-raw/quadglobe.png$
 ^data-raw/world.topo.bathy.200412.3x5400x2700.png$
 ^\.github$

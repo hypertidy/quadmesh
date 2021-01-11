@@ -4,14 +4,11 @@
 #' a raw rendition of the cube is returned as six quad primitives in a `mesh3d` object.
 #'
 #' It's not clear if this is useful.
-#' @references \url{https://github.com/OSGeo/proj.4/wiki/Qsc}
 #' @return mesh3d
 #' @export
 #'
 #' @examples
-#' library(rgl); #rgl.clear()
-#' wire3d(qsc())
-#' if ( rgl::rgl.useNULL()) rglwidget()
+#' str(qsc())
 qsc <- function() {
  radius <- 6378137
  xy <- rbind(c(-radius, -radius, radius, radius),

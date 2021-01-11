@@ -27,11 +27,16 @@ r <- setExtent(raster(volcano), extent(0, 100, 0, 200))
 
 qm <- quadmesh(r)
 
+```
+
+If you have the rgl package installed you can run the following code to produce an interactive plot. 
+
+```R
 library(rgl)
 scl <- function(x) (x - min(x))/diff(range(x))
 shade3d(qm, col = grey(scl(qm$vb[3,qm$ib])))
 
-rglwidget()
+#rglwidget()
 ```
 
 A "quadmesh" is a dense mesh describing a topologically continuous surface of 4-corner primitives. I.e. a grid, without the "regular". This is useful particularly when combined with map projections and texture mapping. 
@@ -44,10 +49,16 @@ The topology of the grid is still sound, but we are no longer bound to the regul
 qm1 <- quadmesh(r)
 
 qm1$vb[1,] <- qm$vb[1,] * qm$vb[2,]/54
+```
+
+If you have the rgl package installed you can run the following code to produce an interactive plot. 
+
+```R
+
 open3d()
 shade3d(qm1, col = grey(scl(qm1$vb[3,qm1$ib])))
 
-rglwidget()
+#rglwidget()
 ```
 
 # Why quadmesh? 
@@ -130,8 +141,9 @@ qm$ib
 
 It works directly with rgl function, and can be used in more raw form. 
 
+If you have the rgl package installed you can run the following code to produce an interactive plot. 
 
-```{r}
+```R
 rgl.clear()
 library(rgl)
 shade3d(qm)
@@ -140,7 +152,7 @@ rglwidget()
 rgl.clear()
 quads3d(t(qm$vb)[qm$ib,], col = rep(c("grey", "black"), each = 4))
 aspect3d(1, 1, 1)
-rglwidget()
+#rglwidget()
 
 ```
 
@@ -153,22 +165,26 @@ The primary means to create this format from a raster is for 3D plotting, but be
 
 Alternatively the centre-of-cell interpretation of a raster is available. 
 
-```{r triangles}
+If you have the rgl package installed you can run the following code to produce an interactive plot. 
+
+```R
 rgl.clear()
 wire3d(qm)
 tm <- triangmesh(r)
 shade3d(tm, col = rep(c("firebrick", "dodgerblue", "grey"), each = 3))
-rglwidget()
+#rglwidget()
 ```
 # Discrete forms
 
 There is a discrete form for both quad and triangles meshes. See how each quad has a constant z-value. 
 
-```{r discrete-quad}
+If you have the rgl package installed you can run the following code to produce an interactive plot. 
+
+```R
 dqm <- dquadmesh(r)
 rgl.clear()
 shade3d(dqm)
-rglwidget()
+#rglwidget()
 ```
 
 
@@ -178,9 +194,15 @@ When the centre-point interpretation of *triangles* are discrete we actually nee
 ```{r discrete-triangle}
 dtm <- dtriangmesh(r)
 dtm$vb[3, ] <- jitter(dtm$vb[3, ], 8)
+
+```
+
+If you have the rgl package installed you can run the following code to produce an interactive plot. 
+
+```R
 rgl.clear()
 shade3d(dtm, col = rep(c("firebrick", "dodgerblue", "grey"), each = 3))
-rglwidget()
+#rglwidget()
 ```
 
 

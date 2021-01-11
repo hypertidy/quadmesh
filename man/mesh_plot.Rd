@@ -96,6 +96,11 @@ mesh_plot(
 \item{...}{passed through to \code{base::plot}}
 
 \item{coords}{optional input raster of coordinates of each cell, see details}
+
+\item{prefer_quad}{set to \code{TRUE} by default, if but may be \code{FALSE} to assume use of triangle rather than quad primitives -
+this covers the case for when a mesh3d object may have quads \emph{and} triangles in the same mesh}
+
+\item{breaks}{argument passed along to \code{\link[palr:image_pal]{palr::image_pal()}}}
 }
 \value{
 nothing, used for the side-effect of creating or adding to a plot

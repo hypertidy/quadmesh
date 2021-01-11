@@ -34,7 +34,6 @@
 #' polygon ID number into a one-degree world raster. (This is a very
 #' out of date polygon data set used for example only).See code in
 #' 'data-raw/worldll.R'.
-#' @importFrom reproj reproj
 #' @docType data
 #' @name worldll
 #' @importFrom reproj reproj

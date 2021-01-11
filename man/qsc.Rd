@@ -17,10 +17,5 @@ a raw rendition of the cube is returned as six quad primitives in a \code{mesh3d
 It's not clear if this is useful.
 }
 \examples{
-library(rgl); #rgl.clear()
-wire3d(qsc())
-if ( rgl::rgl.useNULL()) rglwidget()
-}
-\references{
-\url{https://github.com/OSGeo/proj.4/wiki/Qsc}
+str(qsc())
 }
