@@ -1,6 +1,6 @@
 #' Create a triangle-type mesh for use in rgl.
 #'
-#' Convert an object to a `mesh3d` ([rgl::tmesh3d()]) triangle mesh,
+#' Convert an object to a `mesh3d` (of rgl package) triangle mesh,
 #' with methods for [raster::raster()] and `matrix`.
 #'
 #' `triangmesh()` generates the point-based interpretation of a raster (POINT) with the obvious continuous

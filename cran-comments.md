@@ -1,7 +1,7 @@
-## quadmesh 0.5.0
+## quadmesh 0.5.5
 
 
-* Removed unused suggested package/s to align with CRAN policy as per requirements, emailed on 2020-12-09. 
+* Fixed CRAN issues about html tag attributes, viridis unused import, and removed rgl doc links. 
 
 Thanks!
 
@@ -17,4 +17,4 @@ Thanks!
 
 ## Reverse dependencies
 
-The reverse dependencies 'lazyraster' and 'spex' pass check against this version. 
+The reverse dependencies 'lazyraster' and 'spex' and 'graticule' pass check against this version. 

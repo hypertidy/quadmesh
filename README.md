@@ -1,30 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# quadmesh <img src="man/figures/logo.png" align="right" />
-
-<!-- badges: start -->
-
-[![R build
-status](https://github.com/hypertidy/quadmesh/workflows/R-CMD-check/badge.svg)](https://github.com/hypertidy/quadmesh/actions)
-[![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)[![Travis-CI
-Build
-Status](https://travis-ci.org/hypertidy/quadmesh.svg?branch=master)](https://travis-ci.org/hypertidy/quadmesh)
-[![Build
-Status](http://badges.herokuapp.com/travis/hypertidy/quadmesh?branch=master&env=BUILD_NAME=osx_release&label=osx)](https://travis-ci.org/hypertidy/quadmesh)
-[![AppVeyor build
-status](https://ci.appveyor.com/api/projects/status/github/hypertidy/quadmesh?branch=master&svg=true)](https://ci.appveyor.com/project/mdsumner/quadmesh-x25a2)
-[![Coverage
-status](https://codecov.io/gh/hypertidy/quadmesh/branch/master/graph/badge.svg)](https://codecov.io/github/hypertidy/quadmesh?branch=master)
-[![CRAN
-status](https://www.r-pkg.org/badges/version/quadmesh)](https://cran.r-project.org/package=quadmesh)[![CRAN\_Download\_Badge](http://cranlogs.r-pkg.org/badges/quadmesh)](https://cran.r-project.org/package=quadmesh)
-[![R build
-status](https://github.com/hypertidy/quadmesh/workflows/pkgdown;/badge.svg)](https://github.com/hypertidy/quadmesh/actions)
-[![R build
-status](https://github.com/hypertidy/quadmesh/workflows/pkgdown/badge.svg)](https://github.com/hypertidy/quadmesh/actions)
-[![R build
-status](https://github.com/hypertidy/quadmesh/workflows/test-coverage/badge.svg)](https://github.com/hypertidy/quadmesh/actions)
-<!-- badges: end -->
+# quadmesh <img src="man/figures/logo.png" style='text-align: right;' />
 
 A *quadmesh* is a dense mesh describing a topologically continuous
 surface of 4-corner primitives. This is also known as a *cell-based
@@ -36,39 +13,35 @@ centres) which allows for some extra facilities over raster grids.
 This package provides helpers for working with this mesh interpretation
 of gridded data to enable
 
-  - arbitrary reprojection of raster cells without information loss
+-   arbitrary reprojection of raster cells without information loss
     (`mesh_plot`).
-  - the corner-based *continuous* interpretation of a grid
+-   the corner-based *continuous* interpretation of a grid
     (`quadmesh()`).
-  - the centre-based *continuous* interpretation of a grid
+-   the centre-based *continuous* interpretation of a grid
     (`triangmesh()`).
-  - the corner-based *discrete* interpretation of a grid
+-   the corner-based *discrete* interpretation of a grid
     (`dquadmesh()`).
-  - the centre-based *discrete* interpretation of a grid
+-   the centre-based *discrete* interpretation of a grid
     (`dtriangmesh()`).
-  - easy plotting of grids in 3D visualization tools (quad or triangle
-    primitives for `rgl::shade3d`).
-  - fast polygonization of individual cells, in
+-   easy plotting of grids in 3D visualization tools (quad or triangle
+    primitives for rgl `shade3d()`).
+-   fast polygonization of individual cells, in
     [spex::polygonize](https://CRAN.R-project.org/package=spex).
-  - barycentric interpolation from a triangle mesh (`bary_index()`).
-  - conversion from quad to triangle primitives from the area
+-   barycentric interpolation from a triangle mesh (`bary_index()`).
+-   conversion from quad to triangle primitives from the area
     interpretation (`triangulate_quads()`).
 
 ## Installation
 
 You can install:
 
-  - the latest released version from CRAN with
-
-<!-- end list -->
+-   the latest released version from CRAN with
 
 ``` r
 install.packages("quadmesh")
 ```
 
-  - the latest development version from Github with
-
-<!-- end list -->
+-   the latest development version from Github with
 
 ``` r
 ## install.packages("remotes")
@@ -88,9 +61,6 @@ the `extent` reflects a finite and constant width and height.
 
 ``` r
 library(quadmesh)
-#> Registered S3 method overwritten by 'quadmesh':
-#>   method          from  
-#>   reproj.quadmesh reproj
 library(raster)
 #> Loading required package: sp
 r <- raster(matrix(1:12, 3), xmn = 0, xmx = 4, ymn = 0, ymx = 3)
@@ -201,20 +171,16 @@ library(raster)
 ## VicGrid
 prj <- "+proj=lcc +lat_1=-36 +lat_2=-38 +lat_0=-37 +lon_0=145 +x_0=2500000 +y_0=2500000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"
 er <- crop(etopo, extent(110, 160, -50, -20))
-#> Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO"): Discarded datum WGS_1984 in CRS definition,
-#>  but +towgs84= values preserved
-
-#> Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO"): Discarded datum WGS_1984 in CRS definition,
-#>  but +towgs84= values preserved
 system.time(mesh_plot(er, crs = prj))
 #>    user  system elapsed 
-#>   0.641   0.020   0.662
+#>   0.163   0.007   0.171
 
 ## This is faster to plot and uses much less data that converting explicitly to polygons. 
 
 library(sf)
-#> Linking to GEOS 3.8.0, GDAL 3.0.4, PROJ 7.0.0
+#> Linking to GEOS 3.10.2, GDAL 3.4.3, PROJ 8.2.0; sf_use_s2() is TRUE
 p <- st_transform(spex::polygonize(er), prj)
+#> old-style crs object detected; please recreate object with a recent sf::st_crs()
 plot(st_geometry(p), add = TRUE)
 ```
 
@@ -228,16 +194,13 @@ system.time(plot(p, border = NA))
 ![](man/figures/README-unnamed-chunk-8-2.png)<!-- -->
 
     #>    user  system elapsed 
-    #>   0.407   0.020   0.427
+    #>   0.613   0.021   0.634
     pryr::object_size(er)
-    #> Registered S3 method overwritten by 'pryr':
-    #>   method      from
-    #>   print.bytes Rcpp
-    #> 39.6 kB
+    #> 37.72 kB
     pryr::object_size(p)
     #> 1.68 MB
     pryr::object_size(quadmesh(er))
-    #> 169 kB
+    #> 169.19 kB
 
 The data size and timing benefits are more substantial for larger data
 sets.
@@ -254,23 +217,14 @@ mesh_plot(etopo, crs = pol)
 
 ``` r
 plot(projectRaster(etopo, crs = pol), col = viridis::viridis(64))
-#> Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO"): Discarded datum WGS_1984 in CRS definition,
-#>  but +towgs84= values preserved
-#> Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO"): Discarded datum Unknown based on WGS84 ellipsoid in CRS definition,
-#>  but +towgs84= values preserved
-#> Warning in rgdal::rawTransform(projfrom, projto, nrow(xy), xy[, 1], xy[, : NOT
-#> UPDATED FOR PROJ >= 6
-#> Warning in rgdal::rawTransform(projection(obj), crs, nrow(xy), xy[, 1], : NOT
-#> UPDATED FOR PROJ >= 6
-#> Warning in rgdal::rawTransform(projto_int, projfrom, nrow(xy), xy[, 1], : NOT
-#> UPDATED FOR PROJ >= 6
-#> Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO"): Discarded datum WGS_1984 in CRS definition,
-#>  but +towgs84= values preserved
-#> Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO"): Discarded datum Unknown based on WGS84 ellipsoid in CRS definition,
-#>  but +towgs84= values preserved
-
-#> Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO"): Discarded datum Unknown based on WGS84 ellipsoid in CRS definition,
-#>  but +towgs84= values preserved
+#> Warning in wkt(projfrom): CRS object has no comment
+#> Warning in wkt(pfrom): CRS object has no comment
+#> Warning in rgdal::rawTransform(projfrom, projto, nrow(xy), xy[, 1], xy[, : Using
+#> PROJ not WKT2 strings
+#> Warning in rgdal::rawTransform(fromcrs, crs, nrow(xy), xy[, 1], xy[, 2]): Using
+#> PROJ not WKT2 strings
+#> Warning in rgdal::rawTransform(projto_int, projfrom, nrow(xy), xy[, 1], : Using
+#> PROJ not WKT2 strings
 ```
 
 ![](man/figures/README-unnamed-chunk-9-2.png)<!-- -->
@@ -299,15 +253,15 @@ grids to a polygon layer with 5 explicit coordinates for every cell.
 rr <- disaggregate(r, fact = 20)
 system.time(spex::polygonize(rr))
 #>    user  system elapsed 
-#>   0.094   0.000   0.095
+#>   0.119   0.000   0.119
 system.time(raster::rasterToPolygons(rr))
 #>    user  system elapsed 
-#>   0.659   0.000   0.660
+#>    1.05    0.00    1.05
 
 ## stars has now improved on spex by calling out to GDAL to do the work
 system.time(sf::st_as_sf(stars::st_as_stars(rr), merge = FALSE, as_points = FALSE))
 #>    user  system elapsed 
-#>   0.076   0.004   0.081
+#>   0.157   0.000   0.157
 ```
 
 ### Barycentric interpolation from a triangle mesh
