@@ -3,6 +3,38 @@ scl <- function(x) {
   (x - rg[1])/diff(rg)
 }
 
+
+mesh_plot_inner <- function(xx, isLL = FALSE, add = FALSE) {
+    ##xx <- list(x = xx, y = yy, id = id, col = cols)
+
+  cols <- xx$cols
+  if (any(is.na(cols))) {
+    colsna <- rep(cols, each = 4L)
+    bad2 <- is.na(colsna)
+    xx <- xx[!bad2]
+    yy <- yy[!bad2]
+    id <- id[!bad2]
+    cols <- cols[!is.na(cols)]
+  }
+  if (!add) {
+    graphics::plot.new()
+    graphics::plot.window(xlim = range(xx$x, finite = TRUE), ylim = range(xx$y, finite = TRUE),
+                          asp = if (isLL) 1/cos(mean(xx$y, na.rm = TRUE) * pi/180) else 1  )
+  }
+  vps <- gridBase::baseViewports()
+
+  grid::pushViewport(vps$inner, vps$figure, vps$plot)
+
+
+  grid::grid.polygon(xx$x, xx$y, xx$id, gp = grid::gpar(col = NA, fill = xx$col),
+                     default.units = "native")
+
+
+  grid::popViewport(3)
+  #if (debug) return(xx)
+
+  invisible(NULL)
+}
 #' Plot as a mesh
 #'
 #' Convert to a quadmesh and plot in efficient vectorized form using 'grid'.
@@ -95,14 +127,21 @@ mesh_plot.RasterLayer <- function(x, crs = NULL, col = NULL, add = FALSE, zlim =
   ib <- qm$ib
   ## take the coordinates as given
   xy <- t(qm$vb[1:2, ])
-  if (!is.null(coords)) {
+if (!is.null(coords)) {
+      if (inherits(coords, "data.frame") || inherits(coords, "matrix")) {
+       # browser()
+      coords <- raster::setValues(raster::brick(x[[1]], x[[1]]), as.matrix(coords))
+    }
+
     ## apply coordinates as provided explicitly
     ## fudge for test  (must be + res because could be any raster)
-    coords_fudge <- raster::setExtent(coords, raster::extent(coords) + raster::res(coords) )
-    cells <- raster::cellFromXY(coords_fudge, xy)
-    xy <- raster::extract(coords_fudge, cells)
-    if (!crs_wasnull && !.ok_ll(xy)) warning("'coords' do not look like longlat, so 'crs' arg won't work\n please see Details in '?quadmesh'")
-
+    tst <- try(raster::rasterFromXYZ(coords), silent = TRUE)
+    if (!inherits(tst, "try-error")) coords <- raster::setValues(tst, 0)
+    if (inherits(coords, "BasicRaster")) {
+        coords_fudge <- raster::setExtent(coords, raster::extent(coords) + raster::res(coords) )
+        cells <- raster::cellFromXY(coords_fudge, xy)
+        xy <- raster::extract(coords_fudge, cells)
+    }
   }
 
   if (!is.na(use_crs()) && !is.na(qm$crs)) {
@@ -126,35 +165,9 @@ mesh_plot.RasterLayer <- function(x, crs = NULL, col = NULL, add = FALSE, zlim =
   ## because they propagate to destroy the id
   lc <- length(col)
   cols <- if (is.null(zlim)) col[scales::rescale(values(x), c(1, lc))] else col[scales::rescale(values(x), c(1, lc), zlim)]
-  if (any(is.na(cols))) {
-    colsna <- rep(cols, each = nrow(ib))
-    bad2 <- is.na(colsna)
-    xx <- xx[!bad2]
-    yy <- yy[!bad2]
-    id <- id[!bad2]
-    cols <- cols[!is.na(cols)]
-  }
 
   xx <- list(x = xx, y = yy, id = id, col = cols)
-## if (isLL) 1/cos(mean(xx$y, na.rm = TRUE) * pi/180) else 1
-  if (!add) {
-    graphics::plot.new()
-    graphics::plot.window(xlim = range(xx$x, finite = TRUE), ylim = range(xx$y, finite = TRUE),
-                          ...)
-  }
-  vps <- gridBase::baseViewports()
-
-  grid::pushViewport(vps$inner, vps$figure, vps$plot)
-
-
-  grid::grid.polygon(xx$x, xx$y, xx$id, gp = grid::gpar(col = NA, fill = xx$col),
-                     default.units = "native")
-
-
-  grid::popViewport(3)
-  #if (debug) return(xx)
-
-  invisible(NULL)
+   mesh_plot_inner(xx, isLL = FALSE, add = add)  ## ignore the cos hack
 }
 
 #' @name mesh_plot
@@ -245,31 +258,11 @@ mesh_plot.TRI <- function(x, crs = NULL, col = NULL, add = FALSE, zlim = NULL, .
   ## because they propagate to destroy the id
   #browser()
   cols <- colorRampPalette(col)(nrow(x$object))[factor(x$triangle$object_)]
-  if (any(is.na(cols))) {
-    colsna <- rep(cols, each = nrow(idx))
-    bad2 <- is.na(colsna)
-    xx <- xx[!bad2]
-    yy <- yy[!bad2]
-    id <- id[!bad2]
-    cols <- cols[!is.na(cols)]
-  }
 
   xx <- list(x = xx, y = yy, id = id, col = cols)
 
-isLL <- FALSE
-  if (!add) {
-    graphics::plot.new()
-    graphics::plot.window(xlim = range(xx$x, finite = TRUE), ylim = range(xx$y, finite = TRUE),
-                          asp = if (isLL) 1/cos(mean(xx$y, na.rm = TRUE) * pi/180) else 1  )
-  }
-  vps <- gridBase::baseViewports()
+    mesh_plot_inner(xx, isLL= FALSE, add = add) ## this cos hack was disabled hardcode for TRI
 
-  grid::pushViewport(vps$inner, vps$figure, vps$plot)
- grid::grid.polygon(xx$x, xx$y, xx$id, gp = grid::gpar(col = NA, fill = xx$col),
-                     default.units = "native")
-  grid::popViewport(3)
-#  if (debug) return(xx)
-  invisible(NULL)
 }
 
 
@@ -291,11 +284,17 @@ mesh_plot.quadmesh <- function(x, crs = NULL, col = NULL, add = FALSE, zlim = NU
   ## take the coordinates as given
   xy <- t(qm$vb[1:2, ])
   if (!is.null(coords)) {
+    if (!inherits(coords, "BasicRaster")) {
+      message("cannot get coords from a non-raster for quadmesh")
+    } else {
     ## apply coordinates as provided explicitly
     ## fudge for test  (must be + res because could be any raster)
-    coords_fudge <- raster::setExtent(coords, raster::extent(coords) + raster::res(coords) )
-    cells <- raster::cellFromXY(coords_fudge, xy)
-    xy <- raster::extract(coords_fudge, cells)
+    if (inherits(coords, "BasicRaster")) {
+        coords_fudge <- raster::setExtent(coords, raster::extent(coords) + raster::res(coords) )
+        cells <- raster::cellFromXY(coords_fudge, xy)
+        xy <- raster::extract(coords_fudge, cells)
+    }
+    }
   }
   isLL <- raster::isLonLat(x) || !is.null(coords)  ## we just assume it's longlat if coords given
   if (!is.null(crs) ) {
@@ -332,32 +331,7 @@ mesh_plot.quadmesh <- function(x, crs = NULL, col = NULL, add = FALSE, zlim = NU
   lc <- length(col)
   cols <- if (is.null(zlim)) col[scales::rescale(valx, c(1, lc))] else col[scales::rescale(valx, c(1, lc), zlim)]
 
-  if (any(is.na(cols))) {
-    colsna <- rep(cols, each = nrow(ib))
-    bad2 <- is.na(colsna)
-    xx <- xx[!bad2]
-    yy <- yy[!bad2]
-    id <- id[!bad2]
-    cols <- cols[!is.na(cols)]
-  }
+
   xx <- list(x = xx, y = yy, id = id, col = cols)
-
-  if (!add) {
-    graphics::plot.new()
-    graphics::plot.window(xlim = range(xx$x, finite = TRUE), ylim = range(xx$y, finite = TRUE),
-                          asp = if (isLL) 1/cos(mean(xx$y, na.rm = TRUE) * pi/180) else 1  )
-  }
-  vps <- gridBase::baseViewports()
-
-  grid::pushViewport(vps$inner, vps$figure, vps$plot)
-
-
-  grid::grid.polygon(xx$x, xx$y, xx$id, gp = grid::gpar(col = NA, fill = xx$col),
-                     default.units = "native")
-
-
-  grid::popViewport(3)
-  #if (debug) return(xx)
-
-  invisible(NULL)
+  mesh_plot_inner(xx, isLL, add = add)
 }

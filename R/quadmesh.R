@@ -89,7 +89,7 @@ quadmesh.SpatRaster <- function(x, z = x, na.rm = FALSE, ..., texture = NULL, te
     }
     maxcell <- NULL
  }
-  quadmesh(raster::raster(x, z = z, na.rm = na.rm, ..., texture = raster::brick(texture), texture_filename = texture_filename, maxcell = maxcell))
+  quadmesh(raster::raster(x), z = if (!is.null(z)) raster::raster(z) else z, na.rm = na.rm, ..., texture = if (!is.null(texture)) raster::brick(texture) else texture, texture_filename = texture_filename, maxcell = maxcell)
 }
 #' @name quadmesh
 #' @export
