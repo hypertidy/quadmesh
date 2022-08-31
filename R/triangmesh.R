@@ -71,7 +71,8 @@ triangmesh.BasicRaster <- function (x, z = x, na.rm = FALSE, ..., texture = NULL
 
 
   if (is.null(z)) z <- 0 else z <- raster::values(x)
-  ob <- structure(list(it = ind1, vb = t(cbind(coords, z, 1)),  material = list(), meshColor = "faces"), class = c("mesh3d", "shape3d"))
+  ob <- structure(list( vb = t(cbind(coords, z, 1)),  material = list(), texcoords = NULL, meshColor = "faces", it = ind1),
+                  class = c("mesh3d", "shape3d"))
 
 
 

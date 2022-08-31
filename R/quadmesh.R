@@ -2,7 +2,7 @@
 .mkq3d <- function() {
   structure(list(vb = NULL,
                  material = list(), normals = NULL, texcoords = NULL,
-                 meshColor = "faces", ib = NULL, ), .Names = c("vb",
+                 meshColor = "faces", ib = NULL), .Names = c("vb",
                                                                      "material", "normals", "texcoords", "meshColor", "ib"), class = c("mesh3d",
                                                                                                                                                         "shape3d"))
 
