@@ -67,7 +67,7 @@ dtriangmesh(
 \item{texture_filename}{optional input file path for PNG texture}
 }
 \value{
-mesh3d (primitivetype triangle)
+mesh3d (primitive type triangle)
 }
 \description{
 Convert an object to a \code{mesh3d} triangle mesh,

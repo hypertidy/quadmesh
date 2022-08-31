@@ -4,6 +4,7 @@
 \alias{quadmesh}
 \alias{dquadmesh}
 \alias{dquadmesh.default}
+\alias{quadmesh.SpatRaster}
 \alias{quadmesh.BasicRaster}
 \alias{quadmesh.matrix}
 \title{Create a quad-type mesh for use in rgl.}
@@ -26,11 +27,45 @@ dquadmesh(
   texture_filename = NULL
 )
 
-quadmesh(x, z = x, na.rm = FALSE, ..., texture = NULL, texture_filename = NULL)
+quadmesh(
+  x,
+  z = x,
+  na.rm = FALSE,
+  ...,
+  texture = NULL,
+  texture_filename = NULL,
+  maxcell = 50000
+)
 
-\method{quadmesh}{BasicRaster}(x, z = x, na.rm = FALSE, ..., texture = NULL, texture_filename = NULL)
+\method{quadmesh}{SpatRaster}(
+  x,
+  z = x,
+  na.rm = FALSE,
+  ...,
+  texture = NULL,
+  texture_filename = NULL,
+  maxcell = 50000
+)
 
-\method{quadmesh}{matrix}(x, z = x, na.rm = FALSE, ..., texture = NULL, texture_filename = NULL)
+\method{quadmesh}{BasicRaster}(
+  x,
+  z = x,
+  na.rm = FALSE,
+  ...,
+  texture = NULL,
+  texture_filename = NULL,
+  maxcell = 50000
+)
+
+\method{quadmesh}{matrix}(
+  x,
+  z = x,
+  na.rm = FALSE,
+  ...,
+  texture = NULL,
+  texture_filename = NULL,
+  maxcell = 50000
+)
 }
 \arguments{
 \item{x}{raster object for mesh structure}
@@ -44,6 +79,8 @@ quadmesh(x, z = x, na.rm = FALSE, ..., texture = NULL, texture_filename = NULL)
 \item{texture}{optional input RGB raster, 3-layers}
 
 \item{texture_filename}{optional input file path for PNG texture}
+
+\item{maxcell}{default number of raster or terra cells to plot, with a default lowish-number - set to \code{NULL} to use native resolution}
 }
 \value{
 mesh3d

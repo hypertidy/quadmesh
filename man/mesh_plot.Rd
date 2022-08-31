@@ -3,6 +3,7 @@
 \name{mesh_plot}
 \alias{mesh_plot}
 \alias{mesh_plot.BasicRaster}
+\alias{mesh_plot.SpatRaster}
 \alias{mesh_plot.RasterLayer}
 \alias{mesh_plot.stars}
 \alias{mesh_plot.TRI}
@@ -13,11 +14,12 @@
 mesh_plot(
   x,
   crs = NULL,
-  col = NULL,
+  colfun = NULL,
   add = FALSE,
   zlim = NULL,
   ...,
-  coords = NULL
+  coords = NULL,
+  maxcell = 50000
 )
 
 \method{mesh_plot}{BasicRaster}(
@@ -27,7 +29,19 @@ mesh_plot(
   add = FALSE,
   zlim = NULL,
   ...,
-  coords = NULL
+  coords = NULL,
+  maxcell = 50000
+)
+
+\method{mesh_plot}{SpatRaster}(
+  x,
+  crs = NULL,
+  col = NULL,
+  add = FALSE,
+  zlim = NULL,
+  ...,
+  coords = NULL,
+  maxcell = 50000
 )
 
 \method{mesh_plot}{RasterLayer}(
@@ -37,7 +51,8 @@ mesh_plot(
   add = FALSE,
   zlim = NULL,
   ...,
-  coords = NULL
+  coords = NULL,
+  maxcell = 50000
 )
 
 \method{mesh_plot}{stars}(
@@ -47,7 +62,8 @@ mesh_plot(
   add = FALSE,
   zlim = NULL,
   ...,
-  coords = NULL
+  coords = NULL,
+  maxcell = 50000
 )
 
 \method{mesh_plot}{TRI}(
@@ -57,7 +73,8 @@ mesh_plot(
   add = FALSE,
   zlim = NULL,
   ...,
-  coords = NULL
+  coords = NULL,
+  maxcell = 50000
 )
 
 \method{mesh_plot}{quadmesh}(
@@ -67,7 +84,8 @@ mesh_plot(
   add = FALSE,
   zlim = NULL,
   ...,
-  coords = NULL
+  coords = NULL,
+  maxcell = 50000
 )
 
 \method{mesh_plot}{mesh3d}(
@@ -87,8 +105,6 @@ mesh_plot(
 
 \item{crs}{target map projection}
 
-\item{col}{colours to use, defaults to that used by \code{\link[graphics:image]{graphics::image()}}}
-
 \item{add}{add to existing plot or start a new one}
 
 \item{zlim}{absolute range of data to use for colour scaling (if \code{NULL} the data range is used)}
@@ -96,6 +112,10 @@ mesh_plot(
 \item{...}{passed through to \code{base::plot}}
 
 \item{coords}{optional input raster of coordinates of each cell, see details}
+
+\item{maxcell}{default number of raster or terra cells to plot, with a default lowish-number - set to \code{NULL} to use native resolution}
+
+\item{col}{colours to use, defaults to that used by \code{\link[graphics:image]{graphics::image()}}}
 
 \item{prefer_quad}{set to \code{TRUE} by default, if but may be \code{FALSE} to assume use of triangle rather than quad primitives -
 this covers the case for when a mesh3d object may have quads \emph{and} triangles in the same mesh}
@@ -121,7 +141,7 @@ If \code{coords} is supplied, it is currently assumed to be a 2-layer \code{Rast
 longitude and latitude as the \emph{cell values}. These are used to geographically locate
 the resulting mesh, and will be transformed to the \code{crs} if that is supplied. This is
 modelled on the approach to curvilinear grid data used in the \code{angstroms} package. There
-the function \code{angstroms::romsmap()} and `angstroms::romscoords()`` are used to separate the complicated
+functions are used to separate the complicated
 grid geometry from the grid data itself. A small fudge is applied to extend the coordinates
 by 1 cell to avoid losing any data due to the half cell outer margin (get in touch if this causes problems!).
 
@@ -135,7 +155,10 @@ using the 'col' argument, and controlled with 'zlim' and 'breaks' in the usual
 rr <- raster::crop(worldll, raster::extent(-179, 179, -89, 89))
 mesh_plot(rr, crs = "+proj=laea +datum=WGS84")
 mesh_plot(worldll, crs = "+proj=moll +datum=WGS84")
-prj <- "+proj=lcc +datum=WGS84 +lon_0=147 +lat_0=-40 +lat_1=-55 +lat_2=-20"
-mesh_plot(etopo, crs = prj, add = FALSE, col = grey(seq(0, 1, length = 20)))
-mesh_plot(rr, crs = prj, add = TRUE)
+prj <- "+proj=lcc +datum=WGS84 +lon_0=0 +lat_0=-40 +lat_1=-55 +lat_2=-20"
+safe_etopo <- raster::crop(etopo, raster::extent(-80, 120, -70, 90))
+gcol <- grey(seq(0, 1, length = 20))
+mesh_plot(safe_etopo, crs = prj, add = FALSE, col = gcol, colfun = NULL)
+safe_worldll <- raster::crop(worldll, safe_etopo)
+mesh_plot(safe_worldll, crs = prj, add = TRUE)
 }

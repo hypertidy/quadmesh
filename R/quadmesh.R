@@ -1,8 +1,9 @@
 
 .mkq3d <- function() {
-  structure(list(vb = NULL, ib = NULL, primitivetype = "quad",
-                 material = list(), normals = NULL, texcoords = NULL), .Names = c("vb",
-                                                                                  "ib", "primitivetype", "material", "normals", "texcoords"), class = c("mesh3d",
+  structure(list(vb = NULL,
+                 material = list(), normals = NULL, texcoords = NULL,
+                 meshColor = "faces", ib = NULL, ), .Names = c("vb",
+                                                                     "material", "normals", "texcoords", "meshColor", "ib"), class = c("mesh3d",
                                                                                                                                                         "shape3d"))
 
   }
@@ -62,6 +63,7 @@ prs <- function(x) {
 #' @param ... ignored
 #' @param texture optional input RGB raster, 3-layers
 #' @param texture_filename optional input file path for PNG texture
+#' @param maxcell default number of raster or terra cells to plot, with a default lowish-number - set to `NULL` to use native resolution
 #' @return mesh3d
 #' @export
 #' @aliases dquadmesh
@@ -73,14 +75,35 @@ prs <- function(x) {
 #' data(volcano)
 #' r <- setExtent(raster(volcano), extent(0, 100, 0, 200))
 #' qm <- quadmesh(r)
-quadmesh <- function(x, z = x, na.rm = FALSE, ..., texture = NULL, texture_filename = NULL) {
+quadmesh <- function(x, z = x, na.rm = FALSE, ..., texture = NULL, texture_filename = NULL, maxcell = 50000) {
   UseMethod("quadmesh")
 }
 
 #' @name quadmesh
 #' @export
-quadmesh.BasicRaster <- function(x, z = x, na.rm = FALSE, ..., texture = NULL, texture_filename = NULL) {
+quadmesh.SpatRaster <- function(x, z = x, na.rm = FALSE, ..., texture = NULL, texture_filename = NULL, maxcell = 50000) {
+ if (!is.null(maxcell)) {
+    sub <- ceiling(min(dim(x)[2:1]/sqrt(maxcell)))
+    if (sub > 1) {
+      x <- terra::aggregate(x, fact = sub)
+    }
+    maxcell <- NULL
+ }
+  quadmesh(raster::raster(x, z = z, na.rm = na.rm, ..., texture = raster::brick(texture), texture_filename = texture_filename, maxcell = maxcell))
+}
+#' @name quadmesh
+#' @export
+quadmesh.BasicRaster <- function(x, z = x, na.rm = FALSE, ..., texture = NULL, texture_filename = NULL, maxcell = 50000) {
   x <- x[[1]]  ## just the oneth raster for now
+
+   if (!is.null(maxcell)) {
+    sub <- ceiling(min(dim(x)[2:1]/sqrt(maxcell)))
+    if (sub > 1) {
+      x <- raster::raster(terra::aggregate(x, fact = sub))
+    }
+    maxcell <- NULL
+   }
+
   exy <- edgesXY(x)
  # ind <- apply(prs(seq(ncol(x) + 1)), 1, p4, nc = ncol(x) + 1)
   nc1 <- ncol(x) + 1
@@ -165,7 +188,7 @@ quadmesh.BasicRaster <- function(x, z = x, na.rm = FALSE, ..., texture = NULL, t
 
 #' @name quadmesh
 #' @export
-quadmesh.matrix <- function(x, z = x, na.rm = FALSE, ..., texture = NULL, texture_filename = NULL) {
+quadmesh.matrix <- function(x, z = x, na.rm = FALSE, ..., texture = NULL, texture_filename = NULL, maxcell = 50000) {
   x <- raster::setExtent(raster::raster(x), raster::extent(0, ncol(x), 0, nrow(x)))
   if (is.matrix(z)) {
     #warning("z is a matrix ...")

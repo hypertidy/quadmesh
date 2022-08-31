@@ -17,7 +17,7 @@ scl <- function(x) {
 #' longitude and latitude as the *cell values*. These are used to geographically locate
 #' the resulting mesh, and will be transformed to the `crs` if that is supplied. This is
 #' modelled on the approach to curvilinear grid data used in the `angstroms` package. There
-#' the function `angstroms::romsmap()` and `angstroms::romscoords()`` are used to separate the complicated
+#' functions are used to separate the complicated
 #' grid geometry from the grid data itself. A small fudge is applied to extend the coordinates
 #' by 1 cell to avoid losing any data due to the half cell outer margin (get in touch if this causes problems!).
 #'
@@ -28,6 +28,7 @@ scl <- function(x) {
 #' @param zlim absolute range of data to use for colour scaling (if `NULL` the data range is used)
 #' @param ... passed through to `base::plot`
 #' @param coords optional input raster of coordinates of each cell, see details
+#' @param maxcell default number of raster or terra cells to plot, with a default lowish-number - set to `NULL` to use native resolution
 #' @return nothing, used for the side-effect of creating or adding to a plot
 #' @export
 #' @importFrom scales rescale
@@ -38,26 +39,47 @@ scl <- function(x) {
 #' rr <- raster::crop(worldll, raster::extent(-179, 179, -89, 89))
 #' mesh_plot(rr, crs = "+proj=laea +datum=WGS84")
 #' mesh_plot(worldll, crs = "+proj=moll +datum=WGS84")
-#' prj <- "+proj=lcc +datum=WGS84 +lon_0=147 +lat_0=-40 +lat_1=-55 +lat_2=-20"
-#' mesh_plot(etopo, crs = prj, add = FALSE, col = grey(seq(0, 1, length = 20)))
-#' mesh_plot(rr, crs = prj, add = TRUE)
-mesh_plot <- function(x, crs = NULL, col = NULL, add = FALSE, zlim = NULL, ..., coords = NULL) {
-  if ("colfun" %in% names(list(...))) {
-    stop("argument colfun is defunct, please use 'col' as per base plot")
-  }
+#' prj <- "+proj=lcc +datum=WGS84 +lon_0=0 +lat_0=-40 +lat_1=-55 +lat_2=-20"
+#' safe_etopo <- raster::crop(etopo, raster::extent(-80, 120, -70, 90))
+#' gcol <- grey(seq(0, 1, length = 20))
+#' mesh_plot(safe_etopo, crs = prj, add = FALSE, col = gcol, colfun = NULL)
+#' safe_worldll <- raster::crop(worldll, safe_etopo)
+#' mesh_plot(safe_worldll, crs = prj, add = TRUE)
+mesh_plot <- function(x, crs = NULL, colfun = NULL, add = FALSE, zlim = NULL, ..., coords = NULL, maxcell = 50000) {
   UseMethod("mesh_plot")
 }
 #' @name mesh_plot
 #' @export
-mesh_plot.BasicRaster <- function(x, crs = NULL, col = NULL, add = FALSE, zlim = NULL, ..., coords = NULL) {
+mesh_plot.BasicRaster <- function(x, crs = NULL, col = NULL, add = FALSE, zlim = NULL, ..., coords = NULL, maxcell = 50000) {
   if (raster::nlayers(x) > 1L) warning("extracting single RasterLayer from multilayered input")
   mesh_plot(x[[1L]], crs = crs, col = col, add = add, zlim = zlim, ..., coords = coords)
 }
-#debug <- TRUE
+
+#' @importFrom terra rast aggregate
 #' @name mesh_plot
 #' @export
-mesh_plot.RasterLayer <- function(x, crs = NULL, col = NULL, add = FALSE, zlim = NULL, ..., coords = NULL) {
+mesh_plot.SpatRaster <- function(x, crs = NULL, col = NULL, add = FALSE, zlim = NULL, ..., coords = NULL, maxcell = 50000) {
 
+  if (!is.null(maxcell)) {
+    sub <- ceiling(min(dim(x)[2:1]/sqrt(maxcell)))
+    if (sub > 1) {
+      x <- terra::aggregate(x, fact = sub)
+      maxcell <- NULL
+    }
+  }
+  mesh_plot(raster::raster(x), crs = crs, col = col, add = add, zlim = zlim, coords = coords, maxcell = maxcell, ...)
+}
+#' @name mesh_plot
+#' @export
+mesh_plot.RasterLayer <- function(x, crs = NULL, col = NULL, add = FALSE, zlim = NULL, ..., coords = NULL, maxcell = 50000) {
+
+  if (!is.null(maxcell)) {
+    sub <- ceiling(min(dim(x)[2:1]/sqrt(maxcell)))
+    if (sub > 1) {
+       rs1 <- terra::rast(x)
+      x <- raster::raster(terra::aggregate(rs1, fact = sub))
+    }
+  }
   crs_wasnull <- FALSE
   if (is.null(crs)) crs_wasnull <- TRUE
   if (add && is.null(crs)) crs <- use_crs()
@@ -86,7 +108,10 @@ mesh_plot.RasterLayer <- function(x, crs = NULL, col = NULL, add = FALSE, zlim =
   if (!is.na(use_crs()) && !is.na(qm$crs)) {
 
    xy <- reproj::reproj(xy, target = use_crs(), source = qm$crs)
+  } else {
+    xy <- target_coordinates(xy, src.proj = qm$crs, target = crs, xyz = FALSE)
   }
+  ## we have to remove any infinite vertices
   ## as this affects the entire thing
   bad <- !is.finite(xy[,1]) | !is.finite(xy[,2])
   ## but we must identify the bad xy in the index
@@ -134,7 +159,7 @@ mesh_plot.RasterLayer <- function(x, crs = NULL, col = NULL, add = FALSE, zlim =
 
 #' @name mesh_plot
 #' @export
-mesh_plot.stars <- function(x,  crs = NULL, col = NULL, add = FALSE, zlim = NULL, ..., coords = NULL) {
+mesh_plot.stars <- function(x,  crs = NULL, col = NULL, add = FALSE, zlim = NULL, ..., coords = NULL, maxcell = 50000) {
 
   if (add && is.null(crs)) crs <- use_crs()
   if (!is.null(crs)) use_crs(crs) else use_crs(raster::projection(x))
@@ -187,7 +212,7 @@ mesh_plot.stars <- function(x,  crs = NULL, col = NULL, add = FALSE, zlim = NULL
 
 #' @name mesh_plot
 #' @export
-mesh_plot.TRI <- function(x, crs = NULL, col = NULL, add = FALSE, zlim = NULL, ..., coords = NULL) {
+mesh_plot.TRI <- function(x, crs = NULL, col = NULL, add = FALSE, zlim = NULL, ..., coords = NULL, maxcell = 50000) {
 
   if (add && is.null(crs)) crs <- use_crs()
   if (!is.null(crs)) use_crs(crs) else use_crs(raster::projection(x))
@@ -252,7 +277,7 @@ isLL <- FALSE
 #debug <- TRUE
 #' @name mesh_plot
 #' @export
-mesh_plot.quadmesh <- function(x, crs = NULL, col = NULL, add = FALSE, zlim = NULL, ..., coords = NULL) {
+mesh_plot.quadmesh <- function(x, crs = NULL, col = NULL, add = FALSE, zlim = NULL, ..., coords = NULL, maxcell = 50000) {
 
   srcproj <- x$crs
   if (add && is.null(crs)) crs <- use_crs()

@@ -1,3 +1,15 @@
+# quadmesh dev
+
+* Now importing terra, and supporting 'SpatRaster' objects. 
+
+* 'mesh_plot' gains a 'maxcell' argument to provide a default reduced resolution, can be set to 'NULL' to use native resolution. 
+
+* Removed link to rgl package that we do not use. 
+
+* Fixed import of viridis package which caused CRAN problems. 
+
+
+
 # quadmesh 0.5.0
 
 * cleaned up dependencies for CRAN policies
@@ -31,6 +43,10 @@
 * Simplified use of `reproj()` by relying on upcoming new version. 
 
 * Function `mesh_plot()` now handles stars objects, only plotting the first x-y slice. 
+
+# quadmesh 0.4.1
+
+* Patch release to improve example plot that would sometimes crash. 
 
 # quadmesh 0.4.0
 
