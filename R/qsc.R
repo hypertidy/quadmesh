@@ -24,6 +24,6 @@ vb <-     rbind(cbind(rbind(xy, -radius), rbind(xy, radius)),
               c(5, 6, 7, 8))
   structure(list(vb = vb, ib = ib,
 
-                 material = list(), meshColor = "faces"), class = c("mesh3d", "shape3d"))
+                 material = list(), meshColor = "vertices"), class = c("mesh3d", "shape3d"))
 }
 

@@ -14,7 +14,7 @@
 mesh_plot(
   x,
   crs = NULL,
-  colfun = NULL,
+  col = NULL,
   add = FALSE,
   zlim = NULL,
   ...,
@@ -105,6 +105,8 @@ mesh_plot(
 
 \item{crs}{target map projection}
 
+\item{col}{colours to use, defaults to that used by \code{\link[graphics:image]{graphics::image()}}}
+
 \item{add}{add to existing plot or start a new one}
 
 \item{zlim}{absolute range of data to use for colour scaling (if \code{NULL} the data range is used)}
@@ -114,8 +116,6 @@ mesh_plot(
 \item{coords}{optional input raster of coordinates of each cell, see details}
 
 \item{maxcell}{default number of raster or terra cells to plot, with a default lowish-number - set to \code{NULL} to use native resolution}
-
-\item{col}{colours to use, defaults to that used by \code{\link[graphics:image]{graphics::image()}}}
 
 \item{prefer_quad}{set to \code{TRUE} by default, if but may be \code{FALSE} to assume use of triangle rather than quad primitives -
 this covers the case for when a mesh3d object may have quads \emph{and} triangles in the same mesh}
@@ -158,7 +158,7 @@ mesh_plot(worldll, crs = "+proj=moll +datum=WGS84")
 prj <- "+proj=lcc +datum=WGS84 +lon_0=0 +lat_0=-40 +lat_1=-55 +lat_2=-20"
 safe_etopo <- raster::crop(etopo, raster::extent(-80, 120, -70, 90))
 gcol <- grey(seq(0, 1, length = 20))
-mesh_plot(safe_etopo, crs = prj, add = FALSE, col = gcol, colfun = NULL)
+mesh_plot(safe_etopo, crs = prj, add = FALSE, col = gcol)
 safe_worldll <- raster::crop(worldll, safe_etopo)
 mesh_plot(safe_worldll, crs = prj, add = TRUE)
 }

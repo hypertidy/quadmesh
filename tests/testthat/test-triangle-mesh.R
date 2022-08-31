@@ -5,5 +5,5 @@ test_that("triangle mesh works", {
   triangmesh(etopo) %>%
     expect_s3_class("mesh3d") %>%
     expect_s3_class("triangmesh") %>%
-    expect_named(c("it", "vb",  "material", "raster_metadata", "crs"))
+    expect_named(c("vb",   "material", "texcoords", "meshColor", "it", "raster_metadata", "crs"))
 })

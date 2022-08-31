@@ -42,10 +42,10 @@ scl <- function(x) {
 #' prj <- "+proj=lcc +datum=WGS84 +lon_0=0 +lat_0=-40 +lat_1=-55 +lat_2=-20"
 #' safe_etopo <- raster::crop(etopo, raster::extent(-80, 120, -70, 90))
 #' gcol <- grey(seq(0, 1, length = 20))
-#' mesh_plot(safe_etopo, crs = prj, add = FALSE, col = gcol, colfun = NULL)
+#' mesh_plot(safe_etopo, crs = prj, add = FALSE, col = gcol)
 #' safe_worldll <- raster::crop(worldll, safe_etopo)
 #' mesh_plot(safe_worldll, crs = prj, add = TRUE)
-mesh_plot <- function(x, crs = NULL, colfun = NULL, add = FALSE, zlim = NULL, ..., coords = NULL, maxcell = 50000) {
+mesh_plot <- function(x, crs = NULL, col = NULL, add = FALSE, zlim = NULL, ..., coords = NULL, maxcell = 50000) {
   UseMethod("mesh_plot")
 }
 #' @name mesh_plot
