@@ -33,6 +33,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -45,7 +47,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">quadmesh</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.5.5.9001</span>
       </span>
     </div>
 
@@ -58,7 +60,7 @@
   <a href="reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -75,7 +77,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/hypertidy/quadmesh/">
+  <a href="https://github.com/hypertidy/quadmesh/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -92,12 +94,10 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-<div id="quadmesh-" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#quadmesh-" class="anchor"></a>quadmesh <img src="reference/figures/logo.png" align="right">
+<div class="section level1">
+<div class="page-header"><h1 id="quadmesh-">quadmesh <img src="reference/figures/logo.png" style="vertical-align:right"><a class="anchor" aria-label="anchor" href="#quadmesh-"></a>
 </h1></div>
 <!-- badges: start -->
-
 <p>A <em>quadmesh</em> is a dense mesh describing a topologically continuous surface of 4-corner primitives. This is also known as a <em>cell-based raster</em> but in those contexts the corner coordinates and the continuous nature of the mesh is completely implicit. By making the <em>dense mesh</em> explicit we have access to every corner coordinate (not just the centres) which allows for some extra facilities over raster grids.</p>
 <p>This package provides helpers for working with this mesh interpretation of gridded data to enable</p>
 <ul>
@@ -106,282 +106,259 @@
 <li>the centre-based <em>continuous</em> interpretation of a grid (<code><a href="reference/triangmesh.html">triangmesh()</a></code>).</li>
 <li>the corner-based <em>discrete</em> interpretation of a grid (<code><a href="reference/quadmesh.html">dquadmesh()</a></code>).</li>
 <li>the centre-based <em>discrete</em> interpretation of a grid (<code><a href="reference/triangmesh.html">dtriangmesh()</a></code>).</li>
-<li>easy plotting of grids in 3D visualization tools (quad or triangle primitives for <code>rgl::shade3d</code>).</li>
-<li>fast polygonization of individual cells, in <a href="https://CRAN.R-project.org/package=spex">spex::polygonize</a>.</li>
+<li>easy plotting of grids in 3D visualization tools (quad or triangle primitives for rgl <code>shade3d()</code>).</li>
+<li>fast polygonization of individual cells, in <a href="https://CRAN.R-project.org/package=spex" class="external-link">spex::polygonize</a>.</li>
 <li>barycentric interpolation from a triangle mesh (<code><a href="reference/bary_index.html">bary_index()</a></code>).</li>
 <li>conversion from quad to triangle primitives from the area interpretation (<code><a href="reference/triangulate_quads.html">triangulate_quads()</a></code>).</li>
 </ul>
-<div id="installation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h2>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
 <p>You can install:</p>
-<ul>
-<li>the latest released version from CRAN with</li>
-</ul>
-<!-- end list --><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"quadmesh"</span><span class="op">)</span></code></pre></div>
-<ul>
-<li>the latest development version from Github with</li>
-</ul>
-<!-- end list --><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">## install.packages("remotes")</span>
-<span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"hypertidy/quadmesh"</span><span class="op">)</span></code></pre></div>
+<ul><li>the latest released version from CRAN with</li></ul>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"quadmesh"</span><span class="op">)</span></span></code></pre></div>
+<ul><li>the latest development version from Github with</li></ul>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## install.packages("remotes")</span></span>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"hypertidy/quadmesh"</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div id="examples" class="section level2">
-<h2 class="hasAnchor">
-<a href="#examples" class="anchor"></a>Examples</h2>
+<div class="section level2">
+<h2 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
+</h2>
 <p>Quadmesh provides a number of key features that are not readily available to more commonly used geospatial applications.</p>
-<div id="the-corner-based-interpretation-of-a-grid" class="section level3">
-<h3 class="hasAnchor">
-<a href="#the-corner-based-interpretation-of-a-grid" class="anchor"></a>The corner-based interpretation of a grid</h3>
+<div class="section level3">
+<h3 id="the-corner-based-interpretation-of-a-grid">The corner-based interpretation of a grid<a class="anchor" aria-label="anchor" href="#the-corner-based-interpretation-of-a-grid"></a>
+</h3>
 <p>In raster there is an implicit “area-based” interpretion of the extent and value of every cell. Coordinates are implicit, and centre-based but the <code>extent</code> reflects a finite and constant width and height.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/hypertidy/quadmesh">quadmesh</a></span><span class="op">)</span>
-<span class="co">#&gt; Registered S3 method overwritten by 'quadmesh':</span>
-<span class="co">#&gt;   method          from  </span>
-<span class="co">#&gt;   reproj.quadmesh reproj</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/raster">raster</a></span><span class="op">)</span>
-<span class="co">#&gt; Loading required package: sp</span>
-<span class="va">r</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/raster/man/raster.html">raster</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">12</span>, <span class="fl">3</span><span class="op">)</span>, xmn <span class="op">=</span> <span class="fl">0</span>, xmx <span class="op">=</span> <span class="fl">4</span>, ymn <span class="op">=</span> <span class="fl">0</span>, ymx <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>
-<span class="va">qm</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/quadmesh.html">quadmesh</a></span><span class="op">(</span><span class="va">r</span><span class="op">)</span>
-
-<span class="va">op</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>xpd <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/pkg/raster/man/plot.html">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/extent.html">extent</a></span><span class="op">(</span><span class="va">r</span><span class="op">)</span> <span class="op">+</span> <span class="fl">0.5</span>, type <span class="op">=</span> <span class="st">"n"</span>, axes <span class="op">=</span> <span class="cn">FALSE</span>, xlab <span class="op">=</span> <span class="st">""</span>, ylab <span class="op">=</span> <span class="st">""</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/pkg/raster/man/plot.html">plot</a></span><span class="op">(</span><span class="va">r</span>, col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"palevioletred3"</span>, <span class="st">"aliceblue"</span><span class="op">)</span>, <span class="fl">6</span><span class="op">)</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/pkg/raster/man/text.html">text</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/xyFromCell.html">coordinates</a></span><span class="op">(</span><span class="va">r</span><span class="op">)</span>, lab <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq_len</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/ncell.html">ncell</a></span><span class="op">(</span><span class="va">r</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/pkg/raster/man/plot.html">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/extent.html">extent</a></span><span class="op">(</span><span class="va">r</span><span class="op">)</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-
-<span class="co">## with quadmesh there are 20 corner coordinates</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/points.html">points</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/transpose.html">t</a></span><span class="op">(</span><span class="va">qm</span><span class="op">$</span><span class="va">vb</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, <span class="op">]</span><span class="op">)</span>, pch <span class="op">=</span> <span class="st">"x"</span>, cex <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/hypertidy/quadmesh" class="external-link">quadmesh</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/raster" class="external-link">raster</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; Loading required package: sp</span></span>
+<span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/raster/man/raster.html" class="external-link">raster</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">12</span>, <span class="fl">3</span><span class="op">)</span>, xmn <span class="op">=</span> <span class="fl">0</span>, xmx <span class="op">=</span> <span class="fl">4</span>, ymn <span class="op">=</span> <span class="fl">0</span>, ymx <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span><span class="va">qm</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/quadmesh.html">quadmesh</a></span><span class="op">(</span><span class="va">r</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">op</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>xpd <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/extent.html" class="external-link">extent</a></span><span class="op">(</span><span class="va">r</span><span class="op">)</span> <span class="op">+</span> <span class="fl">0.5</span>, type <span class="op">=</span> <span class="st">"n"</span>, axes <span class="op">=</span> <span class="cn">FALSE</span>, xlab <span class="op">=</span> <span class="st">""</span>, ylab <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">r</span>, col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"palevioletred3"</span>, <span class="st">"aliceblue"</span><span class="op">)</span>, <span class="fl">6</span><span class="op">)</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/text.html" class="external-link">text</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/sp/man/coordinates.html" class="external-link">coordinates</a></span><span class="op">(</span><span class="va">r</span><span class="op">)</span>, lab <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/dimensions.html" class="external-link">ncell</a></span><span class="op">(</span><span class="va">r</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/extent.html" class="external-link">extent</a></span><span class="op">(</span><span class="va">r</span><span class="op">)</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## with quadmesh there are 20 corner coordinates</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/points.html" class="external-link">points</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">qm</span><span class="op">$</span><span class="va">vb</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, <span class="op">]</span><span class="op">)</span>, pch <span class="op">=</span> <span class="st">"x"</span>, cex <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-4-1.png"><!-- --></p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span><span class="va">op</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span><span class="va">op</span><span class="op">)</span></span></code></pre></div>
 <p>Every individual quad is described implicitly by index into the unique corner coordinates. This format is built upon the <code>mesh3d</code> class of the <code>rgl</code> package.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">## coordinates, transpose here</span>
-<span class="va">qm</span><span class="op">$</span><span class="va">vb</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, <span class="op">]</span>
-<span class="co">#&gt;   [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10] [,11] [,12] [,13] [,14]</span>
-<span class="co">#&gt; x    0    1    2    3    4    0    1    2    3     4     0     1     2     3</span>
-<span class="co">#&gt; y    3    3    3    3    3    2    2    2    2     2     1     1     1     1</span>
-<span class="co">#&gt;   [,15] [,16] [,17] [,18] [,19] [,20]</span>
-<span class="co">#&gt; x     4     0     1     2     3     4</span>
-<span class="co">#&gt; y     1     0     0     0     0     0</span>
-
-<span class="co">## indexes, also transpose</span>
-<span class="va">qm</span><span class="op">$</span><span class="va">ib</span>
-<span class="co">#&gt;      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10] [,11] [,12]</span>
-<span class="co">#&gt; [1,]    1    2    3    4    6    7    8    9   11    12    13    14</span>
-<span class="co">#&gt; [2,]    2    3    4    5    7    8    9   10   12    13    14    15</span>
-<span class="co">#&gt; [3,]    7    8    9   10   12   13   14   15   17    18    19    20</span>
-<span class="co">#&gt; [4,]    6    7    8    9   11   12   13   14   16    17    18    19</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co">## coordinates, transpose here</span></span>
+<span><span class="va">qm</span><span class="op">$</span><span class="va">vb</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, <span class="op">]</span></span>
+<span><span class="co">#&gt;   [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10] [,11] [,12] [,13] [,14]</span></span>
+<span><span class="co">#&gt; x    0    1    2    3    4    0    1    2    3     4     0     1     2     3</span></span>
+<span><span class="co">#&gt; y    3    3    3    3    3    2    2    2    2     2     1     1     1     1</span></span>
+<span><span class="co">#&gt;   [,15] [,16] [,17] [,18] [,19] [,20]</span></span>
+<span><span class="co">#&gt; x     4     0     1     2     3     4</span></span>
+<span><span class="co">#&gt; y     1     0     0     0     0     0</span></span>
+<span></span>
+<span><span class="co">## indexes, also transpose</span></span>
+<span><span class="va">qm</span><span class="op">$</span><span class="va">ib</span></span>
+<span><span class="co">#&gt;      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10] [,11] [,12]</span></span>
+<span><span class="co">#&gt; [1,]    1    2    3    4    6    7    8    9   11    12    13    14</span></span>
+<span><span class="co">#&gt; [2,]    2    3    4    5    7    8    9   10   12    13    14    15</span></span>
+<span><span class="co">#&gt; [3,]    7    8    9   10   12   13   14   15   17    18    19    20</span></span>
+<span><span class="co">#&gt; [4,]    6    7    8    9   11   12   13   14   16    17    18    19</span></span></code></pre></div>
 <p>This separation of geometry (the 20 unique corner coordinates) and topology (12 sets of 4-index) is the key concept of a mesh and is found in many domains that involve computer graphics and modelling.</p>
 </div>
-<div id="the-centre-based-interpretation-of-a-grid" class="section level3">
-<h3 class="hasAnchor">
-<a href="#the-centre-based-interpretation-of-a-grid" class="anchor"></a>The centre-based interpretation of a grid</h3>
+<div class="section level3">
+<h3 id="the-centre-based-interpretation-of-a-grid">The centre-based interpretation of a grid<a class="anchor" aria-label="anchor" href="#the-centre-based-interpretation-of-a-grid"></a>
+</h3>
 <p>A quadmesh is centre-based, and each raster pixel occupies a little rectangle, but the centre-based interpretation is better described by a mesh of <em>triangles</em>.</p>
 <p>Every centre point of the grid data is a node in this mesh, while the inside corners with their ambiguous value from 4 neighbouring cells are not explicit. Note that a triangulation can be top-left/bottom-right aligned as here, or bottom-left/top-right aligned, or be a mixture.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">op</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>xpd <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/pkg/raster/man/plot.html">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/extent.html">extent</a></span><span class="op">(</span><span class="va">r</span><span class="op">)</span> <span class="op">+</span> <span class="fl">0.5</span>, type <span class="op">=</span> <span class="st">"n"</span>, axes <span class="op">=</span> <span class="cn">FALSE</span>, xlab <span class="op">=</span> <span class="st">""</span>, ylab <span class="op">=</span> <span class="st">""</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/pkg/raster/man/plot.html">plot</a></span><span class="op">(</span><span class="va">r</span>, col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"palevioletred3"</span>, <span class="st">"aliceblue"</span><span class="op">)</span>, <span class="fl">6</span><span class="op">)</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-
-<span class="va">tri</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/triangmesh.html">triangmesh</a></span><span class="op">(</span><span class="va">r</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/points.html">points</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/transpose.html">t</a></span><span class="op">(</span><span class="va">tri</span><span class="op">$</span><span class="va">vb</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, <span class="op">]</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/polygon.html">polygon</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/transpose.html">t</a></span><span class="op">(</span><span class="va">tri</span><span class="op">$</span><span class="va">vb</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, <span class="fu"><a href="https://rdrr.io/pkg/raster/man/headtail.html">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/as.matrix.html">as.vector</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="va">tri</span><span class="op">$</span><span class="va">it</span>, <span class="cn">NA</span><span class="op">)</span><span class="op">)</span>, <span class="op">-</span><span class="fl">1</span><span class="op">)</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">op</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>xpd <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/extent.html" class="external-link">extent</a></span><span class="op">(</span><span class="va">r</span><span class="op">)</span> <span class="op">+</span> <span class="fl">0.5</span>, type <span class="op">=</span> <span class="st">"n"</span>, axes <span class="op">=</span> <span class="cn">FALSE</span>, xlab <span class="op">=</span> <span class="st">""</span>, ylab <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">r</span>, col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"palevioletred3"</span>, <span class="st">"aliceblue"</span><span class="op">)</span>, <span class="fl">6</span><span class="op">)</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">tri</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/triangmesh.html">triangmesh</a></span><span class="op">(</span><span class="va">r</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/points.html" class="external-link">points</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">tri</span><span class="op">$</span><span class="va">vb</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, <span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/polygon.html" class="external-link">polygon</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">tri</span><span class="op">$</span><span class="va">vb</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/vector.html" class="external-link">as.vector</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">tri</span><span class="op">$</span><span class="va">it</span>, <span class="cn">NA</span><span class="op">)</span><span class="op">)</span>, <span class="op">-</span><span class="fl">1</span><span class="op">)</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-6-1.png"><!-- --></p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span><span class="va">op</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span><span class="va">op</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div id="conversion-from-quad-to-triangle-primitives" class="section level3">
-<h3 class="hasAnchor">
-<a href="#conversion-from-quad-to-triangle-primitives" class="anchor"></a>Conversion from quad to triangle primitives</h3>
+<div class="section level3">
+<h3 id="conversion-from-quad-to-triangle-primitives">Conversion from quad to triangle primitives<a class="anchor" aria-label="anchor" href="#conversion-from-quad-to-triangle-primitives"></a>
+</h3>
 <p>Quads are trivially converted into triangle form by splitting each in two. Note that this is different again from the centre-based triangle interpretation.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">tri2</span> <span class="op">&lt;-</span> <span class="va">qm</span>
-<span class="va">tri2</span><span class="op">$</span><span class="va">it</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/triangulate_quads.html">triangulate_quads</a></span><span class="op">(</span><span class="va">tri2</span><span class="op">$</span><span class="va">ib</span><span class="op">)</span>
-<span class="va">tri2</span><span class="op">$</span><span class="va">ib</span> <span class="op">&lt;-</span> <span class="cn">NULL</span>
-<span class="va">tri2</span><span class="op">$</span><span class="va">primtivetype</span> <span class="op">&lt;-</span> <span class="st">"triangle"</span>
-
-<span class="va">op</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>xpd <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/pkg/raster/man/plot.html">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/extent.html">extent</a></span><span class="op">(</span><span class="va">r</span><span class="op">)</span> <span class="op">+</span> <span class="fl">0.5</span>, type <span class="op">=</span> <span class="st">"n"</span>, axes <span class="op">=</span> <span class="cn">FALSE</span>, xlab <span class="op">=</span> <span class="st">""</span>, ylab <span class="op">=</span> <span class="st">""</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/pkg/raster/man/plot.html">plot</a></span><span class="op">(</span><span class="va">r</span>, col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"palevioletred3"</span>, <span class="st">"aliceblue"</span><span class="op">)</span>, <span class="fl">6</span><span class="op">)</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-
-
-<span class="fu"><a href="https://rdrr.io/r/graphics/points.html">points</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/transpose.html">t</a></span><span class="op">(</span><span class="va">tri2</span><span class="op">$</span><span class="va">vb</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, <span class="op">]</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/polygon.html">polygon</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/transpose.html">t</a></span><span class="op">(</span><span class="va">tri2</span><span class="op">$</span><span class="va">vb</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, <span class="fu"><a href="https://rdrr.io/pkg/raster/man/headtail.html">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/as.matrix.html">as.vector</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="va">tri2</span><span class="op">$</span><span class="va">it</span>, <span class="cn">NA</span><span class="op">)</span><span class="op">)</span>, <span class="op">-</span><span class="fl">1</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>, lwd <span class="op">=</span> <span class="fl">2</span>, lty <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">tri2</span> <span class="op">&lt;-</span> <span class="va">qm</span></span>
+<span><span class="va">tri2</span><span class="op">$</span><span class="va">it</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/triangulate_quads.html">triangulate_quads</a></span><span class="op">(</span><span class="va">tri2</span><span class="op">$</span><span class="va">ib</span><span class="op">)</span></span>
+<span><span class="va">tri2</span><span class="op">$</span><span class="va">ib</span> <span class="op">&lt;-</span> <span class="cn">NULL</span></span>
+<span><span class="va">tri2</span><span class="op">$</span><span class="va">primtivetype</span> <span class="op">&lt;-</span> <span class="st">"triangle"</span></span>
+<span></span>
+<span><span class="va">op</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>xpd <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/extent.html" class="external-link">extent</a></span><span class="op">(</span><span class="va">r</span><span class="op">)</span> <span class="op">+</span> <span class="fl">0.5</span>, type <span class="op">=</span> <span class="st">"n"</span>, axes <span class="op">=</span> <span class="cn">FALSE</span>, xlab <span class="op">=</span> <span class="st">""</span>, ylab <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">r</span>, col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"palevioletred3"</span>, <span class="st">"aliceblue"</span><span class="op">)</span>, <span class="fl">6</span><span class="op">)</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/points.html" class="external-link">points</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">tri2</span><span class="op">$</span><span class="va">vb</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, <span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/polygon.html" class="external-link">polygon</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">tri2</span><span class="op">$</span><span class="va">vb</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/vector.html" class="external-link">as.vector</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">tri2</span><span class="op">$</span><span class="va">it</span>, <span class="cn">NA</span><span class="op">)</span><span class="op">)</span>, <span class="op">-</span><span class="fl">1</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>, lwd <span class="op">=</span> <span class="fl">2</span>, lty <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-7-1.png"><!-- --></p>
 </div>
-<div id="arbitrary-reprojection-of-raster-cells" class="section level3">
-<h3 class="hasAnchor">
-<a href="#arbitrary-reprojection-of-raster-cells" class="anchor"></a>Arbitrary reprojection of raster cells</h3>
+<div class="section level3">
+<h3 id="arbitrary-reprojection-of-raster-cells">Arbitrary reprojection of raster cells<a class="anchor" aria-label="anchor" href="#arbitrary-reprojection-of-raster-cells"></a>
+</h3>
 <p>The in-built <code>etopo</code> data set is used to create a plot in a local map projection. Here each cell is drawn by reprojecting it directly and individually into this new coordinate system.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/hypertidy/quadmesh">quadmesh</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/raster">raster</a></span><span class="op">)</span>
-<span class="co">## VicGrid</span>
-<span class="va">prj</span> <span class="op">&lt;-</span> <span class="st">"+proj=lcc +lat_1=-36 +lat_2=-38 +lat_0=-37 +lon_0=145 +x_0=2500000 +y_0=2500000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"</span>
-<span class="va">er</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/raster/man/crop.html">crop</a></span><span class="op">(</span><span class="va">etopo</span>, <span class="fu"><a href="https://rdrr.io/pkg/raster/man/extent.html">extent</a></span><span class="op">(</span><span class="fl">110</span>, <span class="fl">160</span>, <span class="op">-</span><span class="fl">50</span>, <span class="op">-</span><span class="fl">20</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO"): Discarded datum WGS_1984 in CRS definition,</span>
-<span class="co">#&gt;  but +towgs84= values preserved</span>
-
-<span class="co">#&gt; Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO"): Discarded datum WGS_1984 in CRS definition,</span>
-<span class="co">#&gt;  but +towgs84= values preserved</span>
-<span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span><span class="op">(</span><span class="fu"><a href="reference/mesh_plot.html">mesh_plot</a></span><span class="op">(</span><span class="va">er</span>, crs <span class="op">=</span> <span class="va">prj</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt;    user  system elapsed </span>
-<span class="co">#&gt;   0.641   0.020   0.662</span>
-
-<span class="co">## This is faster to plot and uses much less data that converting explicitly to polygons. </span>
-
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">sf</span><span class="op">)</span>
-<span class="co">#&gt; Linking to GEOS 3.8.0, GDAL 3.0.4, PROJ 7.0.0</span>
-<span class="va">p</span> <span class="op">&lt;-</span> <span class="fu">st_transform</span><span class="op">(</span><span class="fu">spex</span><span class="fu">::</span><span class="fu">polygonize</span><span class="op">(</span><span class="va">er</span><span class="op">)</span>, <span class="va">prj</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/pkg/raster/man/plot.html">plot</a></span><span class="op">(</span><span class="fu">st_geometry</span><span class="op">(</span><span class="va">p</span><span class="op">)</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/hypertidy/quadmesh" class="external-link">quadmesh</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/raster" class="external-link">raster</a></span><span class="op">)</span></span>
+<span><span class="co">## VicGrid</span></span>
+<span><span class="va">prj</span> <span class="op">&lt;-</span> <span class="st">"+proj=lcc +lat_1=-36 +lat_2=-38 +lat_0=-37 +lon_0=145 +x_0=2500000 +y_0=2500000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"</span></span>
+<span><span class="va">er</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/crop.html" class="external-link">crop</a></span><span class="op">(</span><span class="va">etopo</span>, <span class="fu"><a href="https://rdrr.io/pkg/raster/man/extent.html" class="external-link">extent</a></span><span class="op">(</span><span class="fl">110</span>, <span class="fl">160</span>, <span class="op">-</span><span class="fl">50</span>, <span class="op">-</span><span class="fl">20</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="fu"><a href="reference/mesh_plot.html">mesh_plot</a></span><span class="op">(</span><span class="va">er</span>, crs <span class="op">=</span> <span class="va">prj</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt;    user  system elapsed </span></span>
+<span><span class="co">#&gt;   0.153   0.017   0.170</span></span>
+<span></span>
+<span><span class="co">## This is faster to plot and uses much less data that converting explicitly to polygons. </span></span>
+<span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; Linking to GEOS 3.10.2, GDAL 3.4.3, PROJ 8.2.0; sf_use_s2() is TRUE</span></span>
+<span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu">st_transform</span><span class="op">(</span><span class="fu">spex</span><span class="fu">::</span><span class="fu">polygonize</span><span class="op">(</span><span class="va">er</span><span class="op">)</span>, <span class="va">prj</span><span class="op">)</span></span>
+<span><span class="co">#&gt; old-style crs object detected; please recreate object with a recent sf::st_crs()</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu">st_geometry</span><span class="op">(</span><span class="va">p</span><span class="op">)</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-8-1.png"><!-- --></p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/plot.html">plot</a></span><span class="op">(</span><span class="va">p</span>, border <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">p</span>, border <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-8-2.png"><!-- --></p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="co">#&gt;    user  system elapsed </span></span>
-<span id="cb11-2"><a href="#cb11-2"></a><span class="co">#&gt;   0.407   0.020   0.427</span></span>
-<span id="cb11-3"><a href="#cb11-3"></a>pryr<span class="op">::</span><span class="kw">object_size</span>(er)</span>
-<span id="cb11-4"><a href="#cb11-4"></a><span class="co">#&gt; Registered S3 method overwritten by 'pryr':</span></span>
-<span id="cb11-5"><a href="#cb11-5"></a><span class="co">#&gt;   method      from</span></span>
-<span id="cb11-6"><a href="#cb11-6"></a><span class="co">#&gt;   print.bytes Rcpp</span></span>
-<span id="cb11-7"><a href="#cb11-7"></a><span class="co">#&gt; 39.6 kB</span></span>
-<span id="cb11-8"><a href="#cb11-8"></a>pryr<span class="op">::</span><span class="kw">object_size</span>(p)</span>
-<span id="cb11-9"><a href="#cb11-9"></a><span class="co">#&gt; 1.68 MB</span></span>
-<span id="cb11-10"><a href="#cb11-10"></a>pryr<span class="op">::</span><span class="kw">object_size</span>(<span class="kw">quadmesh</span>(er))</span>
-<span id="cb11-11"><a href="#cb11-11"></a><span class="co">#&gt; 169 kB</span></span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    user  system elapsed </span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   0.611   0.023   0.635</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>pryr<span class="sc">::</span><span class="fu">object_size</span>(er)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 37.72 kB</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>pryr<span class="sc">::</span><span class="fu">object_size</span>(p)</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1.68 MB</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>pryr<span class="sc">::</span><span class="fu">object_size</span>(<span class="fu">quadmesh</span>(er))</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 169.19 kB</span></span></code></pre></div>
 <p>The data size and timing benefits are more substantial for larger data sets.</p>
 <p>We get exactly what we asked for from <code>mesh_plot</code>, without the complete remodelling of the data required by grid resampling.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">pol</span> <span class="op">&lt;-</span> <span class="st">"+proj=stere +lat_0=-90 +lon_0=147 +datum=WGS84"</span>
-<span class="fu"><a href="reference/mesh_plot.html">mesh_plot</a></span><span class="op">(</span><span class="va">etopo</span>, crs <span class="op">=</span> <span class="va">pol</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">pol</span> <span class="op">&lt;-</span> <span class="st">"+proj=stere +lat_0=-90 +lon_0=147 +datum=WGS84"</span></span>
+<span><span class="fu"><a href="reference/mesh_plot.html">mesh_plot</a></span><span class="op">(</span><span class="va">etopo</span>, crs <span class="op">=</span> <span class="va">pol</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-9-1.png"><!-- --></p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/raster/man/plot.html">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/projectRaster.html">projectRaster</a></span><span class="op">(</span><span class="va">etopo</span>, crs <span class="op">=</span> <span class="va">pol</span><span class="op">)</span>, col <span class="op">=</span> <span class="fu">viridis</span><span class="fu">::</span><span class="fu">viridis</span><span class="op">(</span><span class="fl">64</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO"): Discarded datum WGS_1984 in CRS definition,</span>
-<span class="co">#&gt;  but +towgs84= values preserved</span>
-<span class="co">#&gt; Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO"): Discarded datum Unknown based on WGS84 ellipsoid in CRS definition,</span>
-<span class="co">#&gt;  but +towgs84= values preserved</span>
-<span class="co">#&gt; Warning in rgdal::rawTransform(projfrom, projto, nrow(xy), xy[, 1], xy[, : NOT</span>
-<span class="co">#&gt; UPDATED FOR PROJ &gt;= 6</span>
-<span class="co">#&gt; Warning in rgdal::rawTransform(projection(obj), crs, nrow(xy), xy[, 1], : NOT</span>
-<span class="co">#&gt; UPDATED FOR PROJ &gt;= 6</span>
-<span class="co">#&gt; Warning in rgdal::rawTransform(projto_int, projfrom, nrow(xy), xy[, 1], : NOT</span>
-<span class="co">#&gt; UPDATED FOR PROJ &gt;= 6</span>
-<span class="co">#&gt; Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO"): Discarded datum WGS_1984 in CRS definition,</span>
-<span class="co">#&gt;  but +towgs84= values preserved</span>
-<span class="co">#&gt; Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO"): Discarded datum Unknown based on WGS84 ellipsoid in CRS definition,</span>
-<span class="co">#&gt;  but +towgs84= values preserved</span>
-
-<span class="co">#&gt; Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO"): Discarded datum Unknown based on WGS84 ellipsoid in CRS definition,</span>
-<span class="co">#&gt;  but +towgs84= values preserved</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/projectRaster.html" class="external-link">projectRaster</a></span><span class="op">(</span><span class="va">etopo</span>, crs <span class="op">=</span> <span class="va">pol</span><span class="op">)</span>, col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/palettes.html" class="external-link">hcl.colors</a></span><span class="op">(</span><span class="fl">64</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning in wkt(projfrom): CRS object has no comment</span></span>
+<span><span class="co">#&gt; Warning in wkt(pfrom): CRS object has no comment</span></span>
+<span><span class="co">#&gt; Warning in rgdal::rawTransform(projfrom, projto, nrow(xy), xy[, 1], xy[, : Using</span></span>
+<span><span class="co">#&gt; PROJ not WKT2 strings</span></span>
+<span><span class="co">#&gt; Warning in rgdal::rawTransform(fromcrs, crs, nrow(xy), xy[, 1], xy[, 2]): Using</span></span>
+<span><span class="co">#&gt; PROJ not WKT2 strings</span></span>
+<span><span class="co">#&gt; Warning in rgdal::rawTransform(projto_int, projfrom, nrow(xy), xy[, 1], : Using</span></span>
+<span><span class="co">#&gt; PROJ not WKT2 strings</span></span></code></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-9-2.png"><!-- --></p>
 </div>
-<div id="easy-3d-plotting-of-grids" class="section level3">
-<h3 class="hasAnchor">
-<a href="#easy-3d-plotting-of-grids" class="anchor"></a>Easy 3D plotting of grids</h3>
+<div class="section level3">
+<h3 id="easy-3d-plotting-of-grids">Easy 3D plotting of grids<a class="anchor" aria-label="anchor" href="#easy-3d-plotting-of-grids"></a>
+</h3>
 <p>The <code>quadmesh</code> and <code>triangmesh</code> types are extensions of the <code>rgl</code> class <code>mesh3d</code>, and so are readily used by that package’s high level functions such as <code>shade3d()</code> and <code>addNormals()</code>.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">qm</span><span class="op">)</span>
-<span class="co">#&gt; [1] "quadmesh" "mesh3d"   "shape3d"</span>
-<span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">tri</span><span class="op">)</span>
-<span class="co">#&gt; [1] "triangmesh" "mesh3d"     "shape3d"</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">qm</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "quadmesh" "mesh3d"   "shape3d"</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">tri</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "triangmesh" "mesh3d"     "shape3d"</span></span></code></pre></div>
 </div>
-<div id="fast-polygonization-of-individual-cells" class="section level3">
-<h3 class="hasAnchor">
-<a href="#fast-polygonization-of-individual-cells" class="anchor"></a>Fast polygonization of individual cells</h3>
+<div class="section level3">
+<h3 id="fast-polygonization-of-individual-cells">Fast polygonization of individual cells<a class="anchor" aria-label="anchor" href="#fast-polygonization-of-individual-cells"></a>
+</h3>
 <p>The <code>spex</code> package has functions <code>polygonize()</code> and <code>qm_rasterToPolygons_sp()</code> which provide very fast conversion of raster grids to a polygon layer with 5 explicit coordinates for every cell. (<code>stars</code> and <code>sf</code> now provide an even faster version by using GDAL).</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">rr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/raster/man/disaggregate.html">disaggregate</a></span><span class="op">(</span><span class="va">r</span>, fact <span class="op">=</span> <span class="fl">20</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span><span class="op">(</span><span class="fu">spex</span><span class="fu">::</span><span class="fu">polygonize</span><span class="op">(</span><span class="va">rr</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt;    user  system elapsed </span>
-<span class="co">#&gt;   0.094   0.000   0.095</span>
-<span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span><span class="op">(</span><span class="fu">raster</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/rasterToPolygons.html">rasterToPolygons</a></span><span class="op">(</span><span class="va">rr</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt;    user  system elapsed </span>
-<span class="co">#&gt;   0.659   0.000   0.660</span>
-
-<span class="co">## stars has now improved on spex by calling out to GDAL to do the work</span>
-<span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu">st_as_sf</span><span class="op">(</span><span class="fu">stars</span><span class="fu">::</span><span class="fu">st_as_stars</span><span class="op">(</span><span class="va">rr</span><span class="op">)</span>, merge <span class="op">=</span> <span class="cn">FALSE</span>, as_points <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt;    user  system elapsed </span>
-<span class="co">#&gt;   0.076   0.004   0.081</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">rr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/sp/man/disaggregate.html" class="external-link">disaggregate</a></span><span class="op">(</span><span class="va">r</span>, fact <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="fu">spex</span><span class="fu">::</span><span class="fu">polygonize</span><span class="op">(</span><span class="va">rr</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt;    user  system elapsed </span></span>
+<span><span class="co">#&gt;   0.132   0.000   0.132</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="fu">raster</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/rasterToPolygons.html" class="external-link">rasterToPolygons</a></span><span class="op">(</span><span class="va">rr</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt;    user  system elapsed </span></span>
+<span><span class="co">#&gt;   1.025   0.000   1.025</span></span>
+<span></span>
+<span><span class="co">## stars has now improved on spex by calling out to GDAL to do the work</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu">st_as_sf</span><span class="op">(</span><span class="fu">stars</span><span class="fu">::</span><span class="fu">st_as_stars</span><span class="op">(</span><span class="va">rr</span><span class="op">)</span>, merge <span class="op">=</span> <span class="cn">FALSE</span>, as_points <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt;    user  system elapsed </span></span>
+<span><span class="co">#&gt;   0.171   0.000   0.172</span></span></code></pre></div>
 </div>
-<div id="barycentric-interpolation-from-a-triangle-mesh" class="section level3">
-<h3 class="hasAnchor">
-<a href="#barycentric-interpolation-from-a-triangle-mesh" class="anchor"></a>Barycentric interpolation from a triangle mesh</h3>
+<div class="section level3">
+<h3 id="barycentric-interpolation-from-a-triangle-mesh">Barycentric interpolation from a triangle mesh<a class="anchor" aria-label="anchor" href="#barycentric-interpolation-from-a-triangle-mesh"></a>
+</h3>
 <p>Using a triangulation version of a raster grid we can build an index of weightings for a new of of arbitrary coordinates to estimate the implicit value at each point as if there were continuous interpolation across each primitive.</p>
 <p>WIP - see <code><a href="reference/bary_index.html">bary_index()</a></code> function.</p>
 </div>
 </div>
-<div id="development" class="section level2">
-<h2 class="hasAnchor">
-<a href="#development" class="anchor"></a>Development</h2>
-<p>Have feedback/ideas? Please let me know via <a href="https://github.com/hypertidy/quadmesh/issues/">issues</a>.</p>
-<p>Many aspects of this package have developed in conjunction with the <a href="https://github.com/AustralianAntarcticDivision/angstroms">angstroms package</a> for dealing with ROMS model output.</p>
-<p>Please note that this project is released with a <a href="https://github.com/hypertidy/quadmesh/blob/master/CODE_OF_CONDUCT.md">Contributor Code of Conduct</a>. By participating in this project you agree to abide by its terms.</p>
+<div class="section level2">
+<h2 id="development">Development<a class="anchor" aria-label="anchor" href="#development"></a>
+</h2>
+<p>Have feedback/ideas? Please let me know via <a href="https://github.com/hypertidy/quadmesh/issues/" class="external-link">issues</a>.</p>
+<p>Many aspects of this package have developed in conjunction with the <a href="https://github.com/AustralianAntarcticDivision/angstroms" class="external-link">angstroms package</a> for dealing with ROMS model output.</p>
+<p>Please note that this project is released with a <a href="https://github.com/hypertidy/quadmesh/blob/master/CODE_OF_CONDUCT.md" class="external-link">Contributor Code of Conduct</a>. By participating in this project you agree to abide by its terms.</p>
 </div>
 </div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
-<h2>Links</h2>
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=quadmesh">https://​cloud.r-project.org/​package=quadmesh</a>
-</li>
-<li>Browse source code at <br><a href="https://github.com/hypertidy/quadmesh/">https://​github.com/​hypertidy/​quadmesh/​</a>
-</li>
-<li>Report a bug at <br><a href="https://github.com/hypertidy/quadmesh/issues">https://​github.com/​hypertidy/​quadmesh/​issues</a>
-</li>
+<li><a href="https://cloud.r-project.org/package=quadmesh" class="external-link">View on CRAN</a></li>
+<li><a href="https://github.com/hypertidy/quadmesh/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/hypertidy/quadmesh/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
+
 <div class="license">
-<h2>License</h2>
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
-<li><a href="https://www.r-project.org/Licenses/GPL-3">GPL-3</a></li>
+<li><a href="https://www.r-project.org/Licenses/GPL-3" class="external-link">GPL-3</a></li>
 </ul>
 </div>
+
 <div class="community">
-<h2>Community</h2>
+<h2 data-toc-skip>Community</h2>
 <ul class="list-unstyled">
 <li><a href="CODE_OF_CONDUCT.html">Code of conduct</a></li>
 </ul>
 </div>
+
+<div class="citation">
+<h2 data-toc-skip>Citation</h2>
+<ul class="list-unstyled">
+<li><a href="authors.html#citation">Citing quadmesh</a></li>
+</ul>
+</div>
+
 <div class="developers">
-<h2>Developers</h2>
+<h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
 <li>Michael D. Sumner <br><small class="roles"> Author, maintainer </small>  </li>
 </ul>
 </div>
 
-  <div class="dev-status">
-<h2>Dev status</h2>
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://github.com/hypertidy/quadmesh/actions"><img src="https://github.com/hypertidy/quadmesh/workflows/R-CMD-check/badge.svg" alt="R build status"></a></li>
-<li><a href="https://www.tidyverse.org/lifecycle/#maturing"><img src="https://img.shields.io/badge/lifecycle-maturing-blue.svg" alt="lifecycle"></a></li>
-<li><a href="https://travis-ci.org/hypertidy/quadmesh"><img src="https://travis-ci.org/hypertidy/quadmesh.svg?branch=master" alt="Travis-CI Build Status"></a></li>
-<li><a href="https://travis-ci.org/hypertidy/quadmesh"><img src="http://badges.herokuapp.com/travis/hypertidy/quadmesh?branch=master&amp;env=BUILD_NAME=osx_release&amp;label=osx" alt="Build Status"></a></li>
-<li><a href="https://ci.appveyor.com/project/mdsumner/quadmesh-x25a2"><img src="https://ci.appveyor.com/api/projects/status/github/hypertidy/quadmesh?branch=master&amp;svg=true" alt="AppVeyor build status"></a></li>
-<li><a href="https://codecov.io/github/hypertidy/quadmesh?branch=master"><img src="https://codecov.io/gh/hypertidy/quadmesh/branch/master/graph/badge.svg" alt="Coverage status"></a></li>
-<li><a href="https://cran.r-project.org/package=quadmesh"><img src="https://www.r-pkg.org/badges/version/quadmesh" alt="CRAN status"></a></li>
-<li><a href="https://cran.r-project.org/package=quadmesh"><img src="http://cranlogs.r-pkg.org/badges/quadmesh" alt="CRAN_Download_Badge"></a></li>
-<li><a href="https://github.com/hypertidy/quadmesh/actions"><img src="https://github.com/hypertidy/quadmesh/workflows/pkgdown;/badge.svg" alt="R build status"></a></li>
-<li><a href="https://github.com/hypertidy/quadmesh/actions"><img src="https://github.com/hypertidy/quadmesh/workflows/pkgdown/badge.svg" alt="R build status"></a></li>
-<li><a href="https://github.com/hypertidy/quadmesh/actions"><img src="https://github.com/hypertidy/quadmesh/workflows/test-coverage/badge.svg" alt="R build status"></a></li>
+<li><a href="https://github.com/hypertidy/quadmesh/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/hypertidy/quadmesh/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
 </ul>
 </div>
-</div>
+
+  </div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by Michael D. Sumner.</p>
+  <p></p>
+<p>Developed by Michael D. Sumner.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>
@@ -389,6 +366,8 @@
 
   
 
+
+  
 
   </body>
 </html>
