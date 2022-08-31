@@ -173,7 +173,7 @@ prj <- "+proj=lcc +lat_1=-36 +lat_2=-38 +lat_0=-37 +lon_0=145 +x_0=2500000 +y_0=
 er <- crop(etopo, extent(110, 160, -50, -20))
 system.time(mesh_plot(er, crs = prj))
 #>    user  system elapsed 
-#>   0.163   0.007   0.171
+#>   0.147   0.016   0.163
 
 ## This is faster to plot and uses much less data that converting explicitly to polygons. 
 
@@ -194,7 +194,7 @@ system.time(plot(p, border = NA))
 ![](man/figures/README-unnamed-chunk-8-2.png)<!-- -->
 
     #>    user  system elapsed 
-    #>   0.613   0.021   0.634
+    #>   0.640   0.022   0.662
     pryr::object_size(er)
     #> 37.72 kB
     pryr::object_size(p)
@@ -253,15 +253,15 @@ grids to a polygon layer with 5 explicit coordinates for every cell.
 rr <- disaggregate(r, fact = 20)
 system.time(spex::polygonize(rr))
 #>    user  system elapsed 
-#>   0.119   0.000   0.119
+#>   0.116   0.000   0.116
 system.time(raster::rasterToPolygons(rr))
 #>    user  system elapsed 
-#>    1.05    0.00    1.05
+#>   1.029   0.000   1.031
 
 ## stars has now improved on spex by calling out to GDAL to do the work
 system.time(sf::st_as_sf(stars::st_as_stars(rr), merge = FALSE, as_points = FALSE))
 #>    user  system elapsed 
-#>   0.157   0.000   0.157
+#>   0.153   0.003   0.156
 ```
 
 ### Barycentric interpolation from a triangle mesh
