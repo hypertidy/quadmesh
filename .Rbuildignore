@@ -16,3 +16,4 @@
 ^data-raw/world.topo.bathy.200412.3x5400x2700.png$
 ^\.github$
 ^data-raw/examples$
+^CRAN-SUBMISSION$
