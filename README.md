@@ -5,12 +5,7 @@
 
 <!-- badges: start -->
 
-[![R build
-status](https://github.com/hypertidy/quadmesh/workflows/R-CMD-check/badge.svg)](https://github.com/hypertidy/quadmesh/actions)
-[![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
-[![CRAN_Download_Badge](http://cranlogs.r-pkg.org/badges/quadmesh)](https://cran.r-project.org/package=quadmesh)
-[![R build
-status](https://github.com/hypertidy/quadmesh/workflows/pkgdown/badge.svg)](https://github.com/hypertidy/quadmesh/actions)
+[![R-CMD-check](https://github.com/hypertidy/quadmesh/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/hypertidy/quadmesh/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 A *quadmesh* is a dense mesh describing a topologically continuous
@@ -34,7 +29,7 @@ of gridded data to enable
 -   the centre-based *discrete* interpretation of a grid
     (`dtriangmesh()`).
 -   easy plotting of grids in 3D visualization tools (quad or triangle
-    primitives for `rgl::shade3d`).
+    primitives for rgl `shade3d()`).
 -   fast polygonization of individual cells, in
     [spex::polygonize](https://CRAN.R-project.org/package=spex).
 -   barycentric interpolation from a triangle mesh (`bary_index()`).
@@ -183,7 +178,7 @@ prj <- "+proj=lcc +lat_1=-36 +lat_2=-38 +lat_0=-37 +lon_0=145 +x_0=2500000 +y_0=
 er <- crop(etopo, extent(110, 160, -50, -20))
 system.time(mesh_plot(er, crs = prj))
 #>    user  system elapsed 
-#>   0.155   0.016   0.171
+#>   0.153   0.017   0.170
 
 ## This is faster to plot and uses much less data that converting explicitly to polygons. 
 
@@ -204,7 +199,7 @@ system.time(plot(p, border = NA))
 ![](man/figures/README-unnamed-chunk-8-2.png)<!-- -->
 
     #>    user  system elapsed 
-    #>   0.631   0.027   0.658
+    #>   0.611   0.023   0.635
     pryr::object_size(er)
     #> 37.72 kB
     pryr::object_size(p)
@@ -263,15 +258,15 @@ grids to a polygon layer with 5 explicit coordinates for every cell.
 rr <- disaggregate(r, fact = 20)
 system.time(spex::polygonize(rr))
 #>    user  system elapsed 
-#>   0.117   0.000   0.117
+#>   0.132   0.000   0.132
 system.time(raster::rasterToPolygons(rr))
 #>    user  system elapsed 
-#>   1.119   0.000   1.119
+#>   1.025   0.000   1.025
 
 ## stars has now improved on spex by calling out to GDAL to do the work
 system.time(sf::st_as_sf(stars::st_as_stars(rr), merge = FALSE, as_points = FALSE))
 #>    user  system elapsed 
-#>   0.165   0.004   0.169
+#>   0.171   0.000   0.172
 ```
 
 ### Barycentric interpolation from a triangle mesh

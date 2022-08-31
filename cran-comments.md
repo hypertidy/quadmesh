@@ -1,6 +1,9 @@
 ## quadmesh dev
 
 
+* Fixed CRAN issues about html tag attributes, viridis unused import, and removed rgl doc links. 
+
+Thanks!
 
 ## Test environments
 
@@ -14,4 +17,4 @@
 
 ## Reverse dependencies
 
-The reverse dependencies lazyraster and 'spex' pass check against this version. 
+The reverse dependencies 'lazyraster' and 'spex' and 'graticule' pass check against this version. 

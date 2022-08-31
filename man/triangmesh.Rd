@@ -70,7 +70,7 @@ dtriangmesh(
 mesh3d (primitive type triangle)
 }
 \description{
-Convert an object to a \code{mesh3d} triangle mesh,
+Convert an object to a \code{mesh3d} (of rgl package) triangle mesh,
 with methods for \code{\link[raster:raster]{raster::raster()}} and \code{matrix}.
 }
 \details{

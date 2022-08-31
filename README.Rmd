@@ -16,13 +16,11 @@ knitr::opts_chunk$set(
 
 # quadmesh <img src="man/figures/logo.png" style="vertical-align:right" />
 
-<!-- badges: start -->
-[![R build status](https://github.com/hypertidy/quadmesh/workflows/R-CMD-check/badge.svg)](https://github.com/hypertidy/quadmesh/actions)
-[![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
-[![CRAN\_Download\_Badge](http://cranlogs.r-pkg.org/badges/quadmesh)](https://cran.r-project.org/package=quadmesh)
-[![R build status](https://github.com/hypertidy/quadmesh/workflows/pkgdown/badge.svg)](https://github.com/hypertidy/quadmesh/actions)
-<!-- badges: end -->
 
+
+<!-- badges: start -->
+[![R-CMD-check](https://github.com/hypertidy/quadmesh/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/hypertidy/quadmesh/actions/workflows/R-CMD-check.yaml)
+<!-- badges: end -->
 
 
 
@@ -36,7 +34,7 @@ This package provides helpers for working with this mesh interpretation of gridd
 * the centre-based *continuous* interpretation of a grid (`triangmesh()`). 
 * the corner-based *discrete* interpretation of a grid (`dquadmesh()`).
 * the centre-based *discrete* interpretation of a grid (`dtriangmesh()`). 
-* easy plotting of grids in 3D visualization tools (quad or triangle primitives for `rgl::shade3d`).
+* easy plotting of grids in 3D visualization tools (quad or triangle primitives for rgl `shade3d()`).
 * fast polygonization of individual cells, in [spex::polygonize](https://CRAN.R-project.org/package=spex). 
 * barycentric interpolation from a triangle mesh (`bary_index()`). 
 * conversion from quad to triangle primitives from the area interpretation (`triangulate_quads()`). 

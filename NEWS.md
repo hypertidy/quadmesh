@@ -9,6 +9,9 @@
 * Fixed import of viridis package which caused CRAN problems. 
 
 
+# quadmesh 0.5.5
+
+* Fixed CRAN issues about html tag attributes, viridis unused import, and removed rgl doc links. 
 
 # quadmesh 0.5.0
 

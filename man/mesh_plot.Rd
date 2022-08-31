@@ -5,9 +5,9 @@
 \alias{mesh_plot.BasicRaster}
 \alias{mesh_plot.SpatRaster}
 \alias{mesh_plot.RasterLayer}
+\alias{mesh_plot.quadmesh}
 \alias{mesh_plot.stars}
 \alias{mesh_plot.TRI}
-\alias{mesh_plot.quadmesh}
 \alias{mesh_plot.mesh3d}
 \title{Plot as a mesh}
 \usage{
@@ -55,6 +55,17 @@ mesh_plot(
   maxcell = 50000
 )
 
+\method{mesh_plot}{quadmesh}(
+  x,
+  crs = NULL,
+  col = NULL,
+  add = FALSE,
+  zlim = NULL,
+  ...,
+  coords = NULL,
+  maxcell = 50000
+)
+
 \method{mesh_plot}{stars}(
   x,
   crs = NULL,
@@ -67,17 +78,6 @@ mesh_plot(
 )
 
 \method{mesh_plot}{TRI}(
-  x,
-  crs = NULL,
-  col = NULL,
-  add = FALSE,
-  zlim = NULL,
-  ...,
-  coords = NULL,
-  maxcell = 50000
-)
-
-\method{mesh_plot}{quadmesh}(
   x,
   crs = NULL,
   col = NULL,
