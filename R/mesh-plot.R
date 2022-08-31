@@ -117,6 +117,9 @@ mesh_plot.RasterLayer <- function(x, crs = NULL, col = NULL, add = FALSE, zlim =
   if (add && is.null(crs)) crs <- use_crs()
   if (!is.null(crs)) use_crs(crs) else use_crs(raster::projection(x))
 
+
+
+
   qm <- quadmesh::quadmesh(x, na.rm = FALSE)
   if (!is.null(coords) && is.na(qm$crs)) {
     ## we need this otherwise no reprojection is done in the case where coords and crs are both given
@@ -144,12 +147,81 @@ if (!is.null(coords)) {
     }
   }
 
-  if (!is.na(use_crs()) && !is.na(qm$crs)) {
+  # if (!is.na(use_crs()) && !is.na(qm$crs)) {
+  #
+  #  xy <- reproj::reproj(xy, target = use_crs(), source = qm$crs)
+  # } else {
+  #   xy <- target_coordinates(xy, src.proj = qm$crs, target = crs, xyz = FALSE)
+  # }
+  # qm$vb[1:2, ] <- t(xy[,1:2])
+  # ## we have to remove any infinite vertices
+  # ## as this affects the entire thing
+  # bad <- !is.finite(xy[,1]) | !is.finite(xy[,2])
+  # ## but we must identify the bad xy in the index
+  # if (any(bad)) ib <- ib[,-which(bad)]
+  #
+  # xx <- xy[c(ib),1]
+  # yy <- xy[c(ib),2]
+  # ## we need a identifier grouping for each 4-vertex polygon
+  # id <- rep(seq_len(ncol(ib)), each  = nrow(ib))
 
-   xy <- reproj::reproj(xy, target = use_crs(), source = qm$crs)
-  } else {
-    xy <- target_coordinates(xy, src.proj = qm$crs, target = crs, xyz = FALSE)
+  ## we also have to deal with any values that are NA
+  ## because they propagate to destroy the id
+  lc <- length(col)
+  #cols <- if (is.null(zlim)) col[scales::rescale(values(x), c(1, lc))] else col[scales::rescale(values(x), c(1, lc), zlim)]
+
+  return(mesh_plot(qm, crs = crs, col = col, add = add, zlim = zlim, coords = coords, maxcell = NULL))
+#  xx <- list(x = xx, y = yy, id = id, col = cols)
+ # mesh_plot_inner(xx, isLL = FALSE, add = add)  ## ignore the cos hack
+}
+
+
+
+#debug <- TRUE
+#' @name mesh_plot
+#' @export
+mesh_plot.quadmesh <- function(x, crs = NULL, col = NULL, add = FALSE, zlim = NULL, ..., coords = NULL, maxcell = 50000) {
+
+  srcproj <- x$crs
+  if (add && is.null(crs)) crs <- use_crs()
+  if (!is.null(crs)) use_crs(crs) else use_crs(srcproj)
+
+
+   qm <- x
+  if (is.null(col)) col <- hcl.colors(12, "YlOrRd",
+                                      rev = TRUE)
+  ib <- qm$ib
+  ## take the coordinates as given
+  xy <- t(qm$vb[1:2, ])
+  if (!is.null(coords)) {
+    if (!inherits(coords, "BasicRaster")) {
+      message("cannot get coords from a non-raster for quadmesh")
+    } else {
+    ## apply coordinates as provided explicitly
+    ## fudge for test  (must be + res because could be any raster)
+    if (inherits(coords, "BasicRaster")) {
+        coords_fudge <- raster::setExtent(coords, raster::extent(coords) + raster::res(coords) )
+        cells <- raster::cellFromXY(coords_fudge, xy)
+        xy <- raster::extract(coords_fudge, cells)
+    }
+    }
   }
+  isLL <- raster::isLonLat(x) || !is.null(coords)  ## we just assume it's longlat if coords given
+  if (!is.null(crs) ) {
+    if (!raster::isLonLat(crs)) {
+      isLL <- FALSE
+    }
+  }
+
+  if (is.na(srcproj) && !is.null(crs)) {
+    if (is.null(coords)) {
+      stop("no projection defined on input raster, and no 'coords' provided - \n either set the CRS of the raster, or supply a two-layer 'coords' brick with longitude and latitude layers")
+    } else {
+      message("coords and crs provided, assuming coords is Longitude, Latitude")
+      srcproj <- "+proj=longlat +datum=WGS84"
+    }
+  }
+  xy <- target_coordinates(xy, src.proj = srcproj, target = crs, xyz = FALSE)
   ## we have to remove any infinite vertices
   ## as this affects the entire thing
   bad <- !is.finite(xy[,1]) | !is.finite(xy[,2])
@@ -163,12 +235,19 @@ if (!is.null(coords)) {
 
   ## we also have to deal with any values that are NA
   ## because they propagate to destroy the id
+  valx <- colMeans(matrix(qm$vb[3, qm$ib], nrow = 4L))
+
+
   lc <- length(col)
-  cols <- if (is.null(zlim)) col[scales::rescale(values(x), c(1, lc))] else col[scales::rescale(values(x), c(1, lc), zlim)]
+  cols <- if (is.null(zlim)) col[scales::rescale(valx, c(1, lc))] else col[scales::rescale(valx, c(1, lc), zlim)]
+
 
   xx <- list(x = xx, y = yy, id = id, col = cols)
-   mesh_plot_inner(xx, isLL = FALSE, add = add)  ## ignore the cos hack
+  mesh_plot_inner(xx, isLL, add = add)
 }
+
+
+
 
 #' @name mesh_plot
 #' @export
@@ -267,71 +346,3 @@ mesh_plot.TRI <- function(x, crs = NULL, col = NULL, add = FALSE, zlim = NULL, .
 
 
 
-#debug <- TRUE
-#' @name mesh_plot
-#' @export
-mesh_plot.quadmesh <- function(x, crs = NULL, col = NULL, add = FALSE, zlim = NULL, ..., coords = NULL, maxcell = 50000) {
-
-  srcproj <- x$crs
-  if (add && is.null(crs)) crs <- use_crs()
-  if (!is.null(crs)) use_crs(crs) else use_crs(srcproj)
-
-
-   qm <- x
-  if (is.null(col)) col <- hcl.colors(12, "YlOrRd",
-                                      rev = TRUE)
-  ib <- qm$ib
-  ## take the coordinates as given
-  xy <- t(qm$vb[1:2, ])
-  if (!is.null(coords)) {
-    if (!inherits(coords, "BasicRaster")) {
-      message("cannot get coords from a non-raster for quadmesh")
-    } else {
-    ## apply coordinates as provided explicitly
-    ## fudge for test  (must be + res because could be any raster)
-    if (inherits(coords, "BasicRaster")) {
-        coords_fudge <- raster::setExtent(coords, raster::extent(coords) + raster::res(coords) )
-        cells <- raster::cellFromXY(coords_fudge, xy)
-        xy <- raster::extract(coords_fudge, cells)
-    }
-    }
-  }
-  isLL <- raster::isLonLat(x) || !is.null(coords)  ## we just assume it's longlat if coords given
-  if (!is.null(crs) ) {
-    if (!raster::isLonLat(crs)) {
-      isLL <- FALSE
-    }
-  }
-
-  if (is.na(srcproj) && !is.null(crs)) {
-    if (is.null(coords)) {
-      stop("no projection defined on input raster, and no 'coords' provided - \n either set the CRS of the raster, or supply a two-layer 'coords' brick with longitude and latitude layers")
-    } else {
-      message("coords and crs provided, assuming coords is Longitude, Latitude")
-      srcproj <- "+proj=longlat +datum=WGS84"
-    }
-  }
-  xy <- target_coordinates(xy, src.proj = srcproj, target = crs, xyz = FALSE)
-  ## we have to remove any infinite vertices
-  ## as this affects the entire thing
-  bad <- !is.finite(xy[,1]) | !is.finite(xy[,2])
-  ## but we must identify the bad xy in the index
-  if (any(bad)) ib <- ib[,-which(bad)]
-
-  xx <- xy[c(ib),1]
-  yy <- xy[c(ib),2]
-  ## we need a identifier grouping for each 4-vertex polygon
-  id <- rep(seq_len(ncol(ib)), each  = nrow(ib))
-
-  ## we also have to deal with any values that are NA
-  ## because they propagate to destroy the id
-  valx <- colMeans(matrix(qm$vb[3, qm$ib], nrow = 4L))
-
-
-  lc <- length(col)
-  cols <- if (is.null(zlim)) col[scales::rescale(valx, c(1, lc))] else col[scales::rescale(valx, c(1, lc), zlim)]
-
-
-  xx <- list(x = xx, y = yy, id = id, col = cols)
-  mesh_plot_inner(xx, isLL, add = add)
-}
