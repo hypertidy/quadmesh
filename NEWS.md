@@ -1,4 +1,6 @@
-# quadmesh dev
+# quadmesh 0.6.0
+
+* Fix use of '.Names' by old dput code:  'Replacing special names ".Names" is deprecated'. 
 
 * Now importing terra, and supporting 'SpatRaster' objects. 
 
