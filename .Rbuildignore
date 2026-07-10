@@ -17,3 +17,5 @@
 ^\.github$
 ^data-raw/examples$
 ^CRAN-SUBMISSION$
+^\.positai$
+^\.claude$

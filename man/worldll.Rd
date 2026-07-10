@@ -8,7 +8,7 @@
 An object of class \code{RasterLayer} of dimension 180 x 360 x 1.
 }
 \usage{
-worldll
+data(worldll)
 }
 \description{
 A rasterized version of \code{wrld_simpl}, created by burning the country

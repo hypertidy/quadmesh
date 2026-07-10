@@ -8,7 +8,7 @@
 An object of class \code{RasterBrick} of dimension 220 x 256 x 3.
 }
 \usage{
-cmip6
+data(cmip6)
 }
 \description{
 A small extract of model output and native grid ('gn') coordinates from CMIP6. Derived from

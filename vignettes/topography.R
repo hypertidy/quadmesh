@@ -11,8 +11,8 @@ lltopo <- quadmesh(etopo, etopo)
 lltopo$vb[1:3, ] <- t(llh2xyz(t(lltopo$vb[1:3, ]), exag = 50))
 
 ## ----eval=FALSE, include=TRUE-------------------------------------------------
-#  data(etopo)
-#  lt <- raster::crop(etopo, raster::extent(100, 168, -58, -40))
-#  ltt <- ltt0 <- quadmesh(lt, lt)
-#  ltt$vb[1:3, ] <- t(llh2xyz(t(ltt$vb[1:3, ])))
+# data(etopo)
+# lt <- raster::crop(etopo, raster::extent(100, 168, -58, -40))
+# ltt <- ltt0 <- quadmesh(lt, lt)
+# ltt$vb[1:3, ] <- t(llh2xyz(t(ltt$vb[1:3, ])))
 

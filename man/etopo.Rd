@@ -8,7 +8,7 @@
 An object of class \code{RasterLayer} of dimension 135 x 540 x 1.
 }
 \usage{
-etopo
+data(etopo)
 }
 \description{
 A simplified version of 'Etopo2'. The Etopo2 data set was

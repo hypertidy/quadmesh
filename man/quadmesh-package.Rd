@@ -3,7 +3,6 @@
 \docType{package}
 \name{quadmesh-package}
 \alias{quadmesh-package}
-\alias{_PACKAGE}
 \title{quadmesh: Quadrangle Mesh}
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
@@ -20,6 +19,11 @@ Useful links:
 }
 \author{
 \strong{Maintainer}: Michael D. Sumner \email{mdsumner@gmail.com}
+
+Authors:
+\itemize{
+  \item Michael D. Sumner \email{mdsumner@gmail.com}
+}
 
 }
 \keyword{internal}

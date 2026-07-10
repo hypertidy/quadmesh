@@ -8,7 +8,7 @@
 An object of class \code{matrix} (inherits from \code{array}) with 82403 rows and 2 columns.
 }
 \usage{
-xymap
+data(xymap)
 }
 \description{
 The world coastline coordinates. A simple matrix of lon, lat, separated by NA.
