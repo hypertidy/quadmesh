@@ -19,3 +19,4 @@
 ^CRAN-SUBMISSION$
 ^\.positai$
 ^\.claude$
+^FUTURE.md$

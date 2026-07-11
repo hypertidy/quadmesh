@@ -19,8 +19,8 @@
 #' a _texture_ on the resulting mesh3d object.
 #' It is not possible to provide rgl with an object of data for texture, it must be a PNG file and so
 #' the in-memory `texture` argument is written out to PNG file (with a message). The location of the file
-#' may be set explicitly with `texture_filename`.  Currently it's not possible to not use the `texture` object
-#' in-memory.
+#' may be set explicitly with `texture_filename`. Alternatively, `texture` may be the
+#' file path to an existing PNG image, draped over the raster extent (see [quadmesh()]).
 #' @inheritParams quadmesh
 #' @return mesh3d (primitive type triangle)
 #' @export
@@ -52,9 +52,8 @@ triangmesh.matrix <- function (x, z = x, na.rm = FALSE, ..., texture = NULL, tex
 triangmesh.BasicRaster <- function (x, z = x, na.rm = FALSE, ..., texture = NULL, texture_filename = NULL)  {
   x <- x[[1]]  ## just the oneth raster for now
 
-  coords <- sp::coordinates(x)
+  coords <- raster::xyFromCell(x, seq_len(raster::ncell(x)))
 
-  exy <- edgesXY(x)
   nc1 <- ncol(x) + 1
   aa <- rbind(t(prs(seq_len(ncol(x)))),
               seq_len(ncol(x)-1) + ncol(x))
@@ -66,16 +65,49 @@ triangmesh.BasicRaster <- function (x, z = x, na.rm = FALSE, ..., texture = NULL
   ind1 <- matrix(ind0, nrow = 3)
 
   if (na.rm) {
-    ind1 <- ind1[,!is.na(raster::values(x))]
+    ## drop triangles that reference any missing vertex (vertices are cells here),
+    ## note that triangle count 2 * (nc-1) * (nr-1) differs from cell count so we
+    ## cannot index columns by the cell logical directly
+    bad <- is.na(raster::values(x))
+    ind1 <- ind1[, colSums(matrix(bad[ind1], nrow = 3L)) == 0L, drop = FALSE]
   }
 
 
-  if (is.null(z)) z <- 0 else z <- raster::values(x)
+  if (is.null(z)) {
+    z <- 0
+  } else if (inherits(z, "SpatRaster") || inherits(z, "BasicRaster")) {
+    if (inherits(z, "SpatRaster")) z <- raster::raster(z)
+    z <- z[[1L]]
+    if (isTRUE(all.equal(raster::extent(z), raster::extent(x))) &&
+        all(dim(z)[1:2] == dim(x)[1:2])) {
+      z <- raster::values(z)
+    } else {
+      z <- raster::extract(z, coords, method = "bilinear")
+    }
+  } else if (is.numeric(z)) {
+    z <- rep(z[1L], nrow(coords))
+  } else {
+    z <- raster::values(x)
+  }
   ob <- structure(list( vb = t(cbind(coords, z, 1)),  material = list(), texcoords = NULL, meshColor = "vertices", it = ind1),
                   class = c("mesh3d", "shape3d"))
+  dimnames(ob$vb) <- NULL
 
-
-
+  if (!is.null(texture) && is.character(texture)) {
+    ## a PNG file path: quad_texture() semantics from the textures package,
+    ## the image is draped over the raster extent and the texture coordinates
+    ## are the extent-normalized vertex coordinates (no reprojection, no
+    ## PNG write step)
+    texture <- texture[1L]
+    if (!file.exists(texture)) {
+      warning(sprintf("texture file '%s' does not exist", texture))
+    }
+    ob$texcoords <- rbind((coords[, 1L] - raster::xmin(x)) / (raster::xmax(x) - raster::xmin(x)),
+                          (coords[, 2L] - raster::ymin(x)) / (raster::ymax(x) - raster::ymin(x)))
+    ob$material$texture <- texture
+    ob$material$color <- "grey"
+    texture <- NULL
+  }
 
   if (!is.null(texture)) {
     if (!inherits(texture, "BasicRaster")) {
@@ -130,21 +162,18 @@ dtriangmesh.default <- function (x, z = x, na.rm = FALSE, ..., texture = NULL, t
   tm <- triangmesh(x, z = NULL, na.rm = na.rm, ..., texture = texture, texture_filename = texture_filename)
 
   if (!is.null(z)) {
+    if (inherits(z, "SpatRaster")) z <- raster::raster(z)
     if (!inherits(z, "BasicRaster")) {
       z <- raster::raster(x)
     }
-    tm$vb[3L, ] <- raster::values(z)
+    tm$vb[3L, ] <- raster::values(z[[1L]])
   }
 
-  ## break the mesh!
-  tm$vb <- tm$vb[, tm$it]
-  if (!is.null(tm$texcoords)) {
-    tm$texcoords <- tm$texcoords[, tm$it]
+  ## break the mesh (expands vertices, and texcoords when present)
+  tm <- textures::break_mesh(tm)
 
-  }
-  tm$it <- matrix(seq_len(ncol(tm$vb)), 3L)
-
-  tm$vb[3, ] <- rep(apply(matrix(tm$vb[3, tm$it, drop = FALSE], 3L), 2, mean),
+  ## discrete interpretation: constant z per triangle (mean of its vertices)
+  tm$vb[3, ] <- rep(.colMeans(matrix(tm$vb[3, ], 3L), 3L, ncol(tm$it)),
                     each = 3L)
 
   tm

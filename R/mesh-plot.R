@@ -7,15 +7,6 @@ scl <- function(x) {
 mesh_plot_inner <- function(xx, isLL = FALSE, add = FALSE) {
     ##xx <- list(x = xx, y = yy, id = id, col = cols)
 
-  cols <- xx$cols
-  if (any(is.na(cols))) {
-    colsna <- rep(cols, each = 4L)
-    bad2 <- is.na(colsna)
-    xx <- xx[!bad2]
-    yy <- yy[!bad2]
-    id <- id[!bad2]
-    cols <- cols[!is.na(cols)]
-  }
   if (!add) {
     graphics::plot.new()
     graphics::plot.window(xlim = range(xx$x, finite = TRUE), ylim = range(xx$y, finite = TRUE),
@@ -42,8 +33,8 @@ mesh_plot_inner <- function(xx, isLL = FALSE, add = FALSE) {
 #' The mesh may be reprojected prior to plotting using the 'crs' argument to
 #' define the target map projection in 'PROJ string' format. (There is no
 #' "reproject" function for quadmesh, this is performed directly on the x-y
-#' coordinates of the 'quadmesh' output). The 'col' argument are mapped to the input pplied
-#' object data as in 'image', and applied relative to 'zlim' if su.
+#' coordinates of the 'quadmesh' output). The 'col' argument is mapped to the input
+#' object data as in 'image', and applied relative to 'zlim' if supplied.
 #'
 #' If `coords` is supplied, it is currently assumed to be a 2-layer `RasterBrick` with
 #' longitude and latitude as the *cell values*. These are used to geographically locate
@@ -222,11 +213,16 @@ mesh_plot.quadmesh <- function(x, crs = NULL, col = NULL, add = FALSE, zlim = NU
     }
   }
   xy <- target_coordinates(xy, src.proj = srcproj, target = crs, xyz = FALSE)
-  ## we have to remove any infinite vertices
+  ## we have to remove any non-finite vertices
   ## as this affects the entire thing
   bad <- !is.finite(xy[,1]) | !is.finite(xy[,2])
-  ## but we must identify the bad xy in the index
-  if (any(bad)) ib <- ib[,-which(bad)]
+  ## drop any quad that references a bad vertex ('bad' is per-vertex,
+  ## so map it through the index rather than treating it as a quad identifier)
+  keep <- rep(TRUE, ncol(ib))
+  if (any(bad)) {
+    keep <- colSums(matrix(bad[ib], nrow = nrow(ib))) == 0L
+    ib <- ib[, keep, drop = FALSE]
+  }
 
   xx <- xy[c(ib),1]
   yy <- xy[c(ib),2]
@@ -235,7 +231,7 @@ mesh_plot.quadmesh <- function(x, crs = NULL, col = NULL, add = FALSE, zlim = NU
 
   ## we also have to deal with any values that are NA
   ## because they propagate to destroy the id
-  valx <- colMeans(matrix(qm$vb[3, qm$ib], nrow = 4L))
+  valx <- colMeans(matrix(qm$vb[3, qm$ib], nrow = 4L))[keep]
 
 
   lc <- length(col)
@@ -320,23 +316,24 @@ mesh_plot.TRI <- function(x, crs = NULL, col = NULL, add = FALSE, zlim = NULL, .
   }
   srcproj <- x$meta$proj[1]
   xy <- target_coordinates(xy, src.proj = srcproj, target = crs, xyz = FALSE)
-  ## we have to remove any infinite vertices
+  ## we have to remove any non-finite vertices
   ## as this affects the entire thing
   bad <- !is.finite(xy[,1]) | !is.finite(xy[,2])
-  ## we need a identifier grouping for each 3-vertex polygon
+  ## drop any triangle that references a bad vertex ('bad' is per-vertex,
+  ## so map it through the index rather than treating it as a triangle identifier)
+  keep <- rep(TRUE, dim(idx)[2L])
+  if (any(bad)) {
+    keep <- colSums(matrix(bad[idx], nrow = 3L)) == 0L
+    idx <- idx[, keep, drop = FALSE]
+  }
+  ## we need an identifier grouping for each 3-vertex polygon
+  ## (computed after removal so it stays aligned with the retained triangles)
   id <- rep(seq_len(dim(idx)[2L]), each = 3)
-
-
-  ## but we must identify the bad xy in the index
-  if (any(bad)) idx <- idx[,-which(bad)]
 
   xx <- xy[c(idx),1]
   yy <- xy[c(idx),2]
 
-  ## we also have to deal with any values that are NA
-  ## because they propagate to destroy the id
-  #browser()
-  cols <- colorRampPalette(col)(nrow(x$object))[factor(x$triangle$object_)]
+  cols <- colorRampPalette(col)(nrow(x$object))[factor(x$triangle$object_)][keep]
 
   xx <- list(x = xx, y = yy, id = id, col = cols)
 

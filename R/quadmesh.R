@@ -6,23 +6,13 @@
             class = c("mesh3d", "shape3d"))
 }
 
-#' @importFrom raster xmin xmax ymin ymax
-edgesXY <- function(x) {
-  xx <- seq(xmin(x), xmax(x), length = ncol(x) + 1L)
-  yy <- seq(ymax(x), ymin(x), length = nrow(x) + 1L)
-  xy <- expand.grid(x = xx, y = yy)
-  xy
-}
+## edgesXY() removed: vertex generation now comes from textures::quad_vertex(),
+## which reproduces the same ordering (x fastest, y from the top) via ydown = TRUE
 
 #' @importFrom utils head tail
 prs <- function(x) {
   cbind(head(x, -1), tail(x, -1))
 }
-
-## what was this for ...
-# p4 <- function(xp, nc) {
-#   (xp + c(0, 0, rep(nc, 2)))[c(1, 2, 4, 3)]
-# }
 
 
 
@@ -51,15 +41,19 @@ prs <- function(x) {
 #'
 #' It is not possible to provide rgl with an object of data for texture, it must be a PNG file and so
 #' the in-memory `texture` argument is written out to PNG file (with a message). The location of the file
-#' may be set explicitly with `texture_filename`.  Currently it's not possible to not use the `texture` object
-#' in-memory.
+#' may be set explicitly with `texture_filename`.
+#'
+#' Alternatively, `texture` may be the file path to an existing PNG image, in which case
+#' no reprojection or file writing is done: the image is draped over the raster extent
+#' with extent-normalized texture coordinates (the semantics of
+#' [textures::quad_texture()]).
 #'
 #'
 #' @param x raster object for mesh structure
 #' @param z raster object for height values
 #' @param na.rm remove quads where missing values?
 #' @param ... ignored
-#' @param texture optional input RGB raster, 3-layers
+#' @param texture optional input RGB raster (3-layers), or the file path to a PNG image
 #' @param texture_filename optional input file path for PNG texture
 #' @param maxcell default number of raster or terra cells to plot, with a default lowish-number - set to `NULL` to use native resolution
 #' @return mesh3d
@@ -67,7 +61,7 @@ prs <- function(x) {
 #' @aliases dquadmesh
 #' @importFrom raster extract extent values
 #' @importFrom png writePNG
-#' @importFrom sp SpatialPoints CRS
+
 #' @examples
 #' library(raster)
 #' data(volcano)
@@ -87,7 +81,9 @@ quadmesh.SpatRaster <- function(x, z = x, na.rm = FALSE, ..., texture = NULL, te
     }
     maxcell <- NULL
  }
-  quadmesh(raster::raster(x), z = if (!is.null(z)) raster::raster(z) else z, na.rm = na.rm, ..., texture = if (!is.null(texture)) raster::brick(texture) else texture, texture_filename = texture_filename, maxcell = maxcell)
+  if (inherits(z, "SpatRaster")) z <- raster::raster(z)
+  if (inherits(texture, "SpatRaster")) texture <- raster::brick(texture)
+  quadmesh(raster::raster(x), z = z, na.rm = na.rm, ..., texture = texture, texture_filename = texture_filename, maxcell = maxcell)
 }
 #' @name quadmesh
 #' @export
@@ -102,38 +98,61 @@ quadmesh.BasicRaster <- function(x, z = x, na.rm = FALSE, ..., texture = NULL, t
     maxcell <- NULL
    }
 
-  exy <- edgesXY(x)
- # ind <- apply(prs(seq(ncol(x) + 1)), 1, p4, nc = ncol(x) + 1)
-  nc1 <- ncol(x) + 1
-  aa <- t(prs(seq(ncol(x) + 1)))
-  ind <- matrix(c(rbind(aa, aa[2:1, ])) + c(0, 0, nc1, nc1), 4)
-#  ind <- matrix(unlist(purrr::map(split(aa, rep(seq(1, ncol(aa)), each = 2)), p4, nc = ncol(x) + 1)), 4)
-  ## all face indexes
-  ind0 <- as.integer(as.vector(ind) +
-    rep(seq(0, length = nrow(x), by = ncol(x) + 1), each = 4 * ncol(x)))
-  ind1 <- matrix(ind0, nrow = 4)
+  dm <- c(raster::ncol(x), raster::nrow(x))
+  ## vertex and index generation from the textures package
+  ## (ydown = TRUE matches the historical edgesXY() ordering: x fastest,
+  ## vertex rows enumerated from the top of the raster, quads in cell order)
+  exy <- textures::quad_vertex(dm, extent = c(raster::xmin(x), raster::xmax(x),
+                                              raster::ymin(x), raster::ymax(x)),
+                               ydown = TRUE)
+  ## textures winds quads anti-clockwise for y-down grids, rotate the cycle
+  ## back to the historical corner order (TL, TR, BR, BL) because
+  ## qm_as_raster(index = ) gives specific corners public meaning
+  ## (rotation by 2 is its own inverse)
+  ind1 <- textures::quad_index(dm, ydown = TRUE)[c(3L, 4L, 1L, 2L), , drop = FALSE]
 
   if (na.rm) {
-    ind1 <- ind1[,!is.na(values(x))]
+    ind1 <- ind1[,!is.na(values(x)), drop = FALSE]
   }
   ob <- .mkq3d()
 
   if (!is.null(z)) {
     ## wish of https://github.com/hypertidy/quadmesh/issues/17
-    sp_exy <- sp::SpatialPoints(exy, proj4string = sp::CRS(raster::projection(x), doCheckCRSArgs = FALSE))
+    if (is.numeric(z) && !inherits(z, "BasicRaster")) {
+      ## constant z as per the documentation
+      z <- raster::setValues(x, z[1L])
+    }
     old <- options(warn = -1)
+    on.exit(options(old), add = TRUE)
 
     ## rather than add eps to the edgesXY coordinates
     ## let's extend the z raster a tiny bit
     z <- raster::setExtent(z, raster::extent(z) + raster::res(z)/1000)
 
-    z <- zapsmall(extract(z, sp_exy, method = "bilinear"))
+    z <- zapsmall(extract(z, as.matrix(exy), method = "bilinear"))
     options(old)
   } else {
     z <- 0
   }
   ob$vb <- t(cbind(exy, z, 1))
+  dimnames(ob$vb) <- NULL
   ob$ib <- ind1
+
+  if (!is.null(texture) && is.character(texture)) {
+    ## a PNG file path: quad_texture() semantics from the textures package,
+    ## the image is draped over the whole mesh and the texture coordinates
+    ## are the extent-normalized vertex coordinates (no reprojection, no
+    ## PNG write step, the image is assumed to cover the raster extent)
+    texture <- texture[1L]
+    if (!file.exists(texture)) {
+      warning(sprintf("texture file '%s' does not exist", texture))
+    }
+    ob$texcoords <- rbind((exy[, 1L] - raster::xmin(x)) / (raster::xmax(x) - raster::xmin(x)),
+                          (exy[, 2L] - raster::ymin(x)) / (raster::ymax(x) - raster::ymin(x)))
+    ob$material$texture <- texture
+    ob$material$color <- "grey"
+    texture <- NULL
+  }
 
   if (!is.null(texture)) {
     if (!inherits(texture, "BasicRaster")) {

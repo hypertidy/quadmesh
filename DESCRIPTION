@@ -1,7 +1,7 @@
 Package: quadmesh
 Type: Package
-Title: Quadrangle Mesh 
-Version: 0.6.0
+Title: Quadrangle Mesh
+Version: 0.7.0
 Authors@R: person("Michael D.","Sumner", role = c("aut", "cre"), email = "mdsumner@gmail.com")
 Description: Create surface forms from matrix or 'raster' data for flexible plotting and
  conversion to other mesh types. The functions 'quadmesh' or 'triangmesh'
@@ -20,10 +20,10 @@ Imports:
     raster,
     gridBase,
     png,
-    sp,
     geometry,
     reproj (>= 0.4.0),
     scales,
+    textures (>= 0.1.0),
     palr,
     terra
 Suggests: 

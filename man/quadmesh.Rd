@@ -76,7 +76,7 @@ quadmesh(
 
 \item{...}{ignored}
 
-\item{texture}{optional input RGB raster, 3-layers}
+\item{texture}{optional input RGB raster (3-layers), or the file path to a PNG image}
 
 \item{texture_filename}{optional input file path for PNG texture}
 
@@ -110,8 +110,12 @@ auto-expanded to RGB.
 
 It is not possible to provide rgl with an object of data for texture, it must be a PNG file and so
 the in-memory \code{texture} argument is written out to PNG file (with a message). The location of the file
-may be set explicitly with \code{texture_filename}.  Currently it's not possible to not use the \code{texture} object
-in-memory.
+may be set explicitly with \code{texture_filename}.
+
+Alternatively, \code{texture} may be the file path to an existing PNG image, in which case
+no reprojection or file writing is done: the image is draped over the raster extent
+with extent-normalized texture coordinates (the semantics of
+\code{\link[textures:quad_texture]{textures::quad_texture()}}).
 }
 \examples{
 library(raster)

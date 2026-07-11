@@ -1,4 +1,3 @@
-context("test-basic.R")
 
 
 g <- raster::raster(matrix(1:12, 3))

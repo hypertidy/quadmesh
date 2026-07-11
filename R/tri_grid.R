@@ -33,14 +33,14 @@ bary_index <- function(x, coords = NULL, grid = NULL, ...) {
   if (!is.null(coords)) {
     xy <- raster::values(coords)
   } else {
-    xy <- sp::coordinates(x)
+    xy <- raster::xyFromCell(x, seq_len(raster::ncell(x)))
   }
   if (is.null(grid)) grid <- default_grid(xy)
 
   a_srs <- "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0"
   xy <- target_coordinates(xy, a_srs, raster::projection(grid), xyz = FALSE)
   #value <- tm$vb[3, ]
-  rxy <- sp::coordinates(grid)
+  rxy <- raster::xyFromCell(grid, seq_len(raster::ncell(grid)))
 
  # nn <- RANN::nn2(xy[x$it[1, ], 1:2], rxy, k = 1)
  #  ord <- order(nn$nn.idx)

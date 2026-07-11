@@ -9,11 +9,15 @@ use_crs(crs = NULL)
 \arguments{
 \item{crs}{provide PROJ string to set the value}
 }
+\value{
+the current value of the in-use coordinate system (may be \code{NULL}), if
+\code{crs} is provided it is returned after being set as the in-use value
+}
 \description{
 Set or return the coordinate system currently in use.
 }
 \details{
-If argument \code{crs} is NULL, the function returns the current value (which may be `NULL``).
+If argument \code{crs} is NULL, the function returns the current value (which may be \code{NULL}).
 }
 \examples{
 \dontrun{

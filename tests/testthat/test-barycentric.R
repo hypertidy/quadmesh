@@ -1,4 +1,3 @@
-context("test-barycentric")
 
 g <- raster::setExtent(raster::raster(matrix(1:12, 3)),
                        raster::extent(0, 4, 0, 3))

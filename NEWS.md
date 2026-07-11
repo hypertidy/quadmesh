@@ -1,3 +1,39 @@
+# quadmesh 0.7.0
+
+* quadmesh now imports the 'textures' package and uses it for mesh machinery: 
+ quad vertex and index generation ('quad_vertex()', 'quad_index()') and the 
+ discrete mesh expansion ('break_mesh()'). Mesh content is unchanged, quads 
+ remain in raster cell order with the historical corner order (see 
+ 'qm_as_raster(index = )'). 
+
+* The 'texture' argument to 'quadmesh()' and 'triangmesh()' may now be a path to 
+ a PNG file (#43). The image is draped over the raster extent with 
+ extent-normalized texture coordinates, in the manner of 'textures::quad_texture()', 
+ with no reprojection and no intermediate PNG write. 
+
+* 'dquadmesh()' with a texture now expands texture coordinates along with the 
+ vertices (previously 'texcoords' were left unexpanded, mismatching the broken mesh). 
+
+* 'dquadmesh(x, na.rm = TRUE)' no longer errors, per-cell z values are aligned to 
+ the retained quads. 
+
+* The 'z' argument is now honoured by 'dquadmesh()' and 'triangmesh()', previously 
+ the values of 'x' were used regardless. 'dtriangmesh()' honoured a raster 'z' but 
+ fell back to an empty template for matrix, 'SpatRaster', or numeric 'z', these now 
+ work. A constant numeric 'z' now works for 'quadmesh()' and 'triangmesh()' as 
+ documented. 
+
+* 'triangmesh(x, na.rm = TRUE)' now correctly drops triangles that reference a missing 
+ cell (the triangle index was previously subset by a cell-length logical, silently 
+ recycling when triangle count and cell count differed). 
+
+* 'mesh_plot()' now correctly drops primitives that reference non-finite reprojected 
+ vertices (previously the per-vertex flag was applied as a primitive index), and 
+ colours stay aligned with the retained primitives. 
+
+* Removed dependency on the 'sp' package (plain coordinate matrices are used with 
+ raster extraction and 'raster::xyFromCell()'). 
+
 # quadmesh 0.6.0
 
 * Fix use of '.Names' by old dput code:  'Replacing special names ".Names" is deprecated'. 

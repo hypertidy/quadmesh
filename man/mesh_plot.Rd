@@ -134,8 +134,8 @@ Plot mesh
 The mesh may be reprojected prior to plotting using the 'crs' argument to
 define the target map projection in 'PROJ string' format. (There is no
 "reproject" function for quadmesh, this is performed directly on the x-y
-coordinates of the 'quadmesh' output). The 'col' argument are mapped to the input pplied
-object data as in 'image', and applied relative to 'zlim' if su.
+coordinates of the 'quadmesh' output). The 'col' argument is mapped to the input
+object data as in 'image', and applied relative to 'zlim' if supplied.
 
 If \code{coords} is supplied, it is currently assumed to be a 2-layer \code{RasterBrick} with
 longitude and latitude as the \emph{cell values}. These are used to geographically locate

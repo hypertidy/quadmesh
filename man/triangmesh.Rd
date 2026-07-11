@@ -62,7 +62,7 @@ dtriangmesh(
 
 \item{...}{ignored}
 
-\item{texture}{optional input RGB raster, 3-layers}
+\item{texture}{optional input RGB raster (3-layers), or the file path to a PNG image}
 
 \item{texture_filename}{optional input file path for PNG texture}
 }
@@ -90,8 +90,8 @@ Any raster RGB object (3-layers, ranging in 0-255) may be used as
 a \emph{texture} on the resulting mesh3d object.
 It is not possible to provide rgl with an object of data for texture, it must be a PNG file and so
 the in-memory \code{texture} argument is written out to PNG file (with a message). The location of the file
-may be set explicitly with \code{texture_filename}.  Currently it's not possible to not use the \code{texture} object
-in-memory.
+may be set explicitly with \code{texture_filename}. Alternatively, \code{texture} may be the
+file path to an existing PNG image, draped over the raster extent (see \code{\link[=quadmesh]{quadmesh()}}).
 }
 \examples{
 library(raster)

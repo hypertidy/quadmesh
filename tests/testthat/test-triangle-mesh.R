@@ -1,4 +1,3 @@
-context("test-triangle-mesh")
 
 test_that("triangle mesh works", {
   ## test will change when triangle mesh is properly featured
