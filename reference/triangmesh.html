@@ -18,7 +18,7 @@ with methods for raster::raster() and matrix."><meta property="og:image" content
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">quadmesh</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.7.1</span>
       </span>
     </div>
 
@@ -138,7 +138,7 @@ with methods for <code><a href="https://rdrr.io/pkg/raster/man/raster.html" clas
 
 
 <dt id="arg-texture">texture<a class="anchor" aria-label="anchor" href="#arg-texture"></a></dt>
-<dd><p>optional input RGB raster, 3-layers</p></dd>
+<dd><p>optional input RGB raster (3-layers), or the file path to a PNG image</p></dd>
 
 
 <dt id="arg-texture-filename">texture_filename<a class="anchor" aria-label="anchor" href="#arg-texture-filename"></a></dt>
@@ -164,8 +164,8 @@ are queried by reprojection.</p>
 a <em>texture</em> on the resulting mesh3d object.
 It is not possible to provide rgl with an object of data for texture, it must be a PNG file and so
 the in-memory <code>texture</code> argument is written out to PNG file (with a message). The location of the file
-may be set explicitly with <code>texture_filename</code>.  Currently it's not possible to not use the <code>texture</code> object
-in-memory.</p>
+may be set explicitly with <code>texture_filename</code>. Alternatively, <code>texture</code> may be the
+file path to an existing PNG image, draped over the raster extent (see <code><a href="quadmesh.html">quadmesh()</a></code>).</p>
     </div>
 
     <div id="ref-examples">

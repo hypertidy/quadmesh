@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">quadmesh</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.7.1</span>
       </span>
     </div>
 
@@ -61,7 +61,18 @@
     </div>
 
     <div class="section level2">
-<h2 class="page-header" data-toc-text="0.6.0" id="quadmesh-060">quadmesh 0.6.0<a class="anchor" aria-label="anchor" href="#quadmesh-060"></a></h2>
+<h2 class="page-header" data-toc-text="0.7.0" id="quadmesh-070">quadmesh 0.7.0<a class="anchor" aria-label="anchor" href="#quadmesh-070"></a></h2>
+<ul><li><p>quadmesh now imports the ‘textures’ package and uses it for mesh machinery: quad vertex and index generation (‘quad_vertex()’, ‘quad_index()’) and the discrete mesh expansion (‘break_mesh()’). Mesh content is unchanged, quads remain in raster cell order with the historical corner order (see ‘qm_as_raster(index = )’).</p></li>
+<li><p>The ‘texture’ argument to ‘quadmesh()’ and ‘triangmesh()’ may now be a path to a PNG file (<a href="https://github.com/hypertidy/quadmesh/issues/43" class="external-link">#43</a>). The image is draped over the raster extent with extent-normalized texture coordinates, in the manner of ‘textures::quad_texture()’, with no reprojection and no intermediate PNG write.</p></li>
+<li><p>‘dquadmesh()’ with a texture now expands texture coordinates along with the vertices (previously ‘texcoords’ were left unexpanded, mismatching the broken mesh).</p></li>
+<li><p>‘dquadmesh(x, na.rm = TRUE)’ no longer errors, per-cell z values are aligned to the retained quads.</p></li>
+<li><p>The ‘z’ argument is now honoured by ‘dquadmesh()’ and ‘triangmesh()’, previously the values of ‘x’ were used regardless. ‘dtriangmesh()’ honoured a raster ‘z’ but fell back to an empty template for matrix, ‘SpatRaster’, or numeric ‘z’, these now work. A constant numeric ‘z’ now works for ‘quadmesh()’ and ‘triangmesh()’ as documented.</p></li>
+<li><p>‘triangmesh(x, na.rm = TRUE)’ now correctly drops triangles that reference a missing cell (the triangle index was previously subset by a cell-length logical, silently recycling when triangle count and cell count differed).</p></li>
+<li><p>‘mesh_plot()’ now correctly drops primitives that reference non-finite reprojected vertices (previously the per-vertex flag was applied as a primitive index), and colours stay aligned with the retained primitives.</p></li>
+<li><p>Removed dependency on the ‘sp’ package (plain coordinate matrices are used with raster extraction and ‘raster::xyFromCell()’).</p></li>
+</ul></div>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="0.6.0" id="quadmesh-060">quadmesh 0.6.0<small>2026-07-11</small><a class="anchor" aria-label="anchor" href="#quadmesh-060"></a></h2>
 <ul><li><p>Fix use of ‘.Names’ by old dput code: ‘Replacing special names “.Names” is deprecated’.</p></li>
 <li><p>Now importing terra, and supporting ‘SpatRaster’ objects.</p></li>
 <li><p>‘mesh_plot’ gains a ‘maxcell’ argument to provide a default reduced resolution, can be set to ‘NULL’ to use native resolution.</p></li>

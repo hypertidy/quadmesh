@@ -18,7 +18,7 @@ Plot mesh"><meta property="og:image" content="/logo.png"><!-- mathjax --><script
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">quadmesh</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.7.1</span>
       </span>
     </div>
 
@@ -219,8 +219,8 @@ this covers the case for when a mesh3d object may have quads <em>and</em> triang
     <p>The mesh may be reprojected prior to plotting using the 'crs' argument to
 define the target map projection in 'PROJ string' format. (There is no
 "reproject" function for quadmesh, this is performed directly on the x-y
-coordinates of the 'quadmesh' output). The 'col' argument are mapped to the input pplied
-object data as in 'image', and applied relative to 'zlim' if su.</p>
+coordinates of the 'quadmesh' output). The 'col' argument is mapped to the input
+object data as in 'image', and applied relative to 'zlim' if supplied.</p>
 <p>If <code>coords</code> is supplied, it is currently assumed to be a 2-layer <code>RasterBrick</code> with
 longitude and latitude as the <em>cell values</em>. These are used to geographically locate
 the resulting mesh, and will be transformed to the <code>crs</code> if that is supplied. This is
