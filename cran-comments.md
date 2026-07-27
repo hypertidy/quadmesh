@@ -1,6 +1,5 @@
-## quadmesh 0.6.0
+## quadmesh next
 
 
-* Small changes, and fix related to '.Names' warning from deprecated structure() usage, 
-flushed out an expression made by dput(). Thanks to CRAN. 
+* Fixes related to  '.Dimnames' and '.Dim' warning from deprecated structure() usage. Thanks to CRAN. 
 

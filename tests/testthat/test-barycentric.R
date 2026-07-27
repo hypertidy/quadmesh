@@ -4,7 +4,7 @@ g <- raster::setExtent(raster::raster(matrix(1:12, 3)),
 
 tri <- structure(c(1L, 2L, 5L, 2L, 3L, 6L, 3L, 4L, 7L, 2L, 5L, 6L, 3L,
                    6L, 7L, 4L, 7L, 8L, 5L, 6L, 9L, 6L, 7L, 10L, 7L, 8L, 11L, 6L,
-                   9L, 10L, 7L, 10L, 11L, 8L, 11L, 12L), .Dim = c(3L, 12L))
+                   9L, 10L, 7L, 10L, 11L, 8L, 11L, 12L), dim = c(3L, 12L))
 
 #set.seed(1)
 v <- seq_len(raster::ncell(g))

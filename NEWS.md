@@ -1,3 +1,8 @@
+# quadmesh dev
+
+* fixed CRAN-found problems in new R 'Found calls to structure() using deprecated special names', '.Dim' and
+ '.Dimnames' - renamed to 'dim' and 'dimnames'. 
+ 
 # quadmesh 0.7.0
 
 * quadmesh now imports the 'textures' package and uses it for mesh machinery: 
