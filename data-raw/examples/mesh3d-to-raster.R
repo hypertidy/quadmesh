@@ -18,7 +18,7 @@ library(raster)
 xy <- t(tm$vb[1:2, ])
 ## a target grid
 grid <- raster(extent(xy), nrows = 80, ncols = 80)
-rxy <- sp::coordinates(grid)
+rxy <- raster::xyFromCell(etopo, seq_len(raster::ncell(etopo)))[idx, ]
 ## the magic barycentric index, the interpolation engine for the target grid vertices
 ## and where they fall in each triangle relative to triangle vertices
 pid0 <- geometry::tsearch(xy[,1], xy[,2], t(tm$it), rxy[,1], rxy[, 2],
